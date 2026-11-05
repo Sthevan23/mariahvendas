@@ -17,7 +17,7 @@
       <label>Categoria
         <select name="categoria" onchange="this.form.action='/catalogo'; this.form.submit()">
           <option value="">Todas</option>
-          <option value="colecao-atelier" <?= ($filters['category_slug'] ?? '') === 'colecao-atelier' ? 'selected' : '' ?>>Coleção Atelier</option>
+          <option value="colecao-atelier" <?= ($filters['category_slug'] ?? '') === 'colecao-atelier' ? 'selected' : '' ?>>Coleção Festa</option>
           <option value="novidades" <?= !empty($filters['is_new']) ? 'selected' : '' ?>>Novidades</option>
           <option value="promocoes" <?= (!empty($filters['is_sale']) && ($filters['category_slug'] ?? '') !== 'colecao-atelier') ? 'selected' : '' ?>>Promoções</option>
           <?php foreach ($categories as $c): ?>
@@ -67,8 +67,8 @@
       <?php if (!$products): ?>
         <div class="empty-state">
           <h2>Nenhuma peça encontrada</h2>
-          <p>Ajuste os filtros ou explore a Coleção Atelier.</p>
-          <p><a class="btn" href="/categoria/colecao-atelier">Ver Coleção Atelier</a></p>
+          <p>Ajuste os filtros ou explore a Coleção Festa.</p>
+          <p><a class="btn" href="/categoria/colecao-atelier">Ver Coleção Festa</a></p>
         </div>
       <?php else: ?>
         <div class="product-grid">

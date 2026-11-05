@@ -52,9 +52,9 @@ class CatalogController extends Controller
             : null;
 
         if ($selectedCategory === 'colecao-atelier' && !$category) {
-            $category = ['name' => 'Coleção Atelier', 'slug' => 'colecao-atelier'];
+            $category = ['name' => 'Coleção Festa', 'slug' => 'colecao-atelier'];
         } elseif ($selectedCategory === 'colecao-atelier') {
-            $category['name'] = $category['name'] ?: 'Coleção Atelier';
+            $category['name'] = $category['name'] ?: 'Coleção Festa';
         }
 
         $products = Product::query($filters);

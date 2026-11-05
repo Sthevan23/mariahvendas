@@ -7,8 +7,8 @@ require dirname(__DIR__) . '/bootstrap.php';
 $pdo = App\Core\Database::connection();
 $settings = [
     'store_name' => 'Mariah Vendas',
-    'tagline' => 'Moda feminina e peças exclusivas para você brilhar',
-    'instagram' => '@mariah.vendas',
+    'tagline' => 'Vestidos de festa exclusivos — formatura, debutante e eventos',
+    'instagram' => '@atelie_mariahaltacostura_',
     'email' => 'contato@mariahvendas.com.br',
 ];
 $stmt = $pdo->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');

@@ -61,7 +61,7 @@ if (!file_exists($dbFile['database'])) {
             $pdo = App\Core\Database::connection();
             $version = (string) ($pdo->query("SELECT value FROM settings WHERE key = 'catalog_version'")->fetchColumn() ?: '');
             $lookCount = (int) $pdo->query("SELECT COUNT(*) FROM products WHERE slug LIKE 'mariah-look-%'")->fetchColumn();
-            if ($version !== 'mariah-v2' || $lookCount < 6) {
+            if ($version !== 'mariah-v5' || $lookCount < 6) {
                 require_once __DIR__ . '/database/seed_mariah_catalog.php';
                 mariah_seed_catalog($pdo, __DIR__);
             }

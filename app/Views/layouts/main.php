@@ -11,6 +11,8 @@ if (empty($_SESSION['_csrf'])) {
 $csrf = $_SESSION['_csrf'];
 $whatsapp = Helpers::whatsappLink('Olá! Gostaria de atendimento da ' . $store . '.');
 $logo = '/assets/brand/logo.jpg';
+$instagramHandle = ltrim((string) Helpers::setting('instagram', ''), '@');
+$instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencode($instagramHandle) : '#';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -18,7 +20,7 @@ $logo = '/assets/brand/logo.jpg';
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title><?= Helpers::e(($title ?? $store) . ' | ' . $store) ?></title>
-  <meta name="description" content="<?= Helpers::e($meta_description ?? Helpers::setting('tagline', 'Moda feminina premium')) ?>">
+  <meta name="description" content="<?= Helpers::e($meta_description ?? Helpers::setting('tagline', 'Vestidos de festa exclusivos')) ?>">
   <meta property="og:title" content="<?= Helpers::e($title ?? $store) ?>">
   <meta property="og:description" content="<?= Helpers::e($meta_description ?? Helpers::setting('tagline')) ?>">
   <?php if (!empty($og_image)): ?><meta property="og:image" content="<?= Helpers::e($og_image) ?>"><?php endif; ?>
@@ -41,7 +43,7 @@ $logo = '/assets/brand/logo.jpg';
 <body>
 <div class="top-bar">
   <div class="container top-bar-inner">
-    <span>Mariah Vendas · Atendimento personalizado</span>
+    <span>Vestidos de festa · Divinópolis/MG</span>
     <a href="<?= Helpers::e($whatsapp) ?>" target="_blank" rel="noopener">Fale conosco no WhatsApp</a>
   </div>
 </div>
@@ -56,7 +58,7 @@ $logo = '/assets/brand/logo.jpg';
     </a>
     <nav class="nav-desktop" aria-label="Principal">
       <a href="/">Início</a>
-      <a href="/categoria/colecao-atelier">Atelier</a>
+      <a href="/categoria/colecao-atelier">Festas</a>
       <a href="/categoria/novidades">Novidades</a>
       <a href="/catalogo">Roupas</a>
       <a href="/categoria/vestidos">Vestidos</a>
@@ -92,7 +94,7 @@ $logo = '/assets/brand/logo.jpg';
 
 <nav class="mobile-nav" data-mobile-nav aria-label="Mobile">
   <a href="/">Início</a>
-  <a href="/categoria/colecao-atelier">Coleção Atelier</a>
+  <a href="/categoria/colecao-atelier">Coleção Festa</a>
   <a href="/categoria/novidades">Novidades</a>
   <a href="/catalogo">Roupas</a>
   <a href="/categoria/vestidos">Vestidos</a>
@@ -137,12 +139,12 @@ $logo = '/assets/brand/logo.jpg';
       <h4>Contato</h4>
       <p><?= Helpers::e(Helpers::setting('email')) ?></p>
       <p><?= Helpers::e(Helpers::setting('phone')) ?></p>
-      <p><?= Helpers::e(Helpers::setting('instagram')) ?></p>
+      <p><a href="<?= Helpers::e($instagramUrl) ?>" target="_blank" rel="noopener"><?= Helpers::e(Helpers::setting('instagram')) ?></a></p>
     </div>
   </div>
   <div class="container footer-bottom">
     <span>© <?= date('Y') ?> <?= Helpers::e($store) ?>. Todos os direitos reservados.</span>
-    <span>Mariah Vendas · Moda feminina</span>
+    <span>Mariah Vendas · Vestidos de festa</span>
   </div>
 </footer>
 

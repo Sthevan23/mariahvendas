@@ -12,7 +12,7 @@ $heroSub = Helpers::setting('hero_subtitle');
     <h1><?= Helpers::e($heroTitle) ?></h1>
     <p class="hero-lead"><?= Helpers::e($heroSub) ?></p>
     <div class="hero-actions">
-      <a class="btn btn-glow" href="/categoria/colecao-atelier">Ver Coleção Atelier</a>
+      <a class="btn btn-glow" href="/categoria/colecao-atelier">Ver vestidos de festa</a>
       <a class="btn btn-outline" href="/catalogo">Explorar catálogo</a>
     </div>
   </div>
@@ -21,9 +21,7 @@ $heroSub = Helpers::setting('hero_subtitle');
 
 <section class="trust-strip">
   <div class="container trust-strip-inner">
-    <div class="trust-item reveal"><strong>Produção artesanal</strong><span>Acabamento impecável</span></div>
-    <div class="trust-item reveal"><strong>Envio nacional</strong><span>Embalagem especial</span></div>
-    <div class="trust-item reveal"><strong>Atendimento humano</strong><span>WhatsApp e provador</span></div>
+    <div class="trust-item reveal"><strong>Vestidos de festa</strong><span>Formatura e eventos</span></div>
   </div>
 </section>
 
@@ -32,7 +30,7 @@ $heroSub = Helpers::setting('hero_subtitle');
     <div class="section-head reveal">
       <div>
         <p class="eyebrow">Seleção</p>
-        <h2>Peças em destaque</h2>
+        <h2>Vestidos de festa em destaque</h2>
       </div>
       <a href="/categoria/colecao-atelier">Ver coleção</a>
     </div>
@@ -100,9 +98,9 @@ $heroSub = Helpers::setting('hero_subtitle');
   <div class="editorial-media" style="background-image:url('/uploads/moda/editorial-atelier.jpg')"></div>
   <div class="editorial-copy">
     <p class="eyebrow">Editorial</p>
-    <h2>Atelier · Alta costura</h2>
-    <p class="muted">Do corte ao acabamento: peças pensadas para vestir bem, com tecidos selecionados e produção cuidadosa em pequena escala.</p>
-    <p style="margin-top:1.5rem"><a class="btn" href="/categoria/colecao-atelier">Ver Coleção Atelier</a></p>
+    <h2>Festa · Brilho & elegância</h2>
+    <p class="muted">Vestidos pensados para formatura, debutante, aniversário, madrinhas e festas — brilho e elegância em cada detalhe.</p>
+    <p style="margin-top:1.5rem"><a class="btn" href="/categoria/colecao-atelier">Ver Coleção Festa</a></p>
   </div>
 </section>
 
@@ -168,7 +166,7 @@ $heroSub = Helpers::setting('hero_subtitle');
     <div class="section-head reveal">
       <div>
         <p class="eyebrow">Social</p>
-        <h2><?= Helpers::e(Helpers::setting('instagram', '@mandalla.oficial')) ?></h2>
+        <h2><?= Helpers::e(Helpers::setting('instagram', '@atelie_mariahaltacostura_')) ?></h2>
       </div>
     </div>
     <div class="instagram-grid">

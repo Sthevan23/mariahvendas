@@ -29,32 +29,32 @@ function mariah_seed_catalog(PDO $pdo, string $root): array
             'INSERT INTO categories (name, slug, image, description, sort_order, is_active)
              VALUES (?, ?, ?, ?, ?, 1)'
         )->execute([
-            'Coleção Atelier',
+            'Coleção Festa',
             'colecao-atelier',
             '/uploads/moda/colecao/mariah-01.jpg',
-            'Peças exclusivas Mariah Vendas',
+            'Vestidos de festa Mariah Vendas',
             0,
         ]);
         $cats['colecao-atelier'] = (int) $pdo->lastInsertId();
     } else {
         $pdo->prepare('UPDATE categories SET name = ?, image = ? WHERE slug = ?')->execute([
-            'Coleção Atelier',
+            'Coleção Festa',
             '/uploads/moda/colecao/mariah-01.jpg',
             'colecao-atelier',
         ]);
     }
 
     $looks = [
-        ['vestidos', 'Vestido Sirena Noiva Branco com Aplicações'],
-        ['vestidos', 'Vestido Longo Cetim Terracota com Fenda'],
+        ['vestidos', 'Vestido Festa Cinza Bordado Brilho'],
+        ['vestidos', 'Vestido Festa Cetim Terracota com Fenda'],
         ['vestidos', 'Vestido Festa Vermelho Plissado'],
-        ['vestidos', 'Vestido Longo Bordado Mesh Preto'],
-        ['vestidos', 'Vestido Longo Amarelo Manteiga com Babados'],
-        ['vestidos', 'Vestido Longo Magenta com Fenda'],
+        ['vestidos', 'Vestido Festa Verde Esmeralda Brilho'],
+        ['vestidos', 'Vestido Festa Amarelo Manteiga com Babados'],
+        ['vestidos', 'Vestido Festa Magenta com Fenda'],
     ];
 
     $colors = [
-        ['Off-white', '#F5F0E8'],
+        ['Cinza prata', '#8A8D8F'],
         ['Areia', '#C4A484'],
         ['Creme', '#E8DFD4'],
         ['Preto', '#1A1A1A'],
@@ -88,7 +88,7 @@ function mariah_seed_catalog(PDO $pdo, string $root): array
         $compare = $isSale ? round($price * 1.18, 2) : null;
         $cost = round($price * 0.4, 2);
         $sold = $best ? random_int(8, 30) : random_int(0, 7);
-        $desc = "Peça exclusiva Mariah Vendas. {$name}. Acabamento artesanal e modelagem pensada para realçar a silhueta.";
+        $desc = "Vestido de festa Mariah Vendas. {$name}. Ideal para formatura, debutante, aniversário, madrinhas e eventos especiais — acabamento artesanal e caimento impecável.";
 
         $insP->execute([$catId, $name, $slug, $desc, $price, $compare, $featured, $isNew, $isSale, $best, $cost, $sold]);
         $pid = (int) $pdo->lastInsertId();
@@ -120,10 +120,10 @@ function mariah_seed_catalog(PDO $pdo, string $root): array
     }
 
     $set = $pdo->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
-    $set->execute(['catalog_version', 'mariah-v2']);
+    $set->execute(['catalog_version', 'mariah-v5']);
     $set->execute(['hero_image', '/uploads/moda/hero-atelier.jpg']);
-    $set->execute(['hero_title', 'Alta costura · Festa & Noiva']);
-    $set->execute(['hero_subtitle', 'Vestidos exclusivos Mariah Vendas — modelagem impecável para momentos inesquecíveis.']);
+    $set->execute(['hero_title', 'Vestidos de festa para você brilhar']);
+    $set->execute(['hero_subtitle', 'Formatura, debutante, aniversário e ocasiões especiais — modelagem exclusiva Mariah Vendas em Divinópolis.']);
     $ig = [];
     foreach ([1, 2, 3, 4, 5, 6] as $i) {
         $f = '/uploads/moda/colecao/mariah-' . str_pad((string) $i, 2, '0', STR_PAD_LEFT) . '.jpg';
