@@ -19,17 +19,25 @@ class CheckoutController extends Controller
             return;
         }
 
-        $shipping = Database::connection()->query('SELECT * FROM shipping_methods WHERE is_active = 1')->fetchAll();
+        $shipping = self::shippingEnabled()
+            ? Database::connection()->query('SELECT * FROM shipping_methods WHERE is_active = 1')->fetchAll()
+            : [];
         $payments = Database::connection()->query('SELECT * FROM payment_methods WHERE is_active = 1')->fetchAll();
 
         $this->render('checkout/index', [
             'title' => 'Finalizar pedido',
             'items' => CartService::items(),
             'totals' => CartService::totals(),
+            'shippingEnabled' => self::shippingEnabled(),
             'shippingMethods' => $shipping,
             'paymentMethods' => $payments,
             'user' => Auth::user(),
         ]);
+    }
+
+    private static function shippingEnabled(): bool
+    {
+        return (bool) (require dirname(__DIR__, 2) . '/config/app.php')['shipping_enabled'];
     }
 
     public function store(): void
@@ -41,19 +49,24 @@ class CheckoutController extends Controller
             $this->redirect('/carrinho');
         }
 
-        $shippingId = (int) $this->input('shipping_method_id');
         $paymentId = (int) $this->input('payment_method_id');
         $pdo = Database::connection();
 
-        $ship = $pdo->prepare('SELECT * FROM shipping_methods WHERE id = ? AND is_active = 1');
-        $ship->execute([$shippingId]);
-        $shipping = $ship->fetch();
+        $shippingId = null;
+        $shipping = null;
+        if (self::shippingEnabled()) {
+            $shippingId = (int) $this->input('shipping_method_id');
+            $ship = $pdo->prepare('SELECT * FROM shipping_methods WHERE id = ? AND is_active = 1');
+            $ship->execute([$shippingId]);
+            $shipping = $ship->fetch();
+        }
+        $shippingPrice = $shipping ? (float) $shipping['price'] : 0.0;
 
         $pay = $pdo->prepare('SELECT * FROM payment_methods WHERE id = ? AND is_active = 1');
         $pay->execute([$paymentId]);
         $payment = $pay->fetch();
 
-        if (!$shipping || !$payment) {
+        if ((self::shippingEnabled() && !$shipping) || !$payment) {
             $this->flash('error', 'Selecione entrega e pagamento válidos.');
             $this->redirect('/checkout');
             return;
@@ -69,7 +82,7 @@ class CheckoutController extends Controller
             return;
         }
 
-        $totals = CartService::totals((float) $shipping['price']);
+        $totals = CartService::totals($shippingPrice);
         $coupon = $totals['coupon']['code'] ?? null;
 
         $orderData = [
@@ -82,7 +95,7 @@ class CheckoutController extends Controller
             'shipping_state' => trim((string) $this->input('shipping_state')),
             'shipping_zip' => trim((string) $this->input('shipping_zip')),
             'shipping_method_id' => $shippingId,
-            'shipping_price' => (float) $shipping['price'],
+            'shipping_price' => $shippingPrice,
             'payment_method_id' => $paymentId,
             'payment_status' => 'pending',
             'status' => 'awaiting_payment',
@@ -132,10 +145,14 @@ class CheckoutController extends Controller
         if ($order['discount'] > 0) {
             $lines[] = 'Desconto: -' . Helpers::money($order['discount']);
         }
-        $lines[] = 'Frete: ' . Helpers::money($order['shipping_price']);
+        if (self::shippingEnabled()) {
+            $lines[] = 'Frete: ' . Helpers::money($order['shipping_price']);
+        }
         $lines[] = '*Total: ' . Helpers::money($order['total']) . '*';
         $lines[] = 'Pagamento: ' . ($order['payment_name'] ?? '');
-        $lines[] = 'Entrega: ' . ($order['shipping_name'] ?? '');
+        if (self::shippingEnabled()) {
+            $lines[] = 'Entrega: ' . ($order['shipping_name'] ?? '');
+        }
         if ($order['shipping_address']) {
             $lines[] = "Endereço: {$order['shipping_address']}, {$order['shipping_city']}-{$order['shipping_state']} {$order['shipping_zip']}";
         }

@@ -30,7 +30,7 @@ $main = $images[0]['path'] ?? null;
     <div>
       <p class="eyebrow"><?= Helpers::e($product['category_name'] ?? Helpers::setting('store_name', 'Ateliê Mariah')) ?></p>
       <h1 class="page-title"><?= Helpers::e($product['name']) ?></h1>
-      <div class="price" style="margin:1rem 0 1.25rem;font-size:1.2rem">
+      <div class="price detail-price">
         <strong><?= Helpers::money($product['price']) ?></strong>
         <?php if (!empty($product['compare_at_price']) && $product['compare_at_price'] > $product['price']): ?>
           <s><?= Helpers::money($product['compare_at_price']) ?></s>
@@ -49,13 +49,13 @@ $main = $images[0]['path'] ?? null;
         <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
         <input type="hidden" name="variant_id" value="<?= $canBuy ? $defaultId : '' ?>" data-variant-id>
         <input type="hidden" name="buy_now" value="0" data-buy-now>
-        <p style="margin:1.5rem 0 .4rem;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase">Tamanho</p>
+        <p class="detail-label">Tamanho</p>
         <div class="sizes">
           <?php foreach ($sizes as $size): ?>
             <button type="button" class="size-opt <?= $size === $defaultSize ? 'active' : '' ?>" data-size="<?= Helpers::e($size) ?>"><?= Helpers::e($size) ?></button>
           <?php endforeach; ?>
         </div>
-        <p style="margin:1rem 0 .4rem;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase">Cor</p>
+        <p class="detail-label detail-label--tight">Cor</p>
         <div class="swatches">
           <?php foreach ($colors as $color => $hex): ?>
             <button type="button" class="swatch <?= $color === $defaultColor ? 'active' : '' ?>" data-color="<?= Helpers::e($color) ?>" title="<?= Helpers::e($color) ?>" aria-label="<?= Helpers::e($color) ?>" style="background:<?= Helpers::e($hex ?: '#ddd') ?>"></button>

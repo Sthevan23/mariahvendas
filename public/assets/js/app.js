@@ -13,9 +13,18 @@
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  menuBtn?.addEventListener('click', () => {
-    mobileNav?.classList.toggle('open');
-    document.body.style.overflow = mobileNav?.classList.contains('open') ? 'hidden' : '';
+  const setMenu = (open) => {
+    if (!mobileNav) return;
+    mobileNav.classList.toggle('open', open);
+    document.body.classList.toggle('menu-open', open);
+    menuBtn?.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuBtn?.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  menuBtn?.addEventListener('click', () => setMenu(!mobileNav?.classList.contains('open')));
+  mobileNav?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => setMenu(false)));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && mobileNav?.classList.contains('open')) setMenu(false);
   });
 
   searchBtn?.addEventListener('click', () => {
@@ -172,6 +181,16 @@
     el.textContent = message;
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 4000);
+  }
+
+  const filtersDisclosure = document.querySelector('[data-filters]');
+  if (filtersDisclosure) {
+    const desktopQuery = window.matchMedia('(min-width: 768px)');
+    const openOnDesktop = () => {
+      if (desktopQuery.matches) filtersDisclosure.open = true;
+    };
+    openOnDesktop();
+    desktopQuery.addEventListener('change', openOnDesktop);
   }
 
   const adminSidebar = document.getElementById('admin-sidebar');

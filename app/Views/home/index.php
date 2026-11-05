@@ -43,6 +43,43 @@ $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $her
   <div class="hero-scroll" aria-hidden="true"><span></span></div>
 </section>
 
+<section class="section collections" aria-labelledby="colecoes-titulo">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <div>
+        <p class="eyebrow">Explore</p>
+        <h2 id="colecoes-titulo">Coleções</h2>
+      </div>
+    </div>
+    <div class="collections-grid">
+      <a class="collection-tile reveal" href="/categoria/colecao-atelier">
+        <img src="/uploads/moda/colecao/mariah-02.jpg" alt="" loading="lazy" width="800" height="1000">
+        <span class="collection-tile__body">
+          <small>Festa &amp; formatura</small>
+          <strong>Coleção Festa</strong>
+          <em>Ver peças</em>
+        </span>
+      </a>
+      <a class="collection-tile reveal" href="/categoria/vestidos">
+        <img src="/uploads/moda/colecao/mariah-01.jpg" alt="" loading="lazy" width="800" height="1000">
+        <span class="collection-tile__body">
+          <small>Silhueta</small>
+          <strong>Vestidos</strong>
+          <em>Ver peças</em>
+        </span>
+      </a>
+      <a class="collection-tile reveal" href="/categoria/novidades">
+        <img src="/uploads/moda/colecao/mariah-03.jpg" alt="" loading="lazy" width="800" height="1000">
+        <span class="collection-tile__body">
+          <small>Recém-chegados</small>
+          <strong>Novidades</strong>
+          <em>Ver peças</em>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <?php if ($collection): ?>
 <section class="section section--surface">
   <div class="container">
@@ -85,6 +122,7 @@ $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $her
       <div>
         <p class="eyebrow">Ofertas</p>
         <h2>Promoções</h2>
+        <p class="section-lead muted">Peças selecionadas com condições especiais.</p>
       </div>
       <a href="/categoria/promocoes">Ver ofertas</a>
     </div>

@@ -10,7 +10,7 @@
     <?php endforeach; ?>
     <hr style="border:0;border-top:1px solid var(--line);margin:1rem 0">
     <p>Total: <strong><?= Helpers::money($order['total']) ?></strong></p>
-    <p class="muted">Pagamento: <?= Helpers::e($order['payment_name'] ?? '') ?> · Entrega: <?= Helpers::e($order['shipping_name'] ?? '') ?></p>
+    <p class="muted">Pagamento: <?= Helpers::e($order['payment_name'] ?? '') ?><?php if (!empty($order['shipping_name'])): ?> · Entrega: <?= Helpers::e($order['shipping_name']) ?><?php endif; ?></p>
     <p style="margin-top:1.5rem;display:flex;flex-wrap:wrap;gap:.75rem">
       <a class="btn" href="<?= Helpers::e($whatsapp) ?>" target="_blank" rel="noopener">Enviar pedido no WhatsApp</a>
       <a class="btn btn-outline" href="/catalogo">Continuar comprando</a>

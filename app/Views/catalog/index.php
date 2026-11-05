@@ -10,6 +10,8 @@
   </div>
 
   <div class="catalog-layout">
+    <details class="filters-disclosure" data-filters>
+      <summary class="filters-toggle">Filtrar e ordenar</summary>
     <form class="filters" method="get" action="<?= !empty($category['slug']) && empty($filters['search']) && empty($filters['is_new']) && (empty($filters['is_sale']) || ($filters['category_slug'] ?? '') === 'colecao-atelier') ? '/categoria/' . Helpers::e($category['slug']) : '/catalogo' ?>">
       <?php if (!empty($filters['search'])): ?>
         <input type="hidden" name="q" value="<?= Helpers::e($filters['search']) ?>">
@@ -50,6 +52,7 @@
       </label>
       <button class="btn btn-block" type="submit">Filtrar</button>
     </form>
+    </details>
 
     <div>
       <?php if (!$products): ?>
