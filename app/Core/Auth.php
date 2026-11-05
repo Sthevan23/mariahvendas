@@ -8,11 +8,20 @@ class Auth
 {
     public static function attempt(string $email, string $password): bool
     {
-        $user = User::findByEmail(strtolower(trim($email)));
-        if (!$user || !password_verify($password, $user['password'])) {
+        $email = strtolower(trim($email));
+        $throttleKey = ($_SERVER['REMOTE_ADDR'] ?? '') . '|' . $email;
+        if (LoginThrottle::blocked($throttleKey)) {
             return false;
         }
 
+        $user = User::findByEmail($email);
+        if (!$user || !password_verify($password, $user['password'])) {
+            LoginThrottle::hit($throttleKey);
+            return false;
+        }
+
+        LoginThrottle::clear($throttleKey);
+        session_regenerate_id(true);
         $_SESSION['user'] = [
             'id' => (int) $user['id'],
             'name' => $user['name'],
@@ -50,6 +59,7 @@ class Auth
 
     public static function loginUser(array $user): void
     {
+        session_regenerate_id(true);
         $_SESSION['user'] = [
             'id' => (int) $user['id'],
             'name' => $user['name'],

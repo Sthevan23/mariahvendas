@@ -153,7 +153,7 @@ class CartService
         if ($coupon['type'] === 'fixed') {
             return min($subtotal, (float) $coupon['value']);
         }
-        return round($subtotal * ((float) $coupon['value'] / 100), 2);
+        return min($subtotal, round($subtotal * ((float) $coupon['value'] / 100), 2));
     }
 
     public static function totals(?float $shipping = 0): array

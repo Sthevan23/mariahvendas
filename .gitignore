@@ -33,3 +33,7 @@ Thumbs.db
 /tsconfig.json
 /eslint.config.*
 /AGENTS.md
+
+# Contadores de tentativas de login (anti força bruta)
+/storage/ratelimit/*
+!/storage/ratelimit/.gitkeep

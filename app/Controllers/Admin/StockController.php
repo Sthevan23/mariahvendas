@@ -40,6 +40,11 @@ class StockController extends Controller
         $type = $this->input('type') === 'out' ? 'out' : 'in';
         $note = trim((string) $this->input('note', 'Reposição manual'));
 
+        if ($qty < 1) {
+            $this->flash('error', 'Informe uma quantidade maior que zero.');
+            $this->redirect('/admin/estoque');
+        }
+
         $pdo = Database::connection();
         $variant = Product::findVariant($variantId);
         if (!$variant) {

@@ -66,17 +66,35 @@ class SettingsController extends Controller
     public function saveCoupon(): void
     {
         $this->verifyCsrf();
-        $pdo = Database::connection();
-        $pdo->prepare(
-            'INSERT INTO coupons (code, type, value, min_subtotal, is_active, expires_at) VALUES (?, ?, ?, ?, ?, ?)'
-        )->execute([
-            strtoupper(trim((string) $this->input('code'))),
-            $this->input('type') === 'fixed' ? 'fixed' : 'percent',
-            (float) $this->input('value'),
-            (float) $this->input('min_subtotal', 0),
-            $this->input('is_active') ? 1 : 0,
-            $this->input('expires_at') ?: null,
-        ]);
+        $code = strtoupper(trim((string) $this->input('code')));
+        $type = $this->input('type') === 'fixed' ? 'fixed' : 'percent';
+        $value = (float) str_replace(',', '.', (string) $this->input('value'));
+
+        if ($code === '') {
+            $this->flash('error', 'Informe o código do cupom.');
+            $this->redirect('/admin/configuracoes');
+        }
+        if ($value <= 0 || ($type === 'percent' && $value > 100)) {
+            $this->flash('error', 'Valor inválido: percentual deve ficar entre 0 e 100.');
+            $this->redirect('/admin/configuracoes');
+        }
+
+        try {
+            Database::connection()->prepare(
+                'INSERT INTO coupons (code, type, value, min_subtotal, is_active, expires_at) VALUES (?, ?, ?, ?, ?, ?)'
+            )->execute([
+                $code,
+                $type,
+                $value,
+                (float) $this->input('min_subtotal', 0),
+                $this->input('is_active') ? 1 : 0,
+                $this->input('expires_at') ?: null,
+            ]);
+        } catch (\PDOException $e) {
+            $this->flash('error', 'Já existe um cupom com este código.');
+            $this->redirect('/admin/configuracoes');
+        }
+
         $this->flash('success', 'Cupom criado.');
         $this->redirect('/admin/configuracoes');
     }

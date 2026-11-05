@@ -83,7 +83,15 @@ class Order
             $hist->execute([$orderId, $order['status'] ?? 'awaiting_confirmation', 'Pedido criado']);
 
             if (!empty($order['coupon_code'])) {
-                $pdo->prepare('UPDATE coupons SET used_count = used_count + 1 WHERE code = ?')->execute([$order['coupon_code']]);
+                // Só incrementa se ainda houver usos disponíveis (checagem e escrita na mesma transação).
+                $couponStmt = $pdo->prepare(
+                    'UPDATE coupons SET used_count = used_count + 1
+                     WHERE code = ? AND (usage_limit IS NULL OR used_count < usage_limit)'
+                );
+                $couponStmt->execute([$order['coupon_code']]);
+                if ($couponStmt->rowCount() === 0) {
+                    throw new \RuntimeException('Este cupom acabou de se esgotar. Remova-o da sacola e tente novamente.');
+                }
             }
 
             $pdo->commit();
@@ -158,16 +166,56 @@ class Order
     public static function updateStatus(int $id, string $status, ?string $note = null, ?int $userId = null, ?string $paymentStatus = null): void
     {
         $pdo = Database::connection();
-        if ($paymentStatus) {
-            $stmt = $pdo->prepare('UPDATE orders SET status = ?, payment_status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?');
-            $stmt->execute([$status, $paymentStatus, $id]);
-        } else {
-            $stmt = $pdo->prepare('UPDATE orders SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?');
-            $stmt->execute([$status, $id]);
-        }
+        $pdo->beginTransaction();
 
-        $hist = $pdo->prepare('INSERT INTO order_status_history (order_id, status, note, user_id) VALUES (?, ?, ?, ?)');
-        $hist->execute([$id, $status, $note, $userId]);
+        try {
+            $current = $pdo->prepare('SELECT status FROM orders WHERE id = ?');
+            $current->execute([$id]);
+            $previousStatus = $current->fetchColumn();
+
+            // Ao cancelar, devolve o estoque — só uma vez, mesmo se o status for salvo de novo como cancelado.
+            if ($status === 'cancelled' && $previousStatus !== 'cancelled') {
+                self::restoreStock($pdo, $id, $userId);
+            }
+
+            if ($paymentStatus) {
+                $stmt = $pdo->prepare('UPDATE orders SET status = ?, payment_status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?');
+                $stmt->execute([$status, $paymentStatus, $id]);
+            } else {
+                $stmt = $pdo->prepare('UPDATE orders SET status = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ?');
+                $stmt->execute([$status, $id]);
+            }
+
+            $hist = $pdo->prepare('INSERT INTO order_status_history (order_id, status, note, user_id) VALUES (?, ?, ?, ?)');
+            $hist->execute([$id, $status, $note, $userId]);
+
+            $pdo->commit();
+        } catch (\Throwable $e) {
+            $pdo->rollBack();
+            throw $e;
+        }
+    }
+
+    private static function restoreStock(PDO $pdo, int $orderId, ?int $userId): void
+    {
+        $items = $pdo->prepare('SELECT variant_id, quantity, product_name FROM order_items WHERE order_id = ? AND variant_id IS NOT NULL');
+        $items->execute([$orderId]);
+
+        $stockStmt = $pdo->prepare('UPDATE product_variants SET stock = stock + ? WHERE id = ?');
+        $moveStmt = $pdo->prepare(
+            'INSERT INTO stock_movements (variant_id, type, quantity, note, user_id) VALUES (?, ?, ?, ?, ?)'
+        );
+
+        foreach ($items->fetchAll() as $item) {
+            $stockStmt->execute([$item['quantity'], $item['variant_id']]);
+            $moveStmt->execute([
+                $item['variant_id'],
+                'in',
+                $item['quantity'],
+                'Cancelamento do pedido #' . $orderId,
+                $userId,
+            ]);
+        }
     }
 
     public static function revenue(string $from, string $to): float
