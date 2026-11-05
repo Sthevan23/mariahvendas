@@ -1,0 +1,690 @@
+[
+  {
+    "index": 1,
+    "file": "/uploads/products/bali/bali-001.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 1,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 2,
+    "file": "/uploads/products/bali/bali-002.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 2,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 3,
+    "file": "/uploads/products/bali/bali-003.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 3,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 4,
+    "file": "/uploads/products/bali/bali-004.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 4,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 5,
+    "file": "/uploads/products/bali/bali-005.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 5,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 6,
+    "file": "/uploads/products/bali/bali-006.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 6,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 7,
+    "file": "/uploads/products/bali/bali-007.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 7,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 8,
+    "file": "/uploads/products/bali/bali-008.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 8,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 9,
+    "file": "/uploads/products/bali/bali-009.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 9,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 10,
+    "file": "/uploads/products/bali/bali-010.jpg",
+    "source": "colecao_bali_parte_01_a_10.pdf",
+    "page": 10,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 11,
+    "file": "/uploads/products/bali/bali-011.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 1,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 12,
+    "file": "/uploads/products/bali/bali-012.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 2,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 13,
+    "file": "/uploads/products/bali/bali-013.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 3,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 14,
+    "file": "/uploads/products/bali/bali-014.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 4,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 15,
+    "file": "/uploads/products/bali/bali-015.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 5,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 16,
+    "file": "/uploads/products/bali/bali-016.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 6,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 17,
+    "file": "/uploads/products/bali/bali-017.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 7,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 18,
+    "file": "/uploads/products/bali/bali-018.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 8,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 19,
+    "file": "/uploads/products/bali/bali-019.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 9,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 20,
+    "file": "/uploads/products/bali/bali-020.jpg",
+    "source": "colecao_bali_parte_11_a_20.pdf",
+    "page": 10,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 21,
+    "file": "/uploads/products/bali/bali-021.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 1,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 22,
+    "file": "/uploads/products/bali/bali-022.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 2,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 23,
+    "file": "/uploads/products/bali/bali-023.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 3,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 24,
+    "file": "/uploads/products/bali/bali-024.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 4,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 25,
+    "file": "/uploads/products/bali/bali-025.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 5,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 26,
+    "file": "/uploads/products/bali/bali-026.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 6,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 27,
+    "file": "/uploads/products/bali/bali-027.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 7,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 28,
+    "file": "/uploads/products/bali/bali-028.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 8,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 29,
+    "file": "/uploads/products/bali/bali-029.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 9,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 30,
+    "file": "/uploads/products/bali/bali-030.jpg",
+    "source": "colecao_bali_parte_21_a_30.pdf",
+    "page": 10,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 31,
+    "file": "/uploads/products/bali/bali-031.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 1,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 32,
+    "file": "/uploads/products/bali/bali-032.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 2,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 33,
+    "file": "/uploads/products/bali/bali-033.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 3,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 34,
+    "file": "/uploads/products/bali/bali-034.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 4,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 35,
+    "file": "/uploads/products/bali/bali-035.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 5,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 36,
+    "file": "/uploads/products/bali/bali-036.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 6,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 37,
+    "file": "/uploads/products/bali/bali-037.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 7,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 38,
+    "file": "/uploads/products/bali/bali-038.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 8,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 39,
+    "file": "/uploads/products/bali/bali-039.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 9,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 40,
+    "file": "/uploads/products/bali/bali-040.jpg",
+    "source": "colecao_bali_parte_31_a_40.pdf",
+    "page": 10,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 41,
+    "file": "/uploads/products/bali/bali-041.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 1,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 42,
+    "file": "/uploads/products/bali/bali-042.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 2,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 43,
+    "file": "/uploads/products/bali/bali-043.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 3,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 44,
+    "file": "/uploads/products/bali/bali-044.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 4,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 45,
+    "file": "/uploads/products/bali/bali-045.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 5,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 46,
+    "file": "/uploads/products/bali/bali-046.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 6,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 47,
+    "file": "/uploads/products/bali/bali-047.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 7,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 48,
+    "file": "/uploads/products/bali/bali-048.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 8,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 49,
+    "file": "/uploads/products/bali/bali-049.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 9,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 50,
+    "file": "/uploads/products/bali/bali-050.jpg",
+    "source": "colecao_bali_parte_41_a_50.pdf",
+    "page": 10,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 51,
+    "file": "/uploads/products/bali/bali-051.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 1,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 52,
+    "file": "/uploads/products/bali/bali-052.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 2,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 53,
+    "file": "/uploads/products/bali/bali-053.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 3,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 54,
+    "file": "/uploads/products/bali/bali-054.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 4,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 55,
+    "file": "/uploads/products/bali/bali-055.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 5,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 56,
+    "file": "/uploads/products/bali/bali-056.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 6,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 57,
+    "file": "/uploads/products/bali/bali-057.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 7,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 58,
+    "file": "/uploads/products/bali/bali-058.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 8,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 59,
+    "file": "/uploads/products/bali/bali-059.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 9,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 60,
+    "file": "/uploads/products/bali/bali-060.jpg",
+    "source": "colecao_bali_parte_51_a_60.pdf",
+    "page": 10,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 61,
+    "file": "/uploads/products/bali/bali-061.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 1,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 62,
+    "file": "/uploads/products/bali/bali-062.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 2,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 63,
+    "file": "/uploads/products/bali/bali-063.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 3,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 64,
+    "file": "/uploads/products/bali/bali-064.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 4,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 65,
+    "file": "/uploads/products/bali/bali-065.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 5,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 66,
+    "file": "/uploads/products/bali/bali-066.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 6,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 67,
+    "file": "/uploads/products/bali/bali-067.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 7,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 68,
+    "file": "/uploads/products/bali/bali-068.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 8,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 69,
+    "file": "/uploads/products/bali/bali-069.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 9,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 70,
+    "file": "/uploads/products/bali/bali-070.jpg",
+    "source": "colecao_bali_parte_61_a_70.pdf",
+    "page": 10,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 71,
+    "file": "/uploads/products/bali/bali-071.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 1,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 72,
+    "file": "/uploads/products/bali/bali-072.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 2,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 73,
+    "file": "/uploads/products/bali/bali-073.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 3,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 74,
+    "file": "/uploads/products/bali/bali-074.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 4,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 75,
+    "file": "/uploads/products/bali/bali-075.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 5,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 76,
+    "file": "/uploads/products/bali/bali-076.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 6,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 77,
+    "file": "/uploads/products/bali/bali-077.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 7,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 78,
+    "file": "/uploads/products/bali/bali-078.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 8,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 79,
+    "file": "/uploads/products/bali/bali-079.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 9,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 80,
+    "file": "/uploads/products/bali/bali-080.jpg",
+    "source": "colecao_bali_parte_71_a_80.pdf",
+    "page": 10,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 81,
+    "file": "/uploads/products/bali/bali-081.jpg",
+    "source": "colecao_bali_parte_81_a_86.pdf",
+    "page": 1,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 82,
+    "file": "/uploads/products/bali/bali-082.jpg",
+    "source": "colecao_bali_parte_81_a_86.pdf",
+    "page": 2,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 83,
+    "file": "/uploads/products/bali/bali-083.jpg",
+    "source": "colecao_bali_parte_81_a_86.pdf",
+    "page": 3,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 84,
+    "file": "/uploads/products/bali/bali-084.jpg",
+    "source": "colecao_bali_parte_81_a_86.pdf",
+    "page": 4,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 85,
+    "file": "/uploads/products/bali/bali-085.jpg",
+    "source": "colecao_bali_parte_81_a_86.pdf",
+    "page": 5,
+    "w": 862,
+    "h": 1179
+  },
+  {
+    "index": 86,
+    "file": "/uploads/products/bali/bali-086.jpg",
+    "source": "colecao_bali_parte_81_a_86.pdf",
+    "page": 6,
+    "w": 862,
+    "h": 1179
+  }
+]

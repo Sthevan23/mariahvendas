@@ -1,0 +1,34 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.pem
+
+# Env (não subir senhas / URL de produção)
+.env
+.env.local
+
+# SQLite (mandalla.db sobe no Git para facilitar Hostinger)
+/database/*.db-journal
+/database/*.db-wal
+/database/*.db-shm
+
+# Uploads gerados (mantém pasta)
+/public/uploads/banners/*
+!/public/uploads/banners/.gitkeep
+/public/uploads/products/_check/
+/public/uploads/products/_bali_previews/
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Lixo de ferramentas antigas (Next/Node) — não usar
+/node_modules/
+/.next/
+/out/
+/build/
+/package.json
+/package-lock.json
+/next.config.*
+/next-env.d.ts
+/tsconfig.json
+/eslint.config.*
+/AGENTS.md

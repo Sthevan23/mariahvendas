@@ -1,0 +1,24 @@
+# Mandalla — Hostinger / Apache
+# Envie a pasta inteira do projeto para public_html.
+# Este arquivo redireciona o tráfego para /public (document root da loja).
+
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # HTTPS em produção (ignora localhost)
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1)(:\d+)?$ [NC]
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Bloqueia acesso direto a pastas/arquivos sensíveis
+  RewriteRule ^(app|config|database|storage)/ - [F,L]
+  RewriteRule ^(bootstrap|routes)\.php$ - [F,L]
+  RewriteRule ^(\.env|\.env\.example|composer\.(json|lock)|README\.md|HOSTINGER\.md)$ - [F,L]
+
+  # Tudo passa por public/
+  RewriteRule ^$ public/ [L]
+  RewriteRule (.*) public/$1 [L]
+</IfModule>
