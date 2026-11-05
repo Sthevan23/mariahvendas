@@ -109,23 +109,29 @@ button, input, select, textarea { font: inherit; color: inherit; }
   border: 2px solid rgba(255, 255, 255, 0.85);
 }
 .logo-brand--mark {
-  max-width: min(100%, 200px);
+  flex-shrink: 0;
+  line-height: 0;
 }
 .logo-brand--mark img {
-  width: auto;
-  height: 52px;
-  max-width: 100%;
-  border-radius: 0;
+  display: block;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
   border: 0;
   box-shadow: none;
   object-fit: contain;
-  object-position: left center;
+  object-position: center;
+  background: transparent;
+  filter: drop-shadow(0 3px 10px rgba(20, 17, 15, 0.1));
+  transition: filter 0.25s ease, transform 0.25s ease;
 }
-.logo-brand--footer.logo-brand--mark {
-  max-width: min(100%, 168px);
+.logo-brand--mark:hover img {
+  filter: drop-shadow(0 4px 14px rgba(20, 17, 15, 0.14));
 }
 .logo-brand--footer.logo-brand--mark img {
-  height: 46px;
+  width: 50px;
+  height: 50px;
+  filter: drop-shadow(0 2px 8px rgba(20, 17, 15, 0.08));
 }
 .logo-brand .logo-text {
   font-family: var(--serif);
@@ -138,11 +144,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (max-width: 720px) {
   .logo-brand .logo-text { display: none; }
   .logo-brand { max-width: none; }
-  .logo-brand--mark {
-    max-width: min(46vw, 148px);
-  }
   .logo-brand--mark img {
-    height: 44px;
+    width: 50px;
+    height: 50px;
   }
 }
 
@@ -183,9 +187,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .logo-brand:not(.logo-brand--mark) img {
     width: 46px;
     height: 46px;
-  }
-  .logo-brand--mark img {
-    height: 42px;
   }
   .header-actions { gap: 0.1rem; flex-shrink: 0; }
   .icon-btn {
