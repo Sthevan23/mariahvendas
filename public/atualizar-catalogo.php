@@ -49,7 +49,7 @@ try {
     <p>Removidos: <?= (int) $result['removed'] ?> produtos antigos</p>
     <p>Criados: <?= (int) $result['created'] ?> looks com foto única</p>
     <p>Duplicatas: <?= (int) $result['dups'] ?></p>
-    <p><a href="/">Ver loja</a> · <a href="/categoria/colecao-bali">Coleção Bali</a> · <a href="/admin">Admin</a></p>
+    <p><a href="/">Ver loja</a></p>
     <p><strong>Apague agora o arquivo</strong> <code>public/atualizar-catalogo.php</code> no File Manager.</p>
   </div>
 </body>

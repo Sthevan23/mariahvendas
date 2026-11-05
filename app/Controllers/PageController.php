@@ -48,7 +48,7 @@ class PageController extends Controller
     public function robots(): void
     {
         header('Content-Type: text/plain');
-        echo "User-agent: *\nAllow: /\nSitemap: " . Helpers::setting('store_url', 'http://localhost:8080') . "/sitemap.xml\n";
+        echo "User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: " . Helpers::setting('store_url', 'http://localhost:8080') . "/sitemap.xml\n";
     }
 
     public function sitemap(): void
