@@ -1,5 +1,4 @@
 <?php
-use App\Core\Auth;
 use App\Core\Helpers;
 $store = Helpers::setting('store_name', 'Mariah Vendas');
 $flash = Helpers::flash();
@@ -28,7 +27,7 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/app.css?v=2">
+  <link rel="stylesheet" href="/assets/css/app.css?v=3">
   <script type="application/ld+json">
   <?= json_encode([
       '@context' => 'https://schema.org',
@@ -49,24 +48,10 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
 </div>
 <header class="site-header" data-header>
   <div class="container header-inner">
-    <button class="icon-btn menu-toggle" type="button" data-menu-toggle aria-label="Menu">
-      <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-    </button>
     <a class="logo logo-brand" href="/">
       <img src="<?= Helpers::e($logo) ?>" alt="<?= Helpers::e($store) ?>" width="56" height="56">
       <span class="logo-text"><?= Helpers::e($store) ?></span>
     </a>
-    <nav class="nav-desktop" aria-label="Principal">
-      <a href="/">Início</a>
-      <a href="/categoria/colecao-atelier">Festas</a>
-      <a href="/categoria/novidades">Novidades</a>
-      <a href="/catalogo">Roupas</a>
-      <a href="/categoria/vestidos">Vestidos</a>
-      <a href="/categoria/conjuntos">Conjuntos</a>
-      <a href="/categoria/calcas">Calças</a>
-      <a href="/categoria/blusas">Blusas</a>
-      <a href="/categoria/promocoes">Promoções</a>
-    </nav>
     <div class="header-actions">
       <button class="icon-btn" type="button" data-search-toggle aria-label="Pesquisar">
         <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
@@ -79,32 +64,15 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
         <svg viewBox="0 0 24 24"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8a3 3 0 0 1 6 0"/></svg>
         <span class="badge" data-cart-count <?= $cartCount ? '' : 'hidden' ?>><?= $cartCount ?></span>
       </a>
-      <a class="icon-btn" href="<?= Auth::check() ? '/conta' : '/login' ?>" aria-label="Conta">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 19a7 7 0 0 1 14 0"/></svg>
-      </a>
     </div>
   </div>
   <div class="search-panel" data-search-panel>
     <form action="/busca" method="get">
-      <input type="search" name="q" placeholder="Buscar peças..." aria-label="Buscar">
+      <input type="search" name="q" placeholder="Buscar vestidos..." aria-label="Buscar">
       <button class="btn" type="submit">Buscar</button>
     </form>
   </div>
 </header>
-
-<nav class="mobile-nav" data-mobile-nav aria-label="Mobile">
-  <a href="/">Início</a>
-  <a href="/categoria/colecao-atelier">Coleção Festa</a>
-  <a href="/categoria/novidades">Novidades</a>
-  <a href="/catalogo">Roupas</a>
-  <a href="/categoria/vestidos">Vestidos</a>
-  <a href="/categoria/conjuntos">Conjuntos</a>
-  <a href="/categoria/calcas">Calças</a>
-  <a href="/categoria/blusas">Blusas</a>
-  <a href="/categoria/promocoes">Promoções</a>
-  <a href="/favoritos">Favoritos</a>
-  <a href="/conta">Minha conta</a>
-</nav>
 
 <?php if ($flash): ?>
   <div class="flash <?= Helpers::e($flash['type']) ?>" data-flash><?= Helpers::e($flash['message']) ?></div>
@@ -124,9 +92,7 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
     </div>
     <div>
       <h4>Loja</h4>
-      <a href="/catalogo">Catálogo</a>
-      <a href="/categoria/novidades">Novidades</a>
-      <a href="/categoria/promocoes">Promoções</a>
+      <a href="/catalogo">Todos os vestidos</a>
       <a href="/favoritos">Favoritos</a>
     </div>
     <div>

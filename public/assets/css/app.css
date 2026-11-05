@@ -79,9 +79,9 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .header-inner {
   height: var(--header-h);
-  display: grid;
-  grid-template-columns: auto 1fr auto;
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 1.5rem;
 }
 .logo {

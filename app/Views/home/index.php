@@ -13,7 +13,7 @@ $heroSub = Helpers::setting('hero_subtitle');
     <p class="hero-lead"><?= Helpers::e($heroSub) ?></p>
     <div class="hero-actions">
       <a class="btn btn-glow" href="/categoria/colecao-atelier">Ver vestidos de festa</a>
-      <a class="btn btn-outline" href="/catalogo">Explorar catálogo</a>
+      <a class="btn btn-outline" href="/catalogo">Ver todos os vestidos</a>
     </div>
   </div>
   <div class="hero-scroll" aria-hidden="true"><span></span></div>
@@ -70,25 +70,6 @@ $heroSub = Helpers::setting('hero_subtitle');
     <div class="product-grid">
       <?php foreach ($bestsellers as $product): ?>
         <?php require dirname(__DIR__) . '/partials/product-card.php'; ?>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="padding-top:0">
-  <div class="container">
-    <div class="section-head reveal">
-      <div>
-        <p class="eyebrow">Explore</p>
-        <h2>Categorias</h2>
-      </div>
-    </div>
-    <div class="category-grid">
-      <?php foreach (array_slice($categories, 0, 8) as $cat): ?>
-        <a class="category-card reveal" href="/categoria/<?= Helpers::e($cat['slug']) ?>">
-          <img src="<?= Helpers::e($cat['image']) ?>" alt="<?= Helpers::e($cat['name']) ?>" loading="lazy">
-          <span><?= Helpers::e($cat['name']) ?></span>
-        </a>
       <?php endforeach; ?>
     </div>
   </div>

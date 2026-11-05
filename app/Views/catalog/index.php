@@ -3,10 +3,10 @@
   <div class="breadcrumbs"><a href="/">Início</a> / <?= Helpers::e($title) ?></div>
   <div class="section-head">
     <div>
-      <p class="eyebrow">Catálogo</p>
+      <p class="eyebrow">Vestidos</p>
       <h1 class="page-title"><?= Helpers::e($title) ?></h1>
     </div>
-    <p class="muted"><?= (int)($total ?? count($products)) ?> peças</p>
+    <p class="muted"><?= (int)($total ?? count($products)) ?> vestidos</p>
   </div>
 
   <div class="catalog-layout">
@@ -14,18 +14,6 @@
       <?php if (!empty($filters['search'])): ?>
         <input type="hidden" name="q" value="<?= Helpers::e($filters['search']) ?>">
       <?php endif; ?>
-      <label>Categoria
-        <select name="categoria" onchange="this.form.action='/catalogo'; this.form.submit()">
-          <option value="">Todas</option>
-          <option value="colecao-atelier" <?= ($filters['category_slug'] ?? '') === 'colecao-atelier' ? 'selected' : '' ?>>Coleção Festa</option>
-          <option value="novidades" <?= !empty($filters['is_new']) ? 'selected' : '' ?>>Novidades</option>
-          <option value="promocoes" <?= (!empty($filters['is_sale']) && ($filters['category_slug'] ?? '') !== 'colecao-atelier') ? 'selected' : '' ?>>Promoções</option>
-          <?php foreach ($categories as $c): ?>
-            <?php if (in_array($c['slug'], ['novidades', 'promocoes', 'colecao-atelier'], true)) continue; ?>
-            <option value="<?= Helpers::e($c['slug']) ?>" <?= ($filters['category_slug'] ?? '') === $c['slug'] ? 'selected' : '' ?>><?= Helpers::e($c['name']) ?></option>
-          <?php endforeach; ?>
-        </select>
-      </label>
       <label>Tamanho
         <select name="tamanho">
           <option value="">Todos</option>

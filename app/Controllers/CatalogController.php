@@ -59,7 +59,7 @@ class CatalogController extends Controller
 
         $products = Product::query($filters);
 
-        $title = 'Catálogo';
+        $title = 'Vestidos';
         if ($filters['search']) {
             $title = 'Busca';
         } elseif (!empty($filters['is_new'])) {
