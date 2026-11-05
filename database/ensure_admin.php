@@ -12,7 +12,10 @@ function mariah_ensure_admin(): string
 {
     $pdo = App\Core\Database::connection();
     $email = trim((string) (getenv('ADMIN_EMAIL') ?: 'admin@mariahvendas.com.br'));
-    $password = (string) (getenv('ADMIN_PASSWORD') ?: 'mariah123');
+    $password = (string) getenv('ADMIN_PASSWORD');
+    if ($password === '') {
+        throw new RuntimeException('Defina ADMIN_PASSWORD no .env antes de criar o admin.');
+    }
     $name = trim((string) (getenv('ADMIN_NAME') ?: 'Administradora'));
     $phone = trim((string) (getenv('ADMIN_PHONE') ?: '37998086607'));
 

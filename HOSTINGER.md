@@ -2,13 +2,17 @@
 
 Loja PHP pura (MVC) + SQLite. Sem Node.js / Next.js.
 
-## Login admin (troque depois de subir)
+## Login admin
 
 - URL: `https://SEU-DOMINIO/admin/login`
-- E-mail: `admin@mariahvendas.com.br`
-- Senha: `mariah123` (troque em **Minha conta**)
+- E-mail: `ADMIN_EMAIL` do `.env`
+- Senha: `ADMIN_PASSWORD` do `.env` (defina uma senha forte antes de subir)
 
-Se não entrar, abra **uma vez**: `https://SEU-DOMINIO/setup-admin.php?key=mariah-admin-2026` e apague `setup-admin.php`.
+Para criar ou redefinir o admin, rode `php database/ensure_admin.php` pelo terminal do hPanel. Não há mais página web para isso.
+
+## Banco de dados
+
+O arquivo `database/mariah_altocostura.db` **não vai para o Git** (contém dados de clientes). Envie-o manualmente pelo File Manager ou FTP para `database/`.
 
 ## Passo a passo
 
@@ -70,10 +74,8 @@ O projeto já vem com `database/mandalla.db` + fotos em `public/uploads/products
 Ao subir os arquivos, a loja **atualiza sozinha** na primeira visita (troca o catálogo antigo pela Bali).
 
 Se ainda aparecer foto antiga:
-1. Confirme que subiu `public/uploads/products/bali/` e `database/mandalla.db`
-2. Ou abra uma vez: `https://SEU-DOMINIO/atualizar-catalogo.php?key=mandalla-bali-2026`
-3. Apague `public/atualizar-catalogo.php` depois
-4. Ctrl+F5 na home
+1. Confirme que subiu `public/uploads/products/bali/` e o banco `database/mariah_altocostura.db`
+2. Ctrl+F5 na home
 
 ### 7. Testar
 

@@ -39,11 +39,16 @@ foreach ($settings as $k => $v) {
     $insSetting->execute([$k, $v]);
 }
 
+$adminPassword = (string) getenv('ADMIN_PASSWORD');
+if ($adminPassword === '') {
+    throw new RuntimeException('Defina ADMIN_PASSWORD no .env antes de criar o banco.');
+}
+
 $pdo->prepare('INSERT INTO users (name, email, phone, password, role) VALUES (?, ?, ?, ?, ?)')->execute([
     'Administradora',
     'admin@mariahvendas.com.br',
     '11999999999',
-    password_hash('mariah123', PASSWORD_DEFAULT),
+    password_hash($adminPassword, PASSWORD_DEFAULT),
     'admin',
 ]);
 

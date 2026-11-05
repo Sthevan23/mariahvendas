@@ -9,11 +9,9 @@ cd "c:\Users\Administrador\OneDrive\Desktop\Meus_clientes\mariah_altocostura"
 php -S localhost:8080 -t public public/router.php
 ```
 
-## Admin demo
+## Admin
 
-| E-mail | Senha |
-|--------|-------|
-| admin@mariahvendas.com.br | mariah123 |
+Defina `ADMIN_EMAIL` e `ADMIN_PASSWORD` no `.env` (veja `.env.example`) e rode `php database/ensure_admin.php`.
 
 ## Cupons
 

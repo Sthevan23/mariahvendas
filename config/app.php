@@ -5,7 +5,7 @@ return [
     'tagline' => 'Vestidos de festa exclusivos — formatura, debutante e eventos',
     'url' => getenv('APP_URL') ?: 'http://localhost:8080',
     'env' => getenv('APP_ENV') ?: 'local',
-    'debug' => (getenv('APP_DEBUG') ?: 'true') === 'true',
+    'debug' => (getenv('APP_DEBUG') ?: 'false') === 'true',
     'timezone' => 'America/Sao_Paulo',
     'locale' => 'pt_BR',
     'currency' => 'BRL',

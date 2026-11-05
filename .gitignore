@@ -7,7 +7,8 @@ Thumbs.db
 .env
 .env.local
 
-# SQLite (mandalla.db sobe no Git para facilitar Hostinger)
+# SQLite: banco com dados de clientes e hashes de senha — nunca versionar
+/database/*.db
 /database/*.db-journal
 /database/*.db-wal
 /database/*.db-shm
