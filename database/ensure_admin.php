@@ -8,13 +8,13 @@ declare(strict_types=1);
  *
  * Opcional no .env:
  *   ADMIN_EMAIL=seu@email.com
- *   ADMIN_PASSWORD=SenhaSegura123
+ *   ADMIN_PASSWORD=mariah123
  */
 require dirname(__DIR__) . '/bootstrap.php';
 
 $pdo = App\Core\Database::connection();
 $email = trim((string) (getenv('ADMIN_EMAIL') ?: 'admin@mariahvendas.com.br'));
-$password = (string) (getenv('ADMIN_PASSWORD') ?: 'Mariah@2026');
+$password = (string) (getenv('ADMIN_PASSWORD') ?: 'mariah123');
 $name = trim((string) (getenv('ADMIN_NAME') ?: 'Administradora'));
 $phone = trim((string) (getenv('ADMIN_PHONE') ?: '37998086607'));
 

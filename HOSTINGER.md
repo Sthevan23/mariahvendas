@@ -6,7 +6,7 @@ Loja PHP pura (MVC) + SQLite. Sem Node.js / Next.js.
 
 - URL: `https://SEU-DOMINIO/admin`
 - E-mail: `admin@mandalla.com`
-- Senha: `admin123`
+- Senha: `mariah123`
 
 ## Passo a passo
 

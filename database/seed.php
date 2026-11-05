@@ -43,7 +43,7 @@ $pdo->prepare('INSERT INTO users (name, email, phone, password, role) VALUES (?,
     'Administradora',
     'admin@mariahvendas.com.br',
     '11999999999',
-    password_hash('admin123', PASSWORD_DEFAULT),
+    password_hash('mariah123', PASSWORD_DEFAULT),
     'admin',
 ]);
 

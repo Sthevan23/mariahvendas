@@ -13,7 +13,7 @@ php -S localhost:8080 -t public public/router.php
 
 | E-mail | Senha |
 |--------|-------|
-| admin@mariahvendas.com.br | admin123 |
+| admin@mariahvendas.com.br | mariah123 |
 
 ## Cupons
 
