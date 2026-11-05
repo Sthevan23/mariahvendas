@@ -77,6 +77,11 @@
     setTimeout(() => flash.remove(), 4200);
   }
 
+  document.querySelectorAll('.fav-form').forEach((form) => {
+    form.addEventListener('click', (e) => e.stopPropagation());
+    form.addEventListener('submit', (e) => e.stopPropagation());
+  });
+
   document.querySelectorAll('[data-ajax-cart]').forEach((form) => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
