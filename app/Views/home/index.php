@@ -7,7 +7,8 @@ $heroSub = Helpers::setting('hero_subtitle');
 <section class="hero">
   <div class="hero-media" style="background-image:url('<?= Helpers::e($heroImage) ?>')"></div>
   <div class="hero-grain" aria-hidden="true"></div>
-  <div class="container hero-content reveal">
+  <div class="hero-glow" aria-hidden="true"></div>
+  <div class="container hero-content hero-enter">
     <p class="eyebrow eyebrow--light">Mariah Vendas</p>
     <h1><?= Helpers::e($heroTitle) ?></h1>
     <p class="hero-lead"><?= Helpers::e($heroSub) ?></p>

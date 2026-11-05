@@ -23,8 +23,16 @@
     searchPanel?.querySelector('input')?.focus();
   });
 
+  const motionOk = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll('.product-grid, .instagram-grid, .benefits').forEach((grid) => {
+    grid.querySelectorAll('.reveal').forEach((el, i) => {
+      el.style.setProperty('--reveal-delay', `${Math.min(i * 70, 420)}ms`);
+    });
+  });
+
   document.querySelectorAll('.reveal').forEach((el) => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (!motionOk) {
       el.classList.add('visible');
       return;
     }
@@ -37,7 +45,6 @@
       });
     }, { threshold: 0.05, rootMargin: '40px 0px' });
     io.observe(el);
-    // Se já está na viewport no load, marca na hora
     requestAnimationFrame(() => {
       const rect = el.getBoundingClientRect();
       if (rect.top < window.innerHeight && rect.bottom > 0) {
@@ -45,6 +52,25 @@
       }
     });
   });
+
+  const heroMedia = document.querySelector('.hero-media');
+  if (heroMedia && motionOk) {
+    let ticking = false;
+    const parallax = () => {
+      ticking = false;
+      const y = window.scrollY;
+      const limit = window.innerHeight * 1.1;
+      if (y > limit) return;
+      const shift = y * 0.28;
+      heroMedia.style.transform = `scale(1.06) translate3d(0, ${shift}px, 0)`;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(parallax);
+      }
+    }, { passive: true });
+  }
 
   const flash = document.querySelector('[data-flash]');
   if (flash) {

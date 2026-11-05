@@ -2,7 +2,7 @@
 use App\Core\Helpers;
 $p = $product;
 ?>
-<article class="product-card">
+<article class="product-card reveal">
   <a href="/produto/<?= Helpers::e($p['slug']) ?>" class="media">
     <span class="media-shade" aria-hidden="true"></span>
     <span class="media-cta">Ver peça</span>
