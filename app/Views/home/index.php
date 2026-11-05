@@ -9,7 +9,7 @@ $heroSub = Helpers::setting('hero_subtitle');
   <div class="hero-grain" aria-hidden="true"></div>
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="container hero-content hero-enter">
-    <p class="eyebrow eyebrow--light">Mariah Vendas</p>
+    <p class="eyebrow eyebrow--light"><?= Helpers::e(Helpers::setting('store_name', 'Ateliê Mariah')) ?></p>
     <h1><?= Helpers::e($heroTitle) ?></h1>
     <p class="hero-lead"><?= Helpers::e($heroSub) ?></p>
     <div class="hero-actions">
@@ -153,7 +153,7 @@ $heroSub = Helpers::setting('hero_subtitle');
     </div>
     <div class="instagram-grid">
       <?php foreach ($instagram as $img): ?>
-        <img class="reveal" src="<?= Helpers::e($img) ?>" alt="Look Mariah Vendas no Instagram" loading="lazy">
+        <img class="reveal" src="<?= Helpers::e($img) ?>" alt="Look Ateliê Mariah no Instagram" loading="lazy">
       <?php endforeach; ?>
     </div>
   </div>

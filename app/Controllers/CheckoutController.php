@@ -119,7 +119,7 @@ class CheckoutController extends Controller
         $orderItems = Order::items($orderId);
         CartService::clear();
 
-        $lines = ["*Novo pedido Mariah Vendas* {$order['number']}", '', "Cliente: {$order['customer_name']}", "Telefone: {$order['customer_phone']}"];
+        $lines = ["*Novo pedido Ateliê Mariah* {$order['number']}", '', "Cliente: {$order['customer_name']}", "Telefone: {$order['customer_phone']}"];
         if ($order['customer_email']) {
             $lines[] = "E-mail: {$order['customer_email']}";
         }

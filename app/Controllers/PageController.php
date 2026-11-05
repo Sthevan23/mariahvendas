@@ -20,7 +20,7 @@ class PageController extends Controller
         try {
             $stmt = Database::connection()->prepare('INSERT INTO newsletter_subscribers (email) VALUES (?)');
             $stmt->execute([$email]);
-            $this->flash('success', 'Inscrição realizada. Você receberá novidades da Mariah Vendas.');
+            $this->flash('success', 'Inscrição realizada. Você receberá novidades do Ateliê Mariah.');
         } catch (\Throwable $e) {
             $this->flash('success', 'Este e-mail já está na nossa lista.');
         }

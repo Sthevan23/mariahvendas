@@ -28,7 +28,7 @@ $main = $images[0]['path'] ?? null;
     </div>
 
     <div>
-      <p class="eyebrow"><?= Helpers::e($product['category_name'] ?? 'Mariah Vendas') ?></p>
+      <p class="eyebrow"><?= Helpers::e($product['category_name'] ?? Helpers::setting('store_name', 'Ateliê Mariah')) ?></p>
       <h1 class="page-title"><?= Helpers::e($product['name']) ?></h1>
       <div class="price" style="margin:1rem 0 1.25rem;font-size:1.2rem">
         <strong><?= Helpers::money($product['price']) ?></strong>

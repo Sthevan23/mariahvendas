@@ -32,7 +32,7 @@ function mariah_seed_catalog(PDO $pdo, string $root): array
             'Coleção Festa',
             'colecao-atelier',
             '/uploads/moda/colecao/mariah-01.jpg',
-            'Vestidos de festa Mariah Vendas',
+            'Vestidos de festa Ateliê Mariah',
             0,
         ]);
         $cats['colecao-atelier'] = (int) $pdo->lastInsertId();
@@ -88,7 +88,7 @@ function mariah_seed_catalog(PDO $pdo, string $root): array
         $compare = $isSale ? round($price * 1.18, 2) : null;
         $cost = round($price * 0.4, 2);
         $sold = $best ? random_int(8, 30) : random_int(0, 7);
-        $desc = "Vestido de festa Mariah Vendas. {$name}. Ideal para formatura, debutante, aniversário, madrinhas e eventos especiais — acabamento artesanal e caimento impecável.";
+        $desc = "Vestido de festa Ateliê Mariah. {$name}. Ideal para formatura, debutante, aniversário, madrinhas e eventos especiais — acabamento artesanal e caimento impecável.";
 
         $insP->execute([$catId, $name, $slug, $desc, $price, $compare, $featured, $isNew, $isSale, $best, $cost, $sold]);
         $pid = (int) $pdo->lastInsertId();
@@ -120,10 +120,11 @@ function mariah_seed_catalog(PDO $pdo, string $root): array
     }
 
     $set = $pdo->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
-    $set->execute(['catalog_version', 'mariah-v5']);
+    $set->execute(['catalog_version', 'mariah-v6']);
+    $set->execute(['store_name', 'Ateliê Mariah']);
     $set->execute(['hero_image', '/uploads/moda/hero-atelier.jpg']);
     $set->execute(['hero_title', 'Vestidos de festa para você brilhar']);
-    $set->execute(['hero_subtitle', 'Formatura, debutante, aniversário e ocasiões especiais — modelagem exclusiva Mariah Vendas em Divinópolis.']);
+    $set->execute(['hero_subtitle', 'Formatura, debutante, aniversário e ocasiões especiais — modelagem exclusiva Ateliê Mariah em Divinópolis.']);
     $ig = [];
     foreach ([1, 2, 3, 4, 5, 6] as $i) {
         $f = '/uploads/moda/colecao/mariah-' . str_pad((string) $i, 2, '0', STR_PAD_LEFT) . '.jpg';

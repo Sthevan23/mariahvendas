@@ -17,7 +17,7 @@ if (empty($_SESSION['_csrf'])) $_SESSION['_csrf'] = bin2hex(random_bytes(32));
 <?php if ($flash): ?><div class="flash <?= Helpers::e($flash['type']) ?>" data-flash><?= Helpers::e($flash['message']) ?></div><?php endif; ?>
 <div class="admin-shell">
   <aside class="admin-sidebar">
-    <a class="logo" href="/admin" style="display:block;margin-bottom:1.5rem;color:#fff">Mariah Vendas</a>
+    <a class="logo" href="/admin" style="display:block;margin-bottom:1.5rem;color:#fff">Ateliê Mariah</a>
     <a href="/admin" class="<?= $path === '/admin' ? 'active' : '' ?>">Dashboard</a>
     <a href="/admin/produtos" class="<?= str_starts_with($path, '/admin/produtos') ? 'active' : '' ?>">Produtos</a>
     <a href="/admin/pedidos" class="<?= str_starts_with($path, '/admin/pedidos') ? 'active' : '' ?>">Pedidos</a>

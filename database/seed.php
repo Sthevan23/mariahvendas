@@ -11,7 +11,7 @@ $schema = file_get_contents(__DIR__ . '/schema.sql');
 $pdo->exec($schema);
 
 $settings = [
-    'store_name' => 'Mariah Vendas',
+    'store_name' => 'Ateliê Mariah',
     'tagline' => 'Vestidos de festa exclusivos — formatura, debutante e eventos',
     'whatsapp' => '5537998086607',
     'instagram' => '@atelie_mariahaltacostura_',
@@ -220,4 +220,4 @@ if (!file_exists($sampleImage)) {
 require_once __DIR__ . '/seed_mariah_catalog.php';
 $mariah = mariah_seed_catalog($pdo, dirname(__DIR__));
 
-echo "Banco Mariah Vendas criado. Coleção: {$mariah['created']} produtos.\n";
+echo "Banco Ateliê Mariah criado. Coleção: {$mariah['created']} produtos.\n";

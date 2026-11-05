@@ -12,7 +12,7 @@ class AuthController extends Controller
         if (Auth::isAdmin()) {
             $this->redirect('/admin');
         }
-        $this->render('admin/auth/login', ['title' => 'Admin Mariah Vendas'], 'layouts/admin-auth');
+        $this->render('admin/auth/login', ['title' => 'Admin Ateliê Mariah'], 'layouts/admin-auth');
     }
 
     public function login(): void

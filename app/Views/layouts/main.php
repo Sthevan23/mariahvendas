@@ -1,6 +1,6 @@
 <?php
 use App\Core\Helpers;
-$store = Helpers::setting('store_name', 'Mariah Vendas');
+$store = Helpers::setting('store_name', 'Ateliê Mariah');
 $flash = Helpers::flash();
 $cartCount = Helpers::cartCount();
 $favCount = count($_SESSION['favorites'] ?? []);

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'name' => 'Mariah Vendas',
+    'name' => 'Ateliê Mariah',
     'tagline' => 'Vestidos de festa exclusivos — formatura, debutante e eventos',
     'url' => getenv('APP_URL') ?: 'http://localhost:8080',
     'env' => getenv('APP_ENV') ?: 'local',
