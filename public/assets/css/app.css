@@ -247,7 +247,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.35rem 0.65rem;
   }
-  .product-card h3 {
+  .product-card-title {
     font-size: 1.05rem;
     line-height: 1.3;
   }
