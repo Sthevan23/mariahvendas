@@ -27,7 +27,7 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/app.css?v=4">
+  <link rel="stylesheet" href="/assets/css/app.css?v=5">
   <script type="application/ld+json">
   <?= json_encode([
       '@context' => 'https://schema.org',
@@ -104,8 +104,8 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
     </div>
     <div>
       <h4>Contato</h4>
-      <p><?= Helpers::e(Helpers::setting('email')) ?></p>
       <p><?= Helpers::e(Helpers::setting('phone')) ?></p>
+      <p><a href="<?= Helpers::e($whatsapp) ?>" target="_blank" rel="noopener">WhatsApp</a></p>
       <p><a href="<?= Helpers::e($instagramUrl) ?>" target="_blank" rel="noopener"><?= Helpers::e(Helpers::setting('instagram')) ?></a></p>
     </div>
   </div>

@@ -157,17 +157,3 @@ $heroSub = Helpers::setting('hero_subtitle');
     </div>
   </div>
 </section>
-
-<section class="newsletter">
-  <div class="container newsletter-inner reveal">
-    <div>
-      <p class="eyebrow" style="color:#c4a484">Newsletter</p>
-      <h2>Receba novidades e pré-vendas</h2>
-    </div>
-    <form method="post" action="/newsletter">
-      <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
-      <input type="email" name="email" required placeholder="Seu melhor e-mail">
-      <button class="btn" type="submit">Quero receber</button>
-    </form>
-  </div>
-</section>
