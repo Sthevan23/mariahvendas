@@ -30,7 +30,8 @@ class SettingsController extends Controller
         $this->verifyCsrf();
         $keys = [
             'store_name', 'tagline', 'whatsapp', 'instagram', 'email', 'phone', 'address',
-            'hero_title', 'hero_subtitle', 'hero_image', 'exchange_policy', 'privacy_policy', 'delivery_info',
+            'hero_title', 'hero_subtitle', 'hero_image', 'og_image',
+            'exchange_policy', 'privacy_policy', 'delivery_info',
         ];
         $stmt = Database::connection()->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
         foreach ($keys as $key) {
@@ -78,5 +79,70 @@ class SettingsController extends Controller
         ]);
         $this->flash('success', 'Cupom criado.');
         $this->redirect('/admin/configuracoes');
+    }
+
+    public function uploadHero(): void
+    {
+        $this->verifyCsrf();
+        if (empty($_FILES['hero_file']['name']) || ($_FILES['hero_file']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+            $this->flash('error', 'Selecione uma imagem JPG, PNG ou WebP.');
+            $this->redirect('/admin/configuracoes');
+        }
+
+        $ext = strtolower(pathinfo((string) $_FILES['hero_file']['name'], PATHINFO_EXTENSION));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) {
+            $this->flash('error', 'Formato não suportado. Use JPG, PNG ou WebP.');
+            $this->redirect('/admin/configuracoes');
+        }
+
+        $dir = dirname(__DIR__, 3) . '/public/uploads/moda/';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+
+        $base = 'hero-atelier';
+        $filename = $ext === 'jpeg' ? $base . '.jpg' : $base . '.' . ($ext === 'jpg' ? 'jpg' : $ext);
+        $dest = $dir . $filename;
+        if (!move_uploaded_file($_FILES['hero_file']['tmp_name'], $dest)) {
+            $this->flash('error', 'Não foi possível salvar a imagem.');
+            $this->redirect('/admin/configuracoes');
+        }
+
+        if ($ext === 'png' || $ext === 'webp') {
+            $jpgPath = $dir . $base . '.jpg';
+            $this->convertHeroToJpeg($dest, $jpgPath, $ext);
+            if (is_file($jpgPath)) {
+                $filename = $base . '.jpg';
+                if ($dest !== $jpgPath && is_file($dest)) {
+                    @unlink($dest);
+                }
+            }
+        }
+
+        $publicPath = '/uploads/moda/' . $filename;
+        Database::connection()->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)')
+            ->execute(['hero_image', $publicPath]);
+
+        require_once dirname(__DIR__, 3) . '/database/build_hero_assets.php';
+        mariah_rebuild_hero_assets(dirname(__DIR__, 3));
+
+        $this->flash('success', 'Banner da home atualizado.');
+        $this->redirect('/admin/configuracoes');
+    }
+
+    private function convertHeroToJpeg(string $source, string $jpgPath, string $ext): void
+    {
+        if ($ext === 'webp' && function_exists('imagecreatefromwebp')) {
+            $img = @imagecreatefromwebp($source);
+        } elseif ($ext === 'png') {
+            $img = @imagecreatefrompng($source);
+        } else {
+            return;
+        }
+        if (!$img) {
+            return;
+        }
+        imagejpeg($img, $jpgPath, 92);
+        imagedestroy($img);
     }
 }

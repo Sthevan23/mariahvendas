@@ -1,5 +1,15 @@
 <?php use App\Core\Helpers; ?>
-<h1 class="page-title">Dashboard</h1>
+<div class="admin-page-head">
+  <h1 class="page-title">Dashboard</h1>
+</div>
+
+<div class="admin-quick">
+  <a href="/admin/produtos"><strong>Produtos</strong>Cadastrar e editar vestidos</a>
+  <a href="/admin/pedidos"><strong>Pedidos</strong>Status e atendimento</a>
+  <a href="/admin/estoque"><strong>Estoque</strong>Tamanhos e cores</a>
+  <a href="/admin/configuracoes"><strong>Configurações</strong>Banner, contatos e loja</a>
+</div>
+
 <div class="stat-grid">
   <div class="stat-card"><span>Faturamento hoje</span><strong><?= Helpers::money($revenueToday) ?></strong></div>
   <div class="stat-card"><span>Semanal</span><strong><?= Helpers::money($revenueWeek) ?></strong></div>

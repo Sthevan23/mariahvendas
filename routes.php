@@ -6,6 +6,7 @@ use App\Controllers\Admin\DashboardController;
 use App\Controllers\Admin\FinanceController;
 use App\Controllers\Admin\OrderController as AdminOrderController;
 use App\Controllers\Admin\ProductController as AdminProductController;
+use App\Controllers\Admin\ProfileController;
 use App\Controllers\Admin\SettingsController;
 use App\Controllers\Admin\StockController;
 use App\Controllers\AuthController;
@@ -74,7 +75,10 @@ $router->get('/admin/financeiro/exportar', [FinanceController::class, 'export'],
 $router->get('/admin/clientes', [AdminCustomerController::class, 'index'], $admin);
 $router->get('/admin/configuracoes', [SettingsController::class, 'index'], $admin);
 $router->post('/admin/configuracoes', [SettingsController::class, 'save'], $admin);
+$router->post('/admin/configuracoes/hero', [SettingsController::class, 'uploadHero'], $admin);
 $router->post('/admin/configuracoes/categoria', [SettingsController::class, 'saveCategory'], $admin);
 $router->post('/admin/configuracoes/cupom', [SettingsController::class, 'saveCoupon'], $admin);
+$router->get('/admin/conta', [ProfileController::class, 'index'], $admin);
+$router->post('/admin/conta/senha', [ProfileController::class, 'updatePassword'], $admin);
 
 return $router;

@@ -7,6 +7,7 @@
   <input class="form-control" name="q" placeholder="Buscar..." value="<?= Helpers::e($_GET['q'] ?? '') ?>">
   <button class="btn btn-outline" type="submit">Buscar</button>
 </form>
+<div class="admin-table-wrap">
 <table class="admin-table">
   <thead><tr><th>Produto</th><th>Preço</th><th>Estoque</th><th>Status</th><th></th></tr></thead>
   <tbody>
@@ -29,3 +30,4 @@
   <?php endforeach; ?>
   </tbody>
 </table>
+</div>

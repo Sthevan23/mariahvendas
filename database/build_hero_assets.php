@@ -3,41 +3,44 @@
 /**
  * Gera hero em 2560px (JPEG + WebP) a partir de public/uploads/moda/hero-atelier.jpg
  */
-$root = dirname(__DIR__);
-$src = $root . '/public/uploads/moda/hero-atelier.jpg';
-if (!is_file($src)) {
-    fwrite(STDERR, "Arquivo não encontrado: {$src}\n");
-    exit(1);
+function mariah_rebuild_hero_assets(string $root): bool
+{
+    $src = $root . '/public/uploads/moda/hero-atelier.jpg';
+    if (!is_file($src)) {
+        return false;
+    }
+
+    $img = @imagecreatefromjpeg($src);
+    if ($img === false) {
+        return false;
+    }
+
+    $sw = imagesx($img);
+    $sh = imagesy($img);
+    $tw = 2560;
+    $th = (int) round($sh * ($tw / max(1, $sw)));
+
+    $out = imagecreatetruecolor($tw, $th);
+    imagecopyresampled($out, $img, 0, 0, 0, 0, $tw, $th, $sw, $sh);
+    imagedestroy($img);
+
+    $jpg = $root . '/public/uploads/moda/hero-atelier.jpg';
+    imagejpeg($out, $jpg, 92);
+
+    if (function_exists('imagewebp')) {
+        imagewebp($out, $root . '/public/uploads/moda/hero-atelier.webp', 88);
+    }
+
+    imagedestroy($out);
+
+    return true;
 }
 
-$img = @imagecreatefromjpeg($src);
-if ($img === false) {
-    fwrite(STDERR, "JPEG inválido: {$src}\n");
-    exit(1);
-}
-
-$sw = imagesx($img);
-$sh = imagesy($img);
-$tw = 2560;
-$th = (int) round($sh * ($tw / $sw));
-
-$out = imagecreatetruecolor($tw, $th);
-imagecopyresampled($out, $img, 0, 0, 0, 0, $tw, $th, $sw, $sh);
-imagedestroy($img);
-
-$jpg = $root . '/public/uploads/moda/hero-atelier.jpg';
-imagejpeg($out, $jpg, 92);
-
-$webpPath = null;
-if (function_exists('imagewebp')) {
-    $webpPath = $root . '/public/uploads/moda/hero-atelier.webp';
-    imagewebp($out, $webpPath, 88);
-}
-
-imagedestroy($out);
-
-echo "OK {$tw}x{$th}\n";
-echo basename($jpg) . ' ' . filesize($jpg) . " bytes\n";
-if ($webpPath && is_file($webpPath)) {
-    echo basename($webpPath) . ' ' . filesize($webpPath) . " bytes\n";
+if (PHP_SAPI === 'cli' && realpath($argv[0] ?? '') === __FILE__) {
+    $root = dirname(__DIR__);
+    if (!mariah_rebuild_hero_assets($root)) {
+        fwrite(STDERR, "Falha ao gerar hero.\n");
+        exit(1);
+    }
+    echo "OK hero-atelier.jpg\n";
 }

@@ -173,4 +173,27 @@
     document.body.appendChild(el);
     setTimeout(() => el.remove(), 4000);
   }
+
+  const adminSidebar = document.getElementById('admin-sidebar');
+  const adminBackdrop = document.getElementById('admin-sidebar-backdrop');
+  const adminToggle = document.getElementById('admin-nav-toggle');
+  const closeAdminNav = () => {
+    adminSidebar?.classList.remove('is-open');
+    adminBackdrop?.classList.remove('is-open');
+    adminToggle?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  };
+  adminToggle?.addEventListener('click', () => {
+    const open = !adminSidebar?.classList.contains('is-open');
+    adminSidebar?.classList.toggle('is-open', open);
+    adminBackdrop?.classList.toggle('is-open', open);
+    adminToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    document.body.style.overflow = open ? 'hidden' : '';
+  });
+  adminBackdrop?.addEventListener('click', closeAdminNav);
+  adminSidebar?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (window.matchMedia('(max-width: 959px)').matches) closeAdminNav();
+    });
+  });
 })();
