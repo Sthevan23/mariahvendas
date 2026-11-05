@@ -17,7 +17,7 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title><?= Helpers::e(($title ?? $store) . ' | ' . $store) ?></title>
   <meta name="description" content="<?= Helpers::e($meta_description ?? Helpers::setting('tagline', 'Vestidos de festa exclusivos')) ?>">
   <meta property="og:title" content="<?= Helpers::e($title ?? $store) ?>">
@@ -27,7 +27,7 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/app.css?v=3">
+  <link rel="stylesheet" href="/assets/css/app.css?v=4">
   <script type="application/ld+json">
   <?= json_encode([
       '@context' => 'https://schema.org',
@@ -42,8 +42,9 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
 <body>
 <div class="top-bar">
   <div class="container top-bar-inner">
-    <span>Vestidos de festa · Divinópolis/MG</span>
-    <a href="<?= Helpers::e($whatsapp) ?>" target="_blank" rel="noopener">Fale conosco no WhatsApp</a>
+    <span class="top-bar-msg top-bar-msg--full">Vestidos de festa · Divinópolis/MG</span>
+    <span class="top-bar-msg top-bar-msg--short">Vestidos de festa</span>
+    <a class="top-bar-wa" href="<?= Helpers::e($whatsapp) ?>" target="_blank" rel="noopener">WhatsApp</a>
   </div>
 </div>
 <header class="site-header" data-header>
