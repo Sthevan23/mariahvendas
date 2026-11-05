@@ -18,6 +18,9 @@ require dirname(__DIR__) . '/bootstrap.php';
 require_once dirname(__DIR__) . '/database/ensure_admin.php';
 $msg = mariah_ensure_admin();
 
+require_once dirname(__DIR__) . '/database/patch_stock_levels.php';
+$stockMsg = mariah_patch_stock_levels();
+
 header('Content-Type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE html>
@@ -33,6 +36,7 @@ header('Content-Type: text/html; charset=utf-8');
 <body>
   <h1>Login admin atualizado</h1>
   <p><?= htmlspecialchars($msg, ENT_QUOTES, 'UTF-8') ?></p>
+  <?php if ($stockMsg !== ''): ?><p><small><?= htmlspecialchars($stockMsg, ENT_QUOTES, 'UTF-8') ?></small></p><?php endif; ?>
   <p>E-mail: <code>admin@mariahvendas.com.br</code></p>
   <p>Senha: <code>mariah123</code> (troque em Minha conta)</p>
   <p><a href="/admin/login">Ir para o painel</a></p>

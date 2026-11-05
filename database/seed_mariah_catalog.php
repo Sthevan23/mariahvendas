@@ -95,7 +95,7 @@ function mariah_seed_catalog(PDO $pdo, string $root): array
         $insI->execute([$pid, $path, $name]);
         $color = $colors[($n - 1) % count($colors)];
         foreach ($sizes as $size) {
-            $stock = $size === 'M' ? random_int(4, 12) : random_int(1, 8);
+            $stock = random_int(10, 28);
             $sku = 'MAR-' . str_pad((string) $n, 3, '0', STR_PAD_LEFT) . "-{$size}";
             $insV->execute([$pid, $size, $color[0], $color[1], $sku, $stock]);
         }

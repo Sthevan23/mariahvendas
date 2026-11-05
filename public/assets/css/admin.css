@@ -251,6 +251,22 @@
   gap: 1.25rem;
 }
 
+.admin-dash-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.admin-dash-list li {
+  padding: 0.55rem 0;
+  border-bottom: 1px solid var(--line, #e5dfd6);
+  font-size: 0.92rem;
+}
+
+.admin-dash-list li:last-child {
+  border-bottom: none;
+}
+
 .admin-hero-preview {
   margin-top: 0.5rem;
   border: 1px solid var(--line);

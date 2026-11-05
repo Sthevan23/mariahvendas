@@ -363,14 +363,39 @@ class Product
         return (int) $pdo->lastInsertId();
     }
 
-    public static function lowStock(int $threshold = 5): array
+    public static function lowStock(int $threshold = 3, int $limit = 6): array
     {
         $stmt = Database::connection()->prepare(
-            'SELECT v.*, p.name AS product_name FROM product_variants v
+            'SELECT p.id AS product_id, p.name AS product_name,
+                    MIN(v.stock) AS stock,
+                    SUM(CASE WHEN v.stock <= ? THEN 1 ELSE 0 END) AS variants_low
+             FROM product_variants v
              JOIN products p ON p.id = v.product_id
-             WHERE v.stock <= ? ORDER BY v.stock ASC'
+             WHERE p.is_active = 1
+             GROUP BY p.id
+             HAVING MIN(v.stock) <= ?
+             ORDER BY stock ASC, p.name ASC
+             LIMIT ?'
         );
-        $stmt->execute([$threshold]);
+        $stmt->bindValue(1, $threshold, PDO::PARAM_INT);
+        $stmt->bindValue(2, $threshold, PDO::PARAM_INT);
+        $stmt->bindValue(3, $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    /** Destaques quando ainda não há pedidos pagos no sistema. */
+    public static function topBySoldCount(int $limit = 5): array
+    {
+        $stmt = Database::connection()->prepare(
+            'SELECT name AS product_name, sold_count AS qty, (price * sold_count) AS revenue
+             FROM products
+             WHERE is_active = 1 AND sold_count > 0
+             ORDER BY sold_count DESC, name ASC
+             LIMIT ?'
+        );
+        $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+        $stmt->execute();
         return $stmt->fetchAll();
     }
 }

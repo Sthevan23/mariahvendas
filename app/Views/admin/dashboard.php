@@ -33,16 +33,40 @@
 <div class="catalog-layout">
   <div class="admin-card">
     <h3 style="margin-top:0;font-family:var(--serif);font-weight:500">Mais vendidos</h3>
-    <?php foreach ($topProducts as $p): ?>
-      <p><?= Helpers::e($p['product_name']) ?> — <?= (int)$p['qty'] ?> un · <?= Helpers::money($p['revenue']) ?></p>
-    <?php endforeach; ?>
-    <?php if (!$topProducts): ?><p class="muted">Sem vendas pagas ainda.</p><?php endif; ?>
+    <?php if ($topProducts): ?>
+      <?php foreach ($topProducts as $p): ?>
+        <p><?= Helpers::e($p['product_name']) ?> — <?= (int)$p['qty'] ?> un · <?= Helpers::money($p['revenue']) ?></p>
+      <?php endforeach; ?>
+    <?php elseif ($topCatalog): ?>
+      <p class="muted" style="margin-top:0;font-size:.85rem">Pedidos pagos ainda não registrados — destaques do catálogo:</p>
+      <?php foreach ($topCatalog as $p): ?>
+        <p><?= Helpers::e($p['product_name']) ?> — <?= (int)$p['qty'] ?> un · ref. <?= Helpers::money($p['revenue']) ?></p>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <p class="muted">Cadastre produtos ou aguarde as primeiras vendas pagas.</p>
+    <?php endif; ?>
   </div>
   <div class="admin-card">
-    <h3 style="margin-top:0;font-family:var(--serif);font-weight:500">Estoque baixo</h3>
-    <?php foreach ($lowStock as $s): ?>
-      <p><?= Helpers::e($s['product_name']) ?> <?= Helpers::e($s['size']) ?>/<?= Helpers::e($s['color']) ?>: <strong><?= (int)$s['stock'] ?></strong></p>
-    <?php endforeach; ?>
+    <div class="section-head" style="margin-bottom:.75rem">
+      <h3 style="margin:0;font-family:var(--serif);font-weight:500">Estoque baixo</h3>
+      <a href="/admin/estoque" class="muted" style="font-size:.82rem">Ajustar</a>
+    </div>
+    <?php if ($lowStock): ?>
+      <p class="muted" style="margin-top:0;font-size:.82rem">Produtos com alguma variante com ≤ <?= (int)$lowStockThreshold ?> un.</p>
+      <ul class="admin-dash-list">
+        <?php foreach ($lowStock as $s): ?>
+          <li>
+            <a href="/admin/produtos/<?= (int)$s['product_id'] ?>/editar"><?= Helpers::e($s['product_name']) ?></a>
+            — mín. <strong><?= (int)$s['stock'] ?></strong> un
+            <?php if ((int)$s['variants_low'] > 1): ?>
+              <span class="muted">(<?= (int)$s['variants_low'] ?> variantes)</span>
+            <?php endif; ?>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+    <?php else: ?>
+      <p class="muted" style="margin:0">Tudo certo — nenhum produto abaixo de <?= (int)$lowStockThreshold ?> unidades.</p>
+    <?php endif; ?>
   </div>
 </div>
 

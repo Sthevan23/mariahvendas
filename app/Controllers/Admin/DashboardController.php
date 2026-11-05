@@ -22,6 +22,10 @@ class DashboardController extends Controller
         $paidMonth = Order::count($monthStart, $today, 'paid');
         $ticket = $paidMonth > 0 ? $revenueMonth / $paidMonth : 0;
 
+        $topPaid = Order::topProducts();
+        $topCatalog = $topPaid ? [] : Product::topBySoldCount();
+        $stockThreshold = max(1, (int) Helpers::setting('low_stock_threshold', 3));
+
         $this->render('admin/dashboard', [
             'title' => 'Dashboard',
             'revenueToday' => $revenueToday,
@@ -29,8 +33,10 @@ class DashboardController extends Controller
             'revenueMonth' => $revenueMonth,
             'ordersMonth' => $ordersMonth,
             'ticket' => $ticket,
-            'topProducts' => Order::topProducts(),
-            'lowStock' => Product::lowStock((int) Helpers::setting('low_stock_threshold', 5)),
+            'topProducts' => $topPaid,
+            'topCatalog' => $topCatalog,
+            'lowStock' => Product::lowStock($stockThreshold),
+            'lowStockThreshold' => $stockThreshold,
             'awaiting' => Order::awaiting(),
             'chart' => Order::salesByDay(14),
         ], 'layouts/admin');

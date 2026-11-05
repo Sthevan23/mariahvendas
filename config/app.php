@@ -10,7 +10,7 @@ return [
     'locale' => 'pt_BR',
     'currency' => 'BRL',
     'whatsapp' => getenv('WHATSAPP') ?: '5537998086607',
-    'low_stock_threshold' => 5,
+    'low_stock_threshold' => 3,
     'session_name' => 'mariah_vendas_session',
     'logo_path' => '/assets/brand/logo-header.png',
 ];
