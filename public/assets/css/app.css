@@ -436,10 +436,22 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .hero-media {
   position: absolute;
   inset: 0;
-  background: #2a2420 center/cover no-repeat;
-  transform: scale(1.06);
+  background: #2a2420;
+  transform: scale(1.04);
   animation: heroZoom 14s ease-out forwards;
   will-change: transform;
+}
+.hero-media picture,
+.hero-media__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.hero-media__img {
+  object-fit: cover;
+  object-position: center 18%;
 }
 .hero-media::after {
   content: "";
@@ -1045,8 +1057,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 
 @keyframes heroZoom {
-  from { transform: scale(1.1); }
-  to { transform: scale(1.02); }
+  from { transform: scale(1.04); }
+  to { transform: scale(1); }
 }
 @keyframes heroLineIn {
   to { opacity: 1; transform: none; }

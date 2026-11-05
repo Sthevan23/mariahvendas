@@ -8,9 +8,26 @@ $instagramHandle = Helpers::setting('instagram', '@atelie_mariahaltacostura_');
 $instagramUser = ltrim((string) $instagramHandle, '@');
 $instagramUrl = $instagramUser !== '' ? 'https://instagram.com/' . rawurlencode($instagramUser) : '#';
 $editorialImage = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/colecao/mariah-01.jpg';
+$heroSrc = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/hero-atelier.jpg';
+$heroWebp = preg_match('/\.jpe?g$/i', $heroSrc) ? preg_replace('/\.jpe?g$/i', '.webp', $heroSrc) : '';
+$heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $heroWebp);
 ?>
 <section class="hero">
-  <div class="hero-media" style="background-image:url('<?= Helpers::e($heroImage) ?>')"></div>
+  <div class="hero-media">
+    <picture>
+      <?php if ($heroWebpOk): ?>
+      <source srcset="<?= Helpers::e($heroWebp) ?>" type="image/webp">
+      <?php endif; ?>
+      <img
+        class="hero-media__img"
+        src="<?= Helpers::e($heroSrc) ?>"
+        width="2560"
+        height="1440"
+        alt=""
+        fetchpriority="high"
+        decoding="async">
+    </picture>
+  </div>
   <div class="hero-grain" aria-hidden="true"></div>
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="container hero-content hero-enter">

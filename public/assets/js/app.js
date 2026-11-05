@@ -62,7 +62,7 @@
       const limit = window.innerHeight * 1.1;
       if (y > limit) return;
       const shift = y * 0.28;
-      heroMedia.style.transform = `scale(1.06) translate3d(0, ${shift}px, 0)`;
+      heroMedia.style.transform = `scale(1.04) translate3d(0, ${shift}px, 0)`;
     };
     window.addEventListener('scroll', () => {
       if (!ticking) {
