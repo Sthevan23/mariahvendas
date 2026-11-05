@@ -9,7 +9,8 @@ class User
 {
     public static function findByEmail(string $email): ?array
     {
-        $stmt = Database::connection()->prepare('SELECT * FROM users WHERE email = ? LIMIT 1');
+        $email = strtolower(trim($email));
+        $stmt = Database::connection()->prepare('SELECT * FROM users WHERE LOWER(email) = ? LIMIT 1');
         $stmt->execute([$email]);
         $row = $stmt->fetch();
         return $row ?: null;

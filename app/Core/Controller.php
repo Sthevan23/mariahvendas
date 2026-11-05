@@ -42,12 +42,13 @@ class Controller
         return $_SESSION['_csrf'];
     }
 
-    protected function verifyCsrf(): void
+    protected function verifyCsrf(?string $redirectTo = null): void
     {
         $token = $_POST['_csrf'] ?? '';
         if (!$token || !hash_equals($_SESSION['_csrf'] ?? '', $token)) {
-            http_response_code(419);
-            exit('Token CSRF inválido.');
+            $this->flash('error', 'Sessão expirada ou cookie bloqueado. Feche abas antigas e tente de novo.');
+            $target = $redirectTo ?? ($_SERVER['HTTP_REFERER'] ?? '/');
+            $this->redirect($target);
         }
     }
 }

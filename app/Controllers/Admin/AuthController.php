@@ -17,12 +17,21 @@ class AuthController extends Controller
 
     public function login(): void
     {
-        $this->verifyCsrf();
-        if (!Auth::attempt(trim((string) $this->input('email')), (string) $this->input('password')) || !Auth::isAdmin()) {
-            Auth::logout();
-            $this->flash('error', 'Acesso administrativo inválido.');
+        $this->verifyCsrf('/admin/login');
+        $email = strtolower(trim((string) $this->input('email')));
+        $password = (string) $this->input('password');
+
+        if (!Auth::attempt($email, $password)) {
+            $this->flash('error', 'E-mail ou senha incorretos. Use admin@mariahvendas.com.br e a senha definida para o painel.');
             $this->redirect('/admin/login');
         }
+
+        if (!Auth::isAdmin()) {
+            Auth::logout();
+            $this->flash('error', 'Esta conta não é administradora. Acesse pelo login da loja em /login.');
+            $this->redirect('/admin/login');
+        }
+
         $this->redirect('/admin');
     }
 

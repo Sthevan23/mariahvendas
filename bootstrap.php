@@ -22,8 +22,26 @@ if (is_file($envFile)) {
 $config = require __DIR__ . '/config/app.php';
 date_default_timezone_set($config['timezone']);
 
+$sessionDir = __DIR__ . '/storage/sessions';
+if (!is_dir($sessionDir)) {
+    mkdir($sessionDir, 0755, true);
+}
+if (is_writable($sessionDir)) {
+    session_save_path($sessionDir);
+}
+
+$isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+    || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_name($config['session_name']);
+    session_set_cookie_params([
+        'lifetime' => 0,
+        'path' => '/',
+        'secure' => $isHttps,
+        'httponly' => true,
+        'samesite' => 'Lax',
+    ]);
     session_start();
 }
 

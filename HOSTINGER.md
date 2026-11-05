@@ -4,9 +4,11 @@ Loja PHP pura (MVC) + SQLite. Sem Node.js / Next.js.
 
 ## Login admin (troque depois de subir)
 
-- URL: `https://SEU-DOMINIO/admin`
-- E-mail: `admin@mandalla.com`
-- Senha: `mariah123`
+- URL: `https://SEU-DOMINIO/admin/login`
+- E-mail: `admin@mariahvendas.com.br`
+- Senha: `mariah123` (troque em **Minha conta**)
+
+Se não entrar, abra **uma vez**: `https://SEU-DOMINIO/setup-admin.php?key=mariah-admin-2026` e apague `setup-admin.php`.
 
 ## Passo a passo
 

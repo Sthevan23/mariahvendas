@@ -8,7 +8,7 @@ class Auth
 {
     public static function attempt(string $email, string $password): bool
     {
-        $user = User::findByEmail($email);
+        $user = User::findByEmail(strtolower(trim($email)));
         if (!$user || !password_verify($password, $user['password'])) {
             return false;
         }
