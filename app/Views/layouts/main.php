@@ -27,7 +27,7 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/app.css?v=5">
+  <link rel="stylesheet" href="/assets/css/app.css?v=6">
   <script type="application/ld+json">
   <?= json_encode([
       '@context' => 'https://schema.org',
@@ -82,36 +82,47 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
 <main><?= $content ?></main>
 
 <footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <a class="logo logo-brand logo-brand--footer" href="/">
-        <img src="<?= Helpers::e($logo) ?>" alt="" width="48" height="48">
-        <span class="logo-text"><?= Helpers::e($store) ?></span>
-      </a>
-      <p><?= Helpers::e(Helpers::setting('tagline')) ?></p>
-      <p><?= Helpers::e(Helpers::setting('address')) ?></p>
-    </div>
-    <div>
-      <h4>Loja</h4>
-      <a href="/catalogo">Todos os vestidos</a>
-      <a href="/favoritos">Favoritos</a>
-    </div>
-    <div>
-      <h4>Ajuda</h4>
-      <a href="/trocas">Trocas</a>
-      <a href="/privacidade">Privacidade</a>
-      <a href="<?= Helpers::e($whatsapp) ?>" target="_blank" rel="noopener">WhatsApp</a>
-    </div>
-    <div>
-      <h4>Contato</h4>
-      <p><?= Helpers::e(Helpers::setting('phone')) ?></p>
-      <p><a href="<?= Helpers::e($whatsapp) ?>" target="_blank" rel="noopener">WhatsApp</a></p>
-      <p><a href="<?= Helpers::e($instagramUrl) ?>" target="_blank" rel="noopener"><?= Helpers::e(Helpers::setting('instagram')) ?></a></p>
+  <div class="footer-cta">
+    <div class="container footer-cta-inner">
+      <div>
+        <p class="footer-cta-eyebrow">Atendimento</p>
+        <p class="footer-cta-title">Dúvidas de tamanho, prazo ou modelagem?</p>
+      </div>
+      <a class="btn footer-cta-btn" href="<?= Helpers::e($whatsapp) ?>" target="_blank" rel="noopener">Chamar no WhatsApp</a>
     </div>
   </div>
-  <div class="container footer-bottom">
-    <span>© <?= date('Y') ?> <?= Helpers::e($store) ?>. Todos os direitos reservados.</span>
-    <span>Mariah Vendas · Vestidos de festa</span>
+  <div class="footer-main">
+    <div class="container footer-grid">
+      <div class="footer-brand">
+        <a class="logo logo-brand logo-brand--footer" href="/">
+          <img src="<?= Helpers::e($logo) ?>" alt="" width="48" height="48">
+          <span class="logo-text"><?= Helpers::e($store) ?></span>
+        </a>
+        <p class="footer-tagline"><?= Helpers::e(Helpers::setting('tagline')) ?></p>
+        <p class="footer-address"><?= Helpers::e(Helpers::setting('address')) ?></p>
+      </div>
+      <div>
+        <h4>Loja</h4>
+        <a href="/catalogo">Todos os vestidos</a>
+        <a href="/favoritos">Favoritos</a>
+      </div>
+      <div>
+        <h4>Ajuda</h4>
+        <a href="/trocas">Trocas</a>
+        <a href="/privacidade">Privacidade</a>
+      </div>
+      <div>
+        <h4>Contato</h4>
+        <p><?= Helpers::e(Helpers::setting('phone')) ?></p>
+        <p><a href="<?= Helpers::e($instagramUrl) ?>" target="_blank" rel="noopener"><?= Helpers::e(Helpers::setting('instagram')) ?></a></p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <span>© <?= date('Y') ?> <?= Helpers::e($store) ?></span>
+      <span>Vestidos de festa · Divinópolis/MG</span>
+    </div>
   </div>
 </footer>
 
