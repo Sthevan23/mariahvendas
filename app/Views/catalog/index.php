@@ -1,7 +1,7 @@
 <?php use App\Core\Helpers; ?>
-<div class="container">
+<div class="container catalog-page">
   <div class="breadcrumbs"><a href="/">Início</a> / <?= Helpers::e($title) ?></div>
-  <div class="section-head">
+  <div class="section-head catalog-intro">
     <div>
       <p class="eyebrow">Vestidos</p>
       <h1 class="page-title"><?= Helpers::e($title) ?></h1>

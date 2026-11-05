@@ -122,6 +122,7 @@ function mariah_seed_catalog(PDO $pdo, string $root): array
     $set = $pdo->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
     $set->execute(['catalog_version', 'mariah-v6']);
     $set->execute(['store_name', 'Ateliê Mariah']);
+    $set->execute(['og_image', '/assets/brand/og-share.jpg']);
     $set->execute(['hero_image', '/uploads/moda/hero-atelier.jpg']);
     $set->execute(['hero_title', 'Vestidos de festa para você brilhar']);
     $set->execute(['hero_subtitle', 'Formatura, debutante, aniversário e ocasiões especiais — modelagem exclusiva Ateliê Mariah em Divinópolis.']);

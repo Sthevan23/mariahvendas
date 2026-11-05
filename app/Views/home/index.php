@@ -1,100 +1,75 @@
 <?php
 use App\Core\Helpers;
 $heroImage = Helpers::setting('hero_image');
-$heroTitle = Helpers::setting('hero_title', 'Seu estilo, sua essência');
+$heroTitle = Helpers::setting('hero_title', 'Vestidos de festa para você brilhar');
 $heroSub = Helpers::setting('hero_subtitle');
+$store = Helpers::setting('store_name', 'Ateliê Mariah');
+$instagramHandle = Helpers::setting('instagram', '@atelie_mariahaltacostura_');
+$instagramUser = ltrim((string) $instagramHandle, '@');
+$instagramUrl = $instagramUser !== '' ? 'https://instagram.com/' . rawurlencode($instagramUser) : '#';
+$editorialImage = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/colecao/mariah-01.jpg';
 ?>
 <section class="hero">
   <div class="hero-media" style="background-image:url('<?= Helpers::e($heroImage) ?>')"></div>
   <div class="hero-grain" aria-hidden="true"></div>
   <div class="hero-glow" aria-hidden="true"></div>
   <div class="container hero-content hero-enter">
-    <p class="eyebrow eyebrow--light"><?= Helpers::e(Helpers::setting('store_name', 'Ateliê Mariah')) ?></p>
+    <p class="eyebrow eyebrow--light"><?= Helpers::e($store) ?></p>
     <h1><?= Helpers::e($heroTitle) ?></h1>
     <p class="hero-lead"><?= Helpers::e($heroSub) ?></p>
+    <p class="hero-kicker">Divinópolis/MG · Atendimento pelo WhatsApp</p>
     <div class="hero-actions">
-      <a class="btn btn-glow" href="/categoria/colecao-atelier">Ver vestidos de festa</a>
-      <a class="btn btn-outline" href="/catalogo">Ver todos os vestidos</a>
+      <a class="btn btn-glow" href="/catalogo">Ver coleção</a>
+      <a class="btn btn-outline" href="<?= Helpers::e(Helpers::whatsappLink('Olá! Gostaria de informações sobre vestidos de festa.')) ?>" target="_blank" rel="noopener">Falar no WhatsApp</a>
     </div>
   </div>
   <div class="hero-scroll" aria-hidden="true"><span></span></div>
 </section>
 
-<section class="trust-strip">
-  <div class="container trust-strip-inner">
-    <div class="trust-item reveal"><strong>Vestidos de festa</strong><span>Formatura e eventos</span></div>
-  </div>
-</section>
-
+<?php if ($collection): ?>
 <section class="section section--surface">
   <div class="container">
-    <div class="section-head reveal">
+    <div class="section-head section-head--center reveal">
       <div>
-        <p class="eyebrow">Seleção</p>
-        <h2>Vestidos de festa em destaque</h2>
+        <p class="eyebrow">Coleção</p>
+        <h2>Vestidos de festa</h2>
+        <p class="section-lead muted">Peças exclusivas para formatura, debutante, aniversário e ocasiões especiais.</p>
       </div>
-      <a href="/categoria/colecao-atelier">Ver coleção</a>
     </div>
-    <div class="product-grid">
-      <?php foreach ($featured as $product): ?>
+    <div class="product-grid product-grid--premium">
+      <?php foreach ($collection as $product): ?>
         <?php require dirname(__DIR__) . '/partials/product-card.php'; ?>
       <?php endforeach; ?>
     </div>
+    <p class="section-cta reveal"><a class="btn btn-outline" href="/catalogo">Ver todos os vestidos</a></p>
   </div>
 </section>
-
-<section class="section" style="padding-top:0">
-  <div class="container">
-    <div class="section-head reveal">
-      <div>
-        <p class="eyebrow">Fresh</p>
-        <h2>Lançamentos da semana</h2>
-      </div>
-      <a href="/categoria/novidades">Novidades</a>
-    </div>
-    <div class="product-grid">
-      <?php foreach ($news as $product): ?>
-        <?php require dirname(__DIR__) . '/partials/product-card.php'; ?>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-
-<section class="section" style="padding-top:0">
-  <div class="container">
-    <div class="section-head reveal">
-      <div>
-        <p class="eyebrow">Favoritas</p>
-        <h2>Mais vendidos</h2>
-      </div>
-    </div>
-    <div class="product-grid">
-      <?php foreach ($bestsellers as $product): ?>
-        <?php require dirname(__DIR__) . '/partials/product-card.php'; ?>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
+<?php endif; ?>
 
 <section class="editorial reveal">
-  <div class="editorial-media" style="background-image:url('/uploads/moda/editorial-atelier.jpg')"></div>
+  <div class="editorial-media" style="background-image:url('<?= Helpers::e($editorialImage) ?>')"></div>
   <div class="editorial-copy">
-    <p class="eyebrow">Editorial</p>
-    <h2>Festa · Brilho & elegância</h2>
-    <p class="muted">Vestidos pensados para formatura, debutante, aniversário, madrinhas e festas — brilho e elegância em cada detalhe.</p>
-    <p style="margin-top:1.5rem"><a class="btn" href="/categoria/colecao-atelier">Ver Coleção Festa</a></p>
+    <p class="eyebrow">Ateliê</p>
+    <h2>Alta costura para momentos inesquecíveis</h2>
+    <p class="muted">Cada vestido é pensado com cuidado artesanal — modelagem, acabamento e brilho na medida certa para você se sentir única na sua festa.</p>
+    <ul class="editorial-list">
+      <li>Formatura &amp; colação</li>
+      <li>Debutante &amp; aniversário</li>
+      <li>Madrinhas &amp; eventos</li>
+    </ul>
+    <p class="editorial-actions"><a class="btn" href="/catalogo">Explorar vestidos</a></p>
   </div>
 </section>
 
 <?php if ($sale): ?>
-<section class="section">
+<section class="section section--tint">
   <div class="container">
     <div class="section-head reveal">
       <div>
         <p class="eyebrow">Ofertas</p>
         <h2>Promoções</h2>
       </div>
-      <a href="/categoria/promocoes">Todas as ofertas</a>
+      <a href="/categoria/promocoes">Ver ofertas</a>
     </div>
     <div class="product-grid">
       <?php foreach ($sale as $product): ?>
@@ -106,24 +81,27 @@ $heroSub = Helpers::setting('hero_subtitle');
 <?php endif; ?>
 
 <section class="section">
-  <div class="container benefits">
-    <div class="benefit reveal">
-      <h3>Compra segura</h3>
-      <p>Pedidos registrados com acompanhamento e atendimento humano.</p>
+  <div class="container pillars">
+    <div class="pillar reveal">
+      <span class="pillar-icon" aria-hidden="true">✦</span>
+      <h3>Modelagem exclusiva</h3>
+      <p>Caimento pensado para valorizar sua silhueta em cada ocasião.</p>
     </div>
-    <div class="benefit reveal">
-      <h3>Atendimento personalizado</h3>
-      <p>Tire dúvidas de tamanho e modelagem pelo WhatsApp.</p>
+    <div class="pillar reveal">
+      <span class="pillar-icon" aria-hidden="true">✦</span>
+      <h3>Atendimento no WhatsApp</h3>
+      <p>Tire dúvidas de tamanho, prazo e personalização com a equipe.</p>
     </div>
-    <div class="benefit reveal">
-      <h3>Facilidade para comprar</h3>
-      <p>Checkout claro, cupons e entrega para todo o Brasil.</p>
+    <div class="pillar reveal">
+      <span class="pillar-icon" aria-hidden="true">✦</span>
+      <h3>Compra tranquila</h3>
+      <p>Pedido registrado, checkout claro e suporte até a entrega.</p>
     </div>
   </div>
 </section>
 
 <?php if (!empty($reviews)): ?>
-<section class="section" style="padding-top:0">
+<section class="section section--surface" style="padding-top:0">
   <div class="container">
     <div class="section-head reveal">
       <div>
@@ -131,11 +109,11 @@ $heroSub = Helpers::setting('hero_subtitle');
         <h2>Depoimentos</h2>
       </div>
     </div>
-    <div class="product-grid">
+    <div class="testimonial-grid">
       <?php foreach ($reviews as $r): ?>
-        <blockquote class="admin-card reveal">
-          <strong><?= Helpers::e($r['customer_name']) ?></strong>
+        <blockquote class="testimonial reveal">
           <p><?= Helpers::e($r['comment']) ?></p>
+          <footer>— <?= Helpers::e($r['customer_name']) ?></footer>
         </blockquote>
       <?php endforeach; ?>
     </div>
@@ -143,18 +121,23 @@ $heroSub = Helpers::setting('hero_subtitle');
 </section>
 <?php endif; ?>
 
+<?php if ($instagram): ?>
 <section class="section" style="padding-top:0">
   <div class="container">
     <div class="section-head reveal">
       <div>
-        <p class="eyebrow">Social</p>
-        <h2><?= Helpers::e(Helpers::setting('instagram', '@atelie_mariahaltacostura_')) ?></h2>
+        <p class="eyebrow">Instagram</p>
+        <h2><a class="insta-title" href="<?= Helpers::e($instagramUrl) ?>" target="_blank" rel="noopener"><?= Helpers::e($instagramHandle) ?></a></h2>
       </div>
+      <a href="<?= Helpers::e($instagramUrl) ?>" target="_blank" rel="noopener">Seguir</a>
     </div>
     <div class="instagram-grid">
       <?php foreach ($instagram as $img): ?>
-        <img class="reveal" src="<?= Helpers::e($img) ?>" alt="Look Ateliê Mariah no Instagram" loading="lazy">
+        <a class="instagram-tile reveal" href="<?= Helpers::e($instagramUrl) ?>" target="_blank" rel="noopener">
+          <img src="<?= Helpers::e($img) ?>" alt="Look <?= Helpers::e($store) ?> no Instagram" loading="lazy">
+        </a>
       <?php endforeach; ?>
     </div>
   </div>
 </section>
+<?php endif; ?>

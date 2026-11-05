@@ -98,4 +98,22 @@ class Helpers
         $phone = preg_replace('/\\D+/', '', (string) self::setting('whatsapp', '5511999999999'));
         return 'https://wa.me/' . $phone . '?text=' . rawurlencode($message);
     }
+
+    public static function appUrl(): string
+    {
+        static $url = null;
+        if ($url === null) {
+            $cfg = require dirname(__DIR__, 2) . '/config/app.php';
+            $url = rtrim((string) ($cfg['url'] ?? ''), '/');
+        }
+        return $url !== '' ? $url : 'http://localhost:8080';
+    }
+
+    public static function absoluteUrl(string $path): string
+    {
+        if (preg_match('#^https?://#i', $path)) {
+            return $path;
+        }
+        return self::appUrl() . '/' . ltrim($path, '/');
+    }
 }

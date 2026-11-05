@@ -42,7 +42,7 @@ class ProductController extends Controller
             'colors' => $colors,
             'defaultVariant' => $defaultVariant,
             'related' => $related,
-            'og_image' => $images[0]['path'] ?? null,
+            'og_image' => $images[0]['path'] ?? Helpers::setting('og_image', '/assets/brand/og-share.jpg'),
         ]);
     }
 }

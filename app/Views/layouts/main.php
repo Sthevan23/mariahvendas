@@ -15,22 +15,43 @@ $favicon = '/assets/brand/logo-favicon.png';
 $logoType = 'image/png';
 $instagramHandle = ltrim((string) Helpers::setting('instagram', ''), '@');
 $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencode($instagramHandle) : '#';
+$tagline = (string) Helpers::setting('tagline', 'Vestidos de festa exclusivos — formatura, debutante e eventos');
+$pageTitle = (string) ($title ?? $store);
+$documentTitle = ($pageTitle !== '' && $pageTitle !== $store) ? ($pageTitle . ' | ' . $store) : $store;
+$ogTitle = (string) ($og_title ?? $store);
+$ogDescription = (string) ($meta_description ?? $tagline);
+$ogImagePath = (string) ($og_image ?? Helpers::setting('og_image', '/assets/brand/og-share.jpg'));
+$ogImageUrl = Helpers::absoluteUrl($ogImagePath);
+$ogPageUrl = Helpers::absoluteUrl(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title><?= Helpers::e(($title ?? $store) . ' | ' . $store) ?></title>
-  <meta name="description" content="<?= Helpers::e($meta_description ?? Helpers::setting('tagline', 'Vestidos de festa exclusivos')) ?>">
-  <meta property="og:title" content="<?= Helpers::e($title ?? $store) ?>">
-  <meta property="og:description" content="<?= Helpers::e($meta_description ?? Helpers::setting('tagline')) ?>">
-  <?php if (!empty($og_image)): ?><meta property="og:image" content="<?= Helpers::e($og_image) ?>"><?php endif; ?>
+  <title><?= Helpers::e($documentTitle) ?></title>
+  <meta name="description" content="<?= Helpers::e($ogDescription) ?>">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="<?= Helpers::e($store) ?>">
+  <meta property="og:url" content="<?= Helpers::e($ogPageUrl) ?>">
+  <meta property="og:title" content="<?= Helpers::e($ogTitle) ?>">
+  <meta property="og:description" content="<?= Helpers::e($ogDescription) ?>">
+  <meta property="og:image" content="<?= Helpers::e($ogImageUrl) ?>">
+  <meta property="og:image:secure_url" content="<?= Helpers::e($ogImageUrl) ?>">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="1200">
+  <meta property="og:image:alt" content="<?= Helpers::e($store) ?>">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="<?= Helpers::e($ogTitle) ?>">
+  <meta name="twitter:description" content="<?= Helpers::e($ogDescription) ?>">
+  <meta name="twitter:image" content="<?= Helpers::e($ogImageUrl) ?>">
   <link rel="icon" href="<?= Helpers::e($favicon) ?>" type="<?= Helpers::e($logoType) ?>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/app.css?v=13">
+  <link rel="stylesheet" href="/assets/css/app.css?v=14">
   <script type="application/ld+json">
   <?= json_encode([
       '@context' => 'https://schema.org',
@@ -45,8 +66,9 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
 <body>
 <header class="site-header" data-header>
   <div class="container header-inner">
-    <a class="logo logo-brand logo-brand--mark" href="/" aria-label="<?= Helpers::e($store) ?>">
-      <img src="<?= Helpers::e($logo) ?>" alt="Mariah Alta Costura" width="56" height="56" decoding="async">
+    <a class="logo logo-brand logo-brand--mark brand-lockup" href="/" aria-label="<?= Helpers::e($store) ?>">
+      <img src="<?= Helpers::e($logo) ?>" alt="" width="56" height="56" decoding="async">
+      <span class="brand-lockup-text"><?= Helpers::e($store) ?></span>
     </a>
     <div class="header-actions">
       <button class="icon-btn" type="button" data-search-toggle aria-label="Pesquisar">
@@ -124,6 +146,6 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
   <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.4A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 6.7 12.3l-.3.4.8 2.9-3-.8-.4.2A8 8 0 1 1 12 4zm4.2 9.6c-.2-.1-1.3-.6-1.5-.7s-.3-.1-.5.1-.6.7-.7.8-.3.2-.5.1a6.4 6.4 0 0 1-1.9-1.2 7.1 7.1 0 0 1-1.3-1.6c-.1-.2 0-.3.1-.4l.3-.4.1-.2a.5.5 0 0 0 0-.5c0-.1-.5-1.2-.7-1.6s-.4-.4-.5-.4h-.4a.8.8 0 0 0-.6.3 2.4 2.4 0 0 0-.8 1.8 4.2 4.2 0 0 0 .9 2.2 9.6 9.6 0 0 0 3.7 3.3 12 12 0 0 0 1.3.5 3.1 3.1 0 0 0 1.4.1 2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .1-1.2c-.1 0-.2-.1-.4-.2z"/></svg>
 </a>
 
-<script src="/assets/js/app.js?v=2" defer></script>
+<script src="/assets/js/app.js?v=3" defer></script>
 </body>
 </html>

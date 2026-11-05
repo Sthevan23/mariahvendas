@@ -9,6 +9,7 @@ $settings = [
     'store_name' => 'Ateliê Mariah',
     'tagline' => 'Vestidos de festa exclusivos — formatura, debutante e eventos',
     'instagram' => '@atelie_mariahaltacostura_',
+    'og_image' => '/assets/brand/og-share.jpg',
     'email' => 'contato@mariahvendas.com.br',
 ];
 $stmt = $pdo->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
