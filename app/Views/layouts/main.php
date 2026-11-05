@@ -10,6 +10,7 @@ if (empty($_SESSION['_csrf'])) {
 $csrf = $_SESSION['_csrf'];
 $whatsapp = Helpers::whatsappLink('Olá! Gostaria de atendimento da ' . $store . '.');
 $logo = '/assets/brand/logo.jpg';
+$logoType = 'image/jpeg';
 $instagramHandle = ltrim((string) Helpers::setting('instagram', ''), '@');
 $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencode($instagramHandle) : '#';
 ?>
@@ -23,11 +24,11 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
   <meta property="og:title" content="<?= Helpers::e($title ?? $store) ?>">
   <meta property="og:description" content="<?= Helpers::e($meta_description ?? Helpers::setting('tagline')) ?>">
   <?php if (!empty($og_image)): ?><meta property="og:image" content="<?= Helpers::e($og_image) ?>"><?php endif; ?>
-  <link rel="icon" href="<?= Helpers::e($logo) ?>" type="image/jpeg">
+  <link rel="icon" href="<?= Helpers::e($logo) ?>" type="<?= Helpers::e($logoType) ?>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/app.css?v=6">
+  <link rel="stylesheet" href="/assets/css/app.css?v=7">
   <script type="application/ld+json">
   <?= json_encode([
       '@context' => 'https://schema.org',
@@ -49,9 +50,8 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
 </div>
 <header class="site-header" data-header>
   <div class="container header-inner">
-    <a class="logo logo-brand" href="/">
-      <img src="<?= Helpers::e($logo) ?>" alt="<?= Helpers::e($store) ?>" width="56" height="56">
-      <span class="logo-text"><?= Helpers::e($store) ?></span>
+    <a class="logo logo-brand logo-brand--mark" href="/" aria-label="<?= Helpers::e($store) ?>">
+      <img src="<?= Helpers::e($logo) ?>" alt="Mariah Alta Costura" width="168" height="56" decoding="async">
     </a>
     <div class="header-actions">
       <button class="icon-btn" type="button" data-search-toggle aria-label="Pesquisar">
@@ -94,9 +94,8 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
   <div class="footer-main">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <a class="logo logo-brand logo-brand--footer" href="/">
-          <img src="<?= Helpers::e($logo) ?>" alt="" width="48" height="48">
-          <span class="logo-text"><?= Helpers::e($store) ?></span>
+        <a class="logo logo-brand logo-brand--mark logo-brand--footer" href="/" aria-label="<?= Helpers::e($store) ?>">
+          <img src="<?= Helpers::e($logo) ?>" alt="Mariah Alta Costura" width="140" height="48" decoding="async">
         </a>
         <p class="footer-tagline"><?= Helpers::e(Helpers::setting('tagline')) ?></p>
         <p class="footer-address"><?= Helpers::e(Helpers::setting('address')) ?></p>

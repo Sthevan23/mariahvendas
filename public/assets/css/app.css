@@ -108,6 +108,25 @@ button, input, select, textarea { font: inherit; color: inherit; }
   box-shadow: 0 8px 24px rgba(20, 17, 15, 0.14);
   border: 2px solid rgba(255, 255, 255, 0.85);
 }
+.logo-brand--mark {
+  max-width: min(100%, 200px);
+}
+.logo-brand--mark img {
+  width: auto;
+  height: 52px;
+  max-width: 100%;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
+  object-fit: contain;
+  object-position: left center;
+}
+.logo-brand--footer.logo-brand--mark {
+  max-width: min(100%, 168px);
+}
+.logo-brand--footer.logo-brand--mark img {
+  height: 46px;
+}
 .logo-brand .logo-text {
   font-family: var(--serif);
   font-size: clamp(1rem, 2.4vw, 1.35rem);
@@ -119,6 +138,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
 @media (max-width: 720px) {
   .logo-brand .logo-text { display: none; }
   .logo-brand { max-width: none; }
+  .logo-brand--mark {
+    max-width: min(46vw, 148px);
+  }
+  .logo-brand--mark img {
+    height: 44px;
+  }
 }
 
 .top-bar-msg--short { display: none; }
@@ -155,9 +180,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
     max-width: 100%;
   }
 
-  .logo-brand img {
+  .logo-brand:not(.logo-brand--mark) img {
     width: 46px;
     height: 46px;
+  }
+  .logo-brand--mark img {
+    height: 42px;
   }
   .header-actions { gap: 0.1rem; flex-shrink: 0; }
   .icon-btn {
