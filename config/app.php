@@ -12,5 +12,5 @@ return [
     'whatsapp' => getenv('WHATSAPP') ?: '5537998086607',
     'low_stock_threshold' => 5,
     'session_name' => 'mariah_vendas_session',
-    'logo_path' => '/assets/brand/logo.jpg',
+    'logo_path' => '/assets/brand/logo.png',
 ];
