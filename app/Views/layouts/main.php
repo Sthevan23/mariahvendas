@@ -9,8 +9,8 @@ if (empty($_SESSION['_csrf'])) {
 }
 $csrf = $_SESSION['_csrf'];
 $whatsapp = Helpers::whatsappLink('Olá! Gostaria de atendimento da ' . $store . '.');
-$logo = '/assets/brand/logo.jpg';
-$logoType = 'image/jpeg';
+$logo = '/assets/brand/logo.png';
+$logoType = 'image/png';
 $instagramHandle = ltrim((string) Helpers::setting('instagram', ''), '@');
 $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencode($instagramHandle) : '#';
 ?>
@@ -28,7 +28,7 @@ $instagramUrl = $instagramHandle !== '' ? 'https://instagram.com/' . rawurlencod
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/app.css?v=7">
+  <link rel="stylesheet" href="/assets/css/app.css?v=9">
   <script type="application/ld+json">
   <?= json_encode([
       '@context' => 'https://schema.org',
