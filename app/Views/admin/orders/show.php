@@ -13,14 +13,14 @@
 <form method="post" action="/admin/pedidos/<?= (int)$order['id'] ?>/status" class="admin-card form-grid">
   <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
   <div class="form-group">
-    <label>Atualizar status</label>
-    <select class="form-control" name="status">
+    <label for="order-status">Atualizar status</label>
+    <select class="form-control" id="order-status" name="status">
       <?php foreach (['awaiting_confirmation','awaiting_payment','payment_approved','separating','shipped','delivered','cancelled'] as $s): ?>
         <option value="<?= $s ?>" <?= $order['status'] === $s ? 'selected' : '' ?>><?= $s ?></option>
       <?php endforeach; ?>
     </select>
   </div>
-  <div class="form-group"><label>Nota</label><input class="form-control" name="note"></div>
+  <div class="form-group"><label for="order-note">Nota</label><input class="form-control" id="order-note" name="note"></div>
   <button class="btn" type="submit">Salvar status</button>
 </form>
 <div class="admin-card">

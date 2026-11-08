@@ -105,12 +105,23 @@
       }
 
       const fd = new FormData(form);
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: fd,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-      });
-      const data = await res.json();
+      const submitBtns = Array.from(form.querySelectorAll('button[type="submit"], button:not([type])'));
+      const prevDisabled = submitBtns.map((b) => b.disabled);
+      submitBtns.forEach((b) => { b.disabled = true; b.setAttribute('aria-busy', 'true'); });
+
+      let data;
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: fd,
+          headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        data = await res.json();
+      } catch (err) {
+        data = { ok: false, message: 'Não foi possível atualizar a sacola. Verifique sua conexão e tente novamente.' };
+      } finally {
+        submitBtns.forEach((b, i) => { b.disabled = prevDisabled[i]; b.removeAttribute('aria-busy'); });
+      }
       showToast(data.message || 'Atualizado', data.ok ? 'success' : 'error');
       if (data.ok) {
         const badge = document.querySelector('[data-cart-count]');

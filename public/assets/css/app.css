@@ -8,6 +8,7 @@
   --gold-soft: #dcc9a8;
   --nude: #c4a484;
   --nude-deep: #9a7555;
+  --eyebrow: #7d5a3c;
   --line: rgba(20, 17, 15, 0.08);
   --shadow: 0 24px 60px rgba(20, 17, 15, 0.1);
   --shadow-soft: 0 12px 32px rgba(20, 17, 15, 0.06);
@@ -392,7 +393,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   padding: .85rem 1rem; border-radius: var(--radius);
 }
 .mobile-nav {
-  display: none; position: fixed; inset: calc(var(--top-bar-h) + var(--header-h)) 0 0 0;
+  display: none; position: fixed; inset: var(--header-h) 0 0 0;
   background: rgba(255, 252, 249, 0.98); padding: 1.5rem; z-index: 40;
   transform: translateX(100%); transition: transform .35s ease;
 }
@@ -597,7 +598,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   font-size: 0.72rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--nude-deep);
+  color: var(--eyebrow);
   margin: 0 0 0.65rem;
   display: flex;
   align-items: center;
@@ -1046,7 +1047,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .form-grid { display: grid; gap: 1rem; }
 .form-grid.two { grid-template-columns: 1fr; }
 .form-group { display: grid; gap: .35rem; }
-.form-group label { font-size: .8rem; color: var(--muted); letter-spacing: .04em; }
+.form-group label, .form-group .form-label { font-size: .8rem; color: var(--muted); letter-spacing: .04em; }
 .empty-state {
   padding: 4rem 1rem; text-align: center; color: var(--muted);
 }
@@ -1582,7 +1583,7 @@ main { display: block; }
   .checkout-layout .cart-summary { position: sticky; top: calc(var(--header-h) + 1.5rem); }
 }
 .checkout-card { padding: 1.75rem; }
-.checkout-card .form-group label { color: var(--muted); }
+.checkout-card .form-group label, .checkout-card .form-group .form-label { color: var(--muted); }
 .checkout-card .form-group label.option {
   display: flex;
   gap: 0.6rem;

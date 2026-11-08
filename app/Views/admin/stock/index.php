@@ -4,18 +4,18 @@
   <h3 style="margin-top:0;font-family:var(--serif);font-weight:500">Ajuste manual</h3>
   <form method="post" action="/admin/estoque" class="form-grid two">
     <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
-    <div class="form-group"><label>Variação</label>
-      <select class="form-control" name="variant_id" required>
+    <div class="form-group"><label for="stock-variant">Variação</label>
+      <select class="form-control" id="stock-variant" name="variant_id" required>
         <?php foreach ($rows as $r): ?>
           <option value="<?= (int)$r['id'] ?>"><?= Helpers::e($r['product_name'].' '.$r['size'].'/'.$r['color'].' ('.$r['stock'].')') ?></option>
         <?php endforeach; ?>
       </select>
     </div>
-    <div class="form-group"><label>Tipo</label>
-      <select class="form-control" name="type"><option value="in">Entrada</option><option value="out">Saída</option></select>
+    <div class="form-group"><label for="stock-type">Tipo</label>
+      <select class="form-control" id="stock-type" name="type"><option value="in">Entrada</option><option value="out">Saída</option></select>
     </div>
-    <div class="form-group"><label>Quantidade</label><input class="form-control" type="number" min="1" name="quantity" required></div>
-    <div class="form-group"><label>Nota</label><input class="form-control" name="note" value="Reposição manual"></div>
+    <div class="form-group"><label for="stock-quantity">Quantidade</label><input class="form-control" id="stock-quantity" type="number" min="1" name="quantity" required></div>
+    <div class="form-group"><label for="stock-note">Nota</label><input class="form-control" id="stock-note" name="note" value="Reposição manual"></div>
     <button class="btn" type="submit">Registrar</button>
   </form>
 </div>

@@ -12,16 +12,16 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
     <form method="post" action="/admin/configuracoes" class="form-grid">
       <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
       <div class="form-group">
-        <label>Título do banner</label>
-        <input class="form-control" name="hero_title" value="<?= Helpers::e($settings['hero_title'] ?? '') ?>">
+        <label for="settings-hero-title">Título do banner</label>
+        <input class="form-control" id="settings-hero-title" name="hero_title" value="<?= Helpers::e($settings['hero_title'] ?? '') ?>">
       </div>
       <div class="form-group">
-        <label>Subtítulo do banner</label>
-        <textarea class="form-control" name="hero_subtitle" rows="3"><?= Helpers::e($settings['hero_subtitle'] ?? '') ?></textarea>
+        <label for="settings-hero-subtitle">Subtítulo do banner</label>
+        <textarea class="form-control" id="settings-hero-subtitle" name="hero_subtitle" rows="3"><?= Helpers::e($settings['hero_subtitle'] ?? '') ?></textarea>
       </div>
       <div class="form-group">
-        <label>URL da imagem (opcional se enviar arquivo abaixo)</label>
-        <input class="form-control" name="hero_image" value="<?= Helpers::e($settings['hero_image'] ?? '') ?>">
+        <label for="settings-hero-image">URL da imagem (opcional se enviar arquivo abaixo)</label>
+        <input class="form-control" id="settings-hero-image" name="hero_image" value="<?= Helpers::e($settings['hero_image'] ?? '') ?>">
       </div>
       <button class="btn" type="submit">Salvar banner</button>
     </form>
@@ -29,8 +29,8 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
     <form method="post" action="/admin/configuracoes/hero" enctype="multipart/form-data" class="form-grid" style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--line)">
       <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
       <div class="form-group">
-        <label>Enviar nova foto do banner</label>
-        <input class="form-control" type="file" name="hero_file" accept="image/jpeg,image/png,image/webp" required>
+        <label for="settings-hero-file">Enviar nova foto do banner</label>
+        <input class="form-control" id="settings-hero-file" type="file" name="hero_file" accept="image/jpeg,image/png,image/webp" required>
         <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">Recomendado: horizontal 16:9, boa resolução.</p>
       </div>
       <div class="admin-hero-preview" style="background-image:url('<?= Helpers::e($heroUrl) ?>')"></div>
@@ -58,11 +58,11 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
       ];
       foreach ($fields as $key => $label): ?>
         <div class="form-group">
-          <label><?= Helpers::e($label) ?></label>
+          <label for="store-<?= $key ?>"><?= Helpers::e($label) ?></label>
           <?php if (str_contains($key, 'policy') || $key === 'delivery_info'): ?>
-            <textarea class="form-control" name="<?= $key ?>" rows="3"><?= Helpers::e($settings[$key] ?? '') ?></textarea>
+            <textarea class="form-control" id="store-<?= $key ?>" name="<?= $key ?>" rows="3"><?= Helpers::e($settings[$key] ?? '') ?></textarea>
           <?php else: ?>
-            <input class="form-control" name="<?= $key ?>" value="<?= Helpers::e($settings[$key] ?? '') ?>">
+            <input class="form-control" id="store-<?= $key ?>" name="<?= $key ?>" value="<?= Helpers::e($settings[$key] ?? '') ?>">
           <?php endif; ?>
         </div>
       <?php endforeach; ?>
@@ -75,10 +75,10 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
   <h3>Nova categoria</h3>
   <form method="post" action="/admin/configuracoes/categoria" class="form-grid two">
     <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
-    <div class="form-group"><label>Nome</label><input class="form-control" name="name" required></div>
-    <div class="form-group"><label>Imagem URL</label><input class="form-control" name="image"></div>
-    <div class="form-group"><label>Descrição</label><input class="form-control" name="description"></div>
-    <div class="form-group"><label>Ordem</label><input class="form-control" type="number" name="sort_order" value="0"></div>
+    <div class="form-group"><label for="category-name">Nome</label><input class="form-control" id="category-name" name="name" required></div>
+    <div class="form-group"><label for="category-image">Imagem URL</label><input class="form-control" id="category-image" name="image"></div>
+    <div class="form-group"><label for="category-description">Descrição</label><input class="form-control" id="category-description" name="description"></div>
+    <div class="form-group"><label for="category-sort">Ordem</label><input class="form-control" id="category-sort" type="number" name="sort_order" value="0"></div>
     <label><input type="checkbox" name="is_active" value="1" checked> Ativa</label>
     <button class="btn" type="submit">Salvar categoria</button>
   </form>
@@ -93,13 +93,13 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
   <h3>Novo cupom</h3>
   <form method="post" action="/admin/configuracoes/cupom" class="form-grid two">
     <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
-    <div class="form-group"><label>Código</label><input class="form-control" name="code" required></div>
-    <div class="form-group"><label>Tipo</label>
-      <select class="form-control" name="type"><option value="percent">Percentual</option><option value="fixed">Fixo</option></select>
+    <div class="form-group"><label for="coupon-code">Código</label><input class="form-control" id="coupon-code" name="code" required></div>
+    <div class="form-group"><label for="coupon-type">Tipo</label>
+      <select class="form-control" id="coupon-type" name="type"><option value="percent">Percentual</option><option value="fixed">Fixo</option></select>
     </div>
-    <div class="form-group"><label>Valor</label><input class="form-control" name="value" required></div>
-    <div class="form-group"><label>Mínimo</label><input class="form-control" name="min_subtotal" value="0"></div>
-    <div class="form-group"><label>Expira em</label><input class="form-control" type="date" name="expires_at"></div>
+    <div class="form-group"><label for="coupon-value">Valor</label><input class="form-control" id="coupon-value" name="value" inputmode="decimal" required></div>
+    <div class="form-group"><label for="coupon-min">Mínimo</label><input class="form-control" id="coupon-min" name="min_subtotal" inputmode="decimal" value="0"></div>
+    <div class="form-group"><label for="coupon-expires">Expira em</label><input class="form-control" id="coupon-expires" type="date" name="expires_at"></div>
     <label><input type="checkbox" name="is_active" value="1" checked> Ativo</label>
     <button class="btn" type="submit">Criar cupom</button>
   </form>

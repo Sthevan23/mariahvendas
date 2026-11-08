@@ -5,32 +5,32 @@
     <form method="post" action="/checkout" class="checkout-card form-grid">
       <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
       <div class="form-group">
-        <label>Nome completo</label>
-        <input class="form-control" name="customer_name" required value="<?= Helpers::e($user['name'] ?? '') ?>">
+        <label for="checkout-customer-name">Nome completo</label>
+        <input class="form-control" id="checkout-customer-name" name="customer_name" autocomplete="name" required value="<?= Helpers::e($user['name'] ?? '') ?>">
       </div>
       <div class="form-grid two">
         <div class="form-group">
-          <label>WhatsApp / telefone</label>
-          <input class="form-control" name="customer_phone" required>
+          <label for="checkout-customer-phone">WhatsApp / telefone</label>
+          <input class="form-control" id="checkout-customer-phone" name="customer_phone" type="tel" autocomplete="tel" required>
         </div>
         <div class="form-group">
-          <label>E-mail</label>
-          <input class="form-control" type="email" name="customer_email" value="<?= Helpers::e($user['email'] ?? '') ?>">
+          <label for="checkout-customer-email">E-mail</label>
+          <input class="form-control" id="checkout-customer-email" type="email" name="customer_email" autocomplete="email" value="<?= Helpers::e($user['email'] ?? '') ?>">
         </div>
       </div>
       <div class="form-group">
-        <label>Endereço</label>
-        <input class="form-control" name="shipping_address">
+        <label for="checkout-shipping-address">Endereço</label>
+        <input class="form-control" id="checkout-shipping-address" name="shipping_address" autocomplete="street-address">
       </div>
       <div class="form-grid two">
-        <div class="form-group"><label>Cidade</label><input class="form-control" name="shipping_city"></div>
-        <div class="form-group"><label>UF</label><input class="form-control" name="shipping_state" maxlength="2"></div>
+        <div class="form-group"><label for="checkout-shipping-city">Cidade</label><input class="form-control" id="checkout-shipping-city" name="shipping_city" autocomplete="address-level2"></div>
+        <div class="form-group"><label for="checkout-shipping-state">UF</label><input class="form-control" id="checkout-shipping-state" name="shipping_state" maxlength="2" autocomplete="address-level1"></div>
       </div>
-      <div class="form-group"><label>CEP</label><input class="form-control" name="shipping_zip"></div>
+      <div class="form-group"><label for="checkout-shipping-zip">CEP</label><input class="form-control" id="checkout-shipping-zip" name="shipping_zip" inputmode="numeric" autocomplete="postal-code"></div>
 
       <?php if ($shippingEnabled): ?>
-      <div class="form-group">
-        <label>Forma de entrega</label>
+      <div class="form-group" role="radiogroup" aria-labelledby="checkout-shipping-legend">
+        <span class="form-label" id="checkout-shipping-legend">Forma de entrega</span>
         <?php foreach ($shippingMethods as $s): ?>
           <label class="option">
             <input type="radio" name="shipping_method_id" value="<?= (int)$s['id'] ?>" required>
@@ -40,8 +40,8 @@
       </div>
       <?php endif; ?>
 
-      <div class="form-group">
-        <label>Forma de pagamento</label>
+      <div class="form-group" role="radiogroup" aria-labelledby="checkout-payment-legend">
+        <span class="form-label" id="checkout-payment-legend">Forma de pagamento</span>
         <?php foreach ($paymentMethods as $p): ?>
           <label class="option">
             <input type="radio" name="payment_method_id" value="<?= (int)$p['id'] ?>" required>
@@ -51,8 +51,8 @@
       </div>
 
       <div class="form-group">
-        <label>Observações</label>
-        <textarea class="form-control" name="notes" rows="3"></textarea>
+        <label for="checkout-notes">Observações</label>
+        <textarea class="form-control" id="checkout-notes" name="notes" rows="3"></textarea>
       </div>
       <button class="btn btn-block" type="submit">Confirmar pedido</button>
     </form>

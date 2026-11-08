@@ -17,7 +17,7 @@ $nav = static function (string $prefix) use ($path): string {
   <title><?= Helpers::e(($title ?? 'Admin') . ' | Ateliê Mariah') ?></title>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@450;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/app.css?v=15">
-  <link rel="stylesheet" href="/assets/css/admin.css?v=1">
+  <link rel="stylesheet" href="/assets/css/admin.css?v=2">
 </head>
 <body class="admin-body">
 <?php if ($flash): ?><div class="flash <?= Helpers::e($flash['type']) ?>" data-flash><?= Helpers::e($flash['message']) ?></div><?php endif; ?>

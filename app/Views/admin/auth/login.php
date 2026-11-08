@@ -9,12 +9,12 @@
     <form method="post" action="/admin/login" class="form-grid">
       <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
       <div class="form-group">
-        <label>E-mail</label>
-        <input class="form-control" type="email" name="email" required autocomplete="username" placeholder="admin@mariahvendas.com.br">
+        <label for="admin-login-email">E-mail</label>
+        <input class="form-control" id="admin-login-email" type="email" name="email" required autocomplete="username" placeholder="admin@mariahvendas.com.br">
       </div>
       <div class="form-group">
-        <label>Senha</label>
-        <input class="form-control" type="password" name="password" required autocomplete="current-password">
+        <label for="admin-login-password">Senha</label>
+        <input class="form-control" id="admin-login-password" type="password" name="password" required autocomplete="current-password">
       </div>
       <button class="btn btn-glow" type="submit">Entrar no painel</button>
     </form>
