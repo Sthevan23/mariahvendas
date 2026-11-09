@@ -105,7 +105,18 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
   </form>
   <ul>
     <?php foreach ($coupons as $c): ?>
-      <li><?= Helpers::e($c['code']) ?> — <?= Helpers::e($c['type']) ?> <?= Helpers::e((string)$c['value']) ?></li>
+      <li style="margin-bottom:.5rem">
+        <strong><?= Helpers::e($c['code']) ?></strong> — <?= $c['type'] === 'fixed' ? Helpers::money($c['value']) : Helpers::e((string)$c['value']) . '%' ?>
+        <?= (int)$c['is_active'] ? '<span class="muted">(ativo)</span>' : '<span class="muted">(inativo)</span>' ?>
+        <form method="post" action="/admin/configuracoes/cupom/<?= (int)$c['id'] ?>/alternar" style="display:inline">
+          <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
+          <button class="btn btn-outline" type="submit"><?= (int)$c['is_active'] ? 'Desativar' : 'Ativar' ?></button>
+        </form>
+        <form method="post" action="/admin/configuracoes/cupom/<?= (int)$c['id'] ?>/excluir" style="display:inline" onsubmit="return confirm('Excluir o cupom <?= Helpers::e($c['code']) ?>?')">
+          <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
+          <button class="btn btn-outline" type="submit">Excluir</button>
+        </form>
+      </li>
     <?php endforeach; ?>
   </ul>
 </div>

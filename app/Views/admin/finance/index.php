@@ -41,3 +41,32 @@
     </tbody>
   </table>
 </div>
+
+<div class="admin-card">
+  <h3 style="margin-top:0;font-family:var(--serif);font-weight:500">Despesas do período</h3>
+  <?php if ($expenses): ?>
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead><tr><th>Data</th><th>Descrição</th><th>Categoria</th><th>Valor</th><th></th></tr></thead>
+      <tbody>
+      <?php foreach ($expenses as $e): ?>
+        <tr>
+          <td><?= Helpers::e(date('d/m/Y', strtotime($e['expense_date']))) ?></td>
+          <td><?= Helpers::e($e['description']) ?></td>
+          <td><?= Helpers::e($e['category'] ?? '-') ?></td>
+          <td><?= Helpers::money($e['amount']) ?></td>
+          <td>
+            <form method="post" action="/admin/financeiro/despesa/<?= (int)$e['id'] ?>/excluir" onsubmit="return confirm('Excluir esta despesa?')">
+              <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
+              <button class="btn btn-outline" type="submit">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+  <?php else: ?>
+    <p class="muted">Nenhuma despesa neste período.</p>
+  <?php endif; ?>
+</div>

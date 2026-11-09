@@ -258,10 +258,6 @@ button, input, select, textarea { font: inherit; color: inherit; }
   .product-card .tags {
     top: .65rem;
     left: .65rem;
-    right: 2.55rem;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: flex-start;
     gap: 0.28rem;
   }
   .fav-form {
@@ -719,9 +715,12 @@ button, input, select, textarea { font: inherit; color: inherit; }
   position: absolute;
   top: .75rem;
   left: .75rem;
-  right: 2.85rem;
+  right: auto;
+  max-width: calc(100% - 3.5rem);
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: flex-start;
   align-content: flex-start;
   gap: .35rem;
   z-index: 1;

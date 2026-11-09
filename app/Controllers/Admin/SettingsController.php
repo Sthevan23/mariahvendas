@@ -99,6 +99,22 @@ class SettingsController extends Controller
         $this->redirect('/admin/configuracoes');
     }
 
+    public function toggleCoupon(string $id): void
+    {
+        $this->verifyCsrf('/admin/configuracoes');
+        Database::connection()->prepare('UPDATE coupons SET is_active = 1 - is_active WHERE id = ?')->execute([(int) $id]);
+        $this->flash('success', 'Status do cupom alterado.');
+        $this->redirect('/admin/configuracoes');
+    }
+
+    public function deleteCoupon(string $id): void
+    {
+        $this->verifyCsrf('/admin/configuracoes');
+        Database::connection()->prepare('DELETE FROM coupons WHERE id = ?')->execute([(int) $id]);
+        $this->flash('success', 'Cupom excluído.');
+        $this->redirect('/admin/configuracoes');
+    }
+
     public function uploadHero(): void
     {
         $this->verifyCsrf();

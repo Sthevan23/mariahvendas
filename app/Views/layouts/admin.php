@@ -48,6 +48,7 @@ $nav = static function (string $prefix) use ($path): string {
     <p class="admin-nav-label">Loja</p>
     <a href="/admin/produtos" class="<?= $nav('/admin/produtos') ?>">Produtos</a>
     <a href="/admin/pedidos" class="<?= $nav('/admin/pedidos') ?>">Pedidos</a>
+    <a href="/admin/promocoes" class="<?= $nav('/admin/promocoes') ?>">Promoções</a>
     <a href="/admin/estoque" class="<?= $nav('/admin/estoque') ?>">Estoque</a>
     <a href="/admin/clientes" class="<?= $nav('/admin/clientes') ?>">Clientes</a>
 

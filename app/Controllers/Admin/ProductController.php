@@ -33,6 +33,7 @@ class ProductController extends Controller
     {
         $this->verifyCsrf();
         $data = $this->productPayload();
+        $data['slug'] = $this->uniqueSlug($data['slug']);
         $id = Product::create($data);
         $this->syncMedia($id);
         $this->syncVariants($id);
@@ -59,7 +60,14 @@ class ProductController extends Controller
     public function update(string $id): void
     {
         $this->verifyCsrf();
-        Product::update((int) $id, $this->productPayload());
+        $current = Product::find((int) $id);
+        if (!$current) {
+            $this->flash('error', 'Produto não encontrado.');
+            $this->redirect('/admin/produtos');
+        }
+        $data = $this->productPayload();
+        $data['slug'] = $current['slug'];
+        Product::update((int) $id, $data);
         $this->syncMedia((int) $id);
         $this->syncVariants((int) $id);
         $this->flash('success', 'Produto atualizado.');
@@ -92,17 +100,65 @@ class ProductController extends Controller
         ];
     }
 
+    public function deleteImage(string $id, string $imageId): void
+    {
+        $this->verifyCsrf('/admin/produtos/' . (int) $id . '/editar');
+        $image = Product::deleteImage((int) $id, (int) $imageId);
+        if ($image) {
+            $this->removeUploadedFile($image['path']);
+            $this->flash('success', 'Foto removida.');
+        } else {
+            $this->flash('error', 'Foto não encontrada.');
+        }
+        $this->redirect('/admin/produtos/' . (int) $id . '/editar');
+    }
+
+    public function primaryImage(string $id, string $imageId): void
+    {
+        $this->verifyCsrf('/admin/produtos/' . (int) $id . '/editar');
+        Product::makePrimaryImage((int) $id, (int) $imageId);
+        $this->flash('success', 'Foto definida como capa.');
+        $this->redirect('/admin/produtos/' . (int) $id . '/editar');
+    }
+
+    private function uniqueSlug(string $slug): string
+    {
+        $candidate = $slug;
+        $n = 2;
+        while (Product::findBySlug($candidate)) {
+            $candidate = $slug . '-' . $n++;
+        }
+        return $candidate;
+    }
+
+    /** Apaga o arquivo só se ele estiver em uploads/products e não for usado por outra foto. */
+    private function removeUploadedFile(string $path): void
+    {
+        if (!str_starts_with($path, '/uploads/products/') || Product::imagePathInUse($path)) {
+            return;
+        }
+        $file = dirname(__DIR__, 3) . '/public' . $path;
+        if (is_file($file)) {
+            @unlink($file);
+        }
+    }
+
     private function syncMedia(int $productId): void
     {
-        $urls = array_filter(array_map('trim', explode("\n", (string) $this->input('image_urls', ''))));
-        foreach ($urls as $i => $url) {
-            if ($url !== '') {
-                Product::addImage($productId, $url, null, $i);
+        $urls = array_filter(array_map('trim', explode("
+", (string) $this->input('image_urls', ''))));
+        $sort = Product::nextImageSort($productId);
+        foreach ($urls as $url) {
+            if (preg_match('#^(https?://|/uploads/)#i', $url)) {
+                Product::addImage($productId, $url, null, $sort++);
             }
         }
 
         if (!empty($_FILES['images']['name'][0])) {
             $dir = dirname(__DIR__, 3) . '/public/uploads/products/';
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
             foreach ($_FILES['images']['name'] as $i => $name) {
                 if ($_FILES['images']['error'][$i] !== UPLOAD_ERR_OK) {
                     continue;
@@ -111,9 +167,13 @@ class ProductController extends Controller
                 if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) {
                     continue;
                 }
-                $filename = uniqid('p_', true) . '.' . $ext;
-                if (move_uploaded_file($_FILES['images']['tmp_name'][$i], $dir . $filename)) {
-                    Product::addImage($productId, '/uploads/products/' . $filename, null, $i);
+                $tmp = $_FILES['images']['tmp_name'][$i];
+                if ($_FILES['images']['size'][$i] > 8 * 1024 * 1024 || @getimagesize($tmp) === false) {
+                    continue;
+                }
+                $filename = uniqid('p_', true) . '.' . ($ext === 'jpeg' ? 'jpg' : $ext);
+                if (move_uploaded_file($tmp, $dir . $filename)) {
+                    Product::addImage($productId, '/uploads/products/' . $filename, null, $sort++);
                 }
             }
         }

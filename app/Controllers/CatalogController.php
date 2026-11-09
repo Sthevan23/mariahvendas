@@ -75,7 +75,7 @@ class CatalogController extends Controller
 
         $this->render('catalog/index', [
             'title' => $title,
-            'meta_description' => 'Explore a coleção Mandalla de moda feminina premium.',
+            'meta_description' => 'Explore a coleção Ateliê Mariah de vestidos de festa.',
             'products' => $products,
             'categories' => Category::allActive(),
             'sizes' => Product::sizes(),

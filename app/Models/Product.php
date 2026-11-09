@@ -343,6 +343,56 @@ class Product
         $stmt->execute([$productId, $path, $alt, $sort]);
     }
 
+    public static function nextImageSort(int $productId): int
+    {
+        $stmt = Database::connection()->prepare('SELECT COALESCE(MAX(sort_order), -1) + 1 FROM product_images WHERE product_id = ?');
+        $stmt->execute([$productId]);
+        return (int) $stmt->fetchColumn();
+    }
+
+    public static function findImage(int $productId, int $imageId): ?array
+    {
+        $stmt = Database::connection()->prepare('SELECT * FROM product_images WHERE id = ? AND product_id = ?');
+        $stmt->execute([$imageId, $productId]);
+        $row = $stmt->fetch();
+        return $row ?: null;
+    }
+
+    public static function deleteImage(int $productId, int $imageId): ?array
+    {
+        $image = self::findImage($productId, $imageId);
+        if (!$image) {
+            return null;
+        }
+        Database::connection()->prepare('DELETE FROM product_images WHERE id = ?')->execute([$imageId]);
+        return $image;
+    }
+
+    /** Coloca a foto escolhida em primeiro lugar (capa) e reordena as demais. */
+    public static function makePrimaryImage(int $productId, int $imageId): void
+    {
+        $pdo = Database::connection();
+        $ids = $pdo->prepare('SELECT id FROM product_images WHERE product_id = ? ORDER BY sort_order, id');
+        $ids->execute([$productId]);
+        $order = array_map('intval', $ids->fetchAll(PDO::FETCH_COLUMN));
+        if (!in_array($imageId, $order, true)) {
+            return;
+        }
+        $order = array_values(array_merge([$imageId], array_diff($order, [$imageId])));
+        $upd = $pdo->prepare('UPDATE product_images SET sort_order = ? WHERE id = ?');
+        foreach ($order as $i => $id) {
+            $upd->execute([$i, $id]);
+        }
+    }
+
+    /** Verdadeiro se o arquivo ainda é usado por outro registro (evita apagar foto compartilhada). */
+    public static function imagePathInUse(string $path): bool
+    {
+        $stmt = Database::connection()->prepare('SELECT COUNT(*) FROM product_images WHERE path = ?');
+        $stmt->execute([$path]);
+        return (int) $stmt->fetchColumn() > 0;
+    }
+
     public static function upsertVariant(int $productId, string $size, string $color, ?string $hex, int $stock, ?string $sku = null): int
     {
         $pdo = Database::connection();

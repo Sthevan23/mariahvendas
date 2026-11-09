@@ -69,6 +69,14 @@ class FinanceController extends Controller
         $this->redirect('/admin/financeiro');
     }
 
+    public function deleteExpense(string $id): void
+    {
+        $this->verifyCsrf('/admin/financeiro');
+        Database::connection()->prepare('DELETE FROM expenses WHERE id = ?')->execute([(int) $id]);
+        $this->flash('success', 'Despesa excluída.');
+        $this->redirect('/admin/financeiro');
+    }
+
     public function export(): void
     {
         $from = $this->input('from', date('Y-m-01'));
@@ -81,7 +89,7 @@ class FinanceController extends Controller
         $orders->execute([$from, $to]);
 
         header('Content-Type: text/csv; charset=utf-8');
-        header('Content-Disposition: attachment; filename=financeiro-mandalla.csv');
+        header('Content-Disposition: attachment; filename=financeiro-atelie-mariah.csv');
         $out = fopen('php://output', 'w');
         fputcsv($out, ['Pedido', 'Cliente', 'Total', 'Pagamento', 'Status', 'Data'], ';');
         foreach ($orders as $row) {
