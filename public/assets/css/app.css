@@ -3,7 +3,7 @@
   --bg-soft: #ebe3d9;
   --surface: #fffcf9;
   --ink: #14110f;
-  --muted: #6b635c;
+  --muted: #4a433c;
   --gold: #b8956b;
   --gold-soft: #dcc9a8;
   --nude: #c4a484;
@@ -26,6 +26,7 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: var(--sans);
+  font-weight: 400;
   color: var(--ink);
   background:
     radial-gradient(1200px 600px at 10% -10%, rgba(184, 149, 107, 0.12), transparent 55%),
