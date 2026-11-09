@@ -279,6 +279,32 @@
   border-color: var(--line);
 }
 
+/* Mostrar/ocultar senha no login */
+.pw-wrap { position: relative; }
+.pw-wrap .form-control { padding-right: 3rem; }
+.pw-toggle {
+  position: absolute;
+  right: 0.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: var(--muted, #6b6560);
+  cursor: pointer;
+  border-radius: 4px;
+}
+.pw-toggle:hover { color: var(--ink, #1a1a1a); }
+.pw-toggle:focus-visible { outline: 2px solid var(--ink, #1a1a1a); outline-offset: 2px; }
+.pw-toggle svg { width: 20px; height: 20px; }
+.pw-toggle .icon-off { display: none; }
+.pw-toggle[aria-pressed="true"] .icon-on { display: none; }
+.pw-toggle[aria-pressed="true"] .icon-off { display: block; }
+
 /* Links de ação do admin: tom mais escuro para manter contraste AA (4.5:1) sobre fundo claro */
 .admin-body .section-head a:not(.btn) {
   color: #7a5c40;
