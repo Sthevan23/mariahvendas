@@ -279,6 +279,16 @@
   border-color: var(--line);
 }
 
+/* Links de ação do admin: tom mais escuro para manter contraste AA (4.5:1) sobre fundo claro */
+.admin-body .section-head a:not(.btn) {
+  color: #7a5c40;
+  border-bottom-color: #7a5c40;
+}
+.admin-body .section-head a:not(.btn):hover {
+  color: var(--ink, #1a1a1a);
+  border-color: var(--ink, #1a1a1a);
+}
+
 .admin-body .admin-sidebar .btn-outline {
   width: 100%;
   color: #fff;

@@ -40,6 +40,45 @@ class CheckoutController extends Controller
         return (bool) (require dirname(__DIR__, 2) . '/config/app.php')['shipping_enabled'];
     }
 
+    /**
+     * Consulta o CEP na ViaCEP.
+     * Retorna o array da API, ['erro' => true] se o CEP não existe, ou null se a consulta falhou.
+     */
+    private static function lookupCep(string $cep): ?array
+    {
+        $url = "https://viacep.com.br/ws/{$cep}/json/";
+        $body = false;
+        if (function_exists('curl_init')) {
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_TIMEOUT => 6,
+                CURLOPT_CONNECTTIMEOUT => 4,
+            ]);
+            $body = curl_exec($ch);
+            curl_close($ch);
+        } else {
+            $ctx = stream_context_create(['http' => ['timeout' => 6, 'ignore_errors' => true]]);
+            $body = @file_get_contents($url, false, $ctx);
+        }
+        if (!is_string($body) || $body === '') {
+            return null;
+        }
+        $data = json_decode($body, true);
+        if (!is_array($data)) {
+            return null;
+        }
+        return $data;
+    }
+
+    private static function isDivinopolis(array $address): bool
+    {
+        $city = mb_strtolower(trim((string) ($address['localidade'] ?? '')));
+        $city = strtr($city, ['á' => 'a', 'à' => 'a', 'ã' => 'a', 'â' => 'a', 'é' => 'e', 'ê' => 'e', 'í' => 'i', 'ó' => 'o', 'ô' => 'o', 'õ' => 'o', 'ú' => 'u', 'ç' => 'c']);
+        $uf = strtoupper(trim((string) ($address['uf'] ?? '')));
+        return $city === 'divinopolis' && $uf === 'MG';
+    }
+
     public function store(): void
     {
         $this->verifyCsrf();
@@ -82,6 +121,30 @@ class CheckoutController extends Controller
             return;
         }
 
+        // Entrega por enquanto só em Divinópolis-MG; o CEP é conferido na ViaCEP.
+        $cep = preg_replace('/\D/', '', (string) $this->input('shipping_zip'));
+        if (strlen($cep) !== 8) {
+            $this->flash('error', 'Informe um CEP válido com 8 números.');
+            $this->redirect('/checkout');
+            return;
+        }
+        $address = self::lookupCep($cep);
+        if ($address === null) {
+            $this->flash('error', 'Não conseguimos validar o CEP agora. Tente novamente ou fale com a gente pelo WhatsApp.');
+            $this->redirect('/checkout');
+            return;
+        }
+        if (!empty($address['erro'])) {
+            $this->flash('error', 'CEP não encontrado. Confira os números.');
+            $this->redirect('/checkout');
+            return;
+        }
+        if (!self::isDivinopolis($address)) {
+            $this->flash('error', 'Por enquanto entregamos somente em Divinópolis-MG. Fale com a gente pelo WhatsApp para outras regiões.');
+            $this->redirect('/checkout');
+            return;
+        }
+
         $totals = CartService::totals($shippingPrice);
         $coupon = $totals['coupon']['code'] ?? null;
 
@@ -91,9 +154,9 @@ class CheckoutController extends Controller
             'customer_email' => $email ?: null,
             'customer_phone' => $phone,
             'shipping_address' => trim((string) $this->input('shipping_address')),
-            'shipping_city' => trim((string) $this->input('shipping_city')),
-            'shipping_state' => trim((string) $this->input('shipping_state')),
-            'shipping_zip' => trim((string) $this->input('shipping_zip')),
+            'shipping_city' => (string) ($address['localidade'] ?? ''),
+            'shipping_state' => (string) ($address['uf'] ?? ''),
+            'shipping_zip' => $cep,
             'shipping_method_id' => $shippingId,
             'shipping_price' => $shippingPrice,
             'payment_method_id' => $paymentId,

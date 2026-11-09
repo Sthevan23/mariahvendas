@@ -69,24 +69,3 @@ if ($config['debug']) {
     ini_set('display_errors', '0');
 }
 
-$dbFile = require __DIR__ . '/config/database.php';
-if (!file_exists($dbFile['database'])) {
-    require __DIR__ . '/database/seed.php';
-} else {
-    $catalogDir = __DIR__ . '/public/uploads/moda/colecao';
-    if (is_dir($catalogDir)) {
-        try {
-            $pdo = App\Core\Database::connection();
-            $version = (string) ($pdo->query("SELECT value FROM settings WHERE key = 'catalog_version'")->fetchColumn() ?: '');
-            $lookCount = (int) $pdo->query("SELECT COUNT(*) FROM products WHERE slug LIKE 'mariah-look-%'")->fetchColumn();
-            if ($version !== 'mariah-v6' || $lookCount < 6) {
-                require_once __DIR__ . '/database/seed_mariah_catalog.php';
-                mariah_seed_catalog($pdo, __DIR__);
-            }
-        } catch (Throwable $e) {
-            if (!empty($config['debug'])) {
-                throw $e;
-            }
-        }
-    }
-}

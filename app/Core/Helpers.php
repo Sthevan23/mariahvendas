@@ -53,13 +53,27 @@ class Helpers
         static $cache = null;
         if ($cache === null) {
             $pdo = Database::connection();
-            $rows = $pdo->query('SELECT key, value FROM settings')->fetchAll();
+            $rows = $pdo->query('SELECT `key`, value FROM settings')->fetchAll();
             $cache = [];
             foreach ($rows as $row) {
                 $cache[$row['key']] = $row['value'];
             }
         }
         return $cache[$key] ?? $default;
+    }
+
+    /** Grava uma configuração em qualquer driver (SQLite ou MySQL). */
+    public static function saveSetting(string $key, string $value): void
+    {
+        $pdo = Database::connection();
+        // Não usa rowCount(): no MySQL ele dá 0 quando o valor não muda.
+        $exists = $pdo->prepare('SELECT COUNT(*) FROM settings WHERE `key` = ?');
+        $exists->execute([$key]);
+        if ((int) $exists->fetchColumn() > 0) {
+            $pdo->prepare('UPDATE settings SET value = ? WHERE `key` = ?')->execute([$value, $key]);
+        } else {
+            $pdo->prepare('INSERT INTO settings (`key`, value) VALUES (?, ?)')->execute([$key, $value]);
+        }
     }
 
     public static function flash(): ?array

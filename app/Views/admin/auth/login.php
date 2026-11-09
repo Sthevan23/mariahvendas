@@ -10,7 +10,7 @@
       <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
       <div class="form-group">
         <label for="admin-login-email">E-mail</label>
-        <input class="form-control" id="admin-login-email" type="email" name="email" required autocomplete="username" placeholder="admin@mariahvendas.com.br">
+        <input class="form-control" id="admin-login-email" type="email" name="email" required autocomplete="username" placeholder="seu@email.com">
       </div>
       <div class="form-group">
         <label for="admin-login-password">Senha</label>

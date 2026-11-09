@@ -22,11 +22,11 @@
         <label for="checkout-shipping-address">Endereço</label>
         <input class="form-control" id="checkout-shipping-address" name="shipping_address" autocomplete="street-address">
       </div>
-      <div class="form-grid two">
-        <div class="form-group"><label for="checkout-shipping-city">Cidade</label><input class="form-control" id="checkout-shipping-city" name="shipping_city" autocomplete="address-level2"></div>
-        <div class="form-group"><label for="checkout-shipping-state">UF</label><input class="form-control" id="checkout-shipping-state" name="shipping_state" maxlength="2" autocomplete="address-level1"></div>
+      <div class="form-group">
+        <label for="checkout-shipping-zip">CEP</label>
+        <input class="form-control" id="checkout-shipping-zip" name="shipping_zip" inputmode="numeric" autocomplete="postal-code" maxlength="9" required>
+        <p class="muted" style="margin:.4rem 0 0">Por enquanto entregamos somente em Divinópolis-MG.</p>
       </div>
-      <div class="form-group"><label for="checkout-shipping-zip">CEP</label><input class="form-control" id="checkout-shipping-zip" name="shipping_zip" inputmode="numeric" autocomplete="postal-code"></div>
 
       <?php if ($shippingEnabled): ?>
       <div class="form-group" role="radiogroup" aria-labelledby="checkout-shipping-legend">

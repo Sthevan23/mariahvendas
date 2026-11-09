@@ -264,10 +264,10 @@ class Order
     {
         $stmt = Database::connection()->prepare(
             "SELECT date(created_at) AS day, COALESCE(SUM(CASE WHEN payment_status = 'paid' THEN total ELSE 0 END),0) AS total
-             FROM orders WHERE date(created_at) >= date('now', ?)
+             FROM orders WHERE date(created_at) >= ?
              GROUP BY date(created_at) ORDER BY day ASC"
         );
-        $stmt->execute(['-' . $days . ' days']);
+        $stmt->execute([date('Y-m-d', strtotime('-' . $days . ' days'))]);
         return $stmt->fetchAll();
     }
 }

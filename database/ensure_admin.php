@@ -11,12 +11,15 @@ declare(strict_types=1);
 function mariah_ensure_admin(): string
 {
     $pdo = App\Core\Database::connection();
-    $email = trim((string) (getenv('ADMIN_EMAIL') ?: 'admin@mariahvendas.com.br'));
+    $email = trim((string) getenv('ADMIN_EMAIL'));
+    if ($email === '') {
+        throw new RuntimeException('Defina ADMIN_EMAIL no .env antes de criar o admin.');
+    }
     $password = (string) getenv('ADMIN_PASSWORD');
     if ($password === '') {
         throw new RuntimeException('Defina ADMIN_PASSWORD no .env antes de criar o admin.');
     }
-    $name = trim((string) (getenv('ADMIN_NAME') ?: 'Administradora'));
+    $name = trim((string) (getenv('ADMIN_NAME') ?: 'Administrador(a)'));
     $phone = trim((string) (getenv('ADMIN_PHONE') ?: '37998086607'));
 
     $stmt = $pdo->prepare('SELECT id FROM users WHERE role = ? LIMIT 1');

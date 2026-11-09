@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Controller;
 use App\Core\Database;
+use App\Core\Helpers;
 
 class SettingsController extends Controller
 {
@@ -11,7 +12,7 @@ class SettingsController extends Controller
     {
         $pdo = Database::connection();
         $settings = [];
-        foreach ($pdo->query('SELECT key, value FROM settings') as $row) {
+        foreach ($pdo->query('SELECT `key`, value FROM settings') as $row) {
             $settings[$row['key']] = $row['value'];
         }
 
@@ -33,10 +34,9 @@ class SettingsController extends Controller
             'hero_title', 'hero_subtitle', 'hero_image', 'og_image',
             'exchange_policy', 'privacy_policy', 'delivery_info',
         ];
-        $stmt = Database::connection()->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)');
         foreach ($keys as $key) {
             if ($this->input($key) !== null) {
-                $stmt->execute([$key, trim((string) $this->input($key))]);
+                Helpers::saveSetting($key, trim((string) $this->input($key)));
             }
         }
         $this->flash('success', 'Configurações salvas.');
@@ -154,8 +154,7 @@ class SettingsController extends Controller
         }
 
         $publicPath = '/uploads/moda/' . $filename;
-        Database::connection()->prepare('INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)')
-            ->execute(['hero_image', $publicPath]);
+        Helpers::saveSetting('hero_image', $publicPath);
 
         require_once dirname(__DIR__, 3) . '/database/build_hero_assets.php';
         mariah_rebuild_hero_assets(dirname(__DIR__, 3));

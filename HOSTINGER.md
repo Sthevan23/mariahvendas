@@ -1,120 +1,117 @@
-# Mandalla — Deploy na Hostinger (PHP)
+# Ateliê Mariah — Deploy na Hostinger (PHP + MySQL)
 
-Loja PHP pura (MVC) + SQLite. Sem Node.js / Next.js.
+Loja PHP pura (MVC) com banco MySQL. Sem Node.js e sem SQLite.
 
-## Login admin
+## 1. Banco MySQL
 
-- URL: `https://SEU-DOMINIO/admin/login`
-- E-mail: `ADMIN_EMAIL` do `.env`
-- Senha: `ADMIN_PASSWORD` do `.env` (defina uma senha forte antes de subir)
+1. No hPanel, abra **Bancos de dados MySQL** e anote o nome do banco, o usuário e a senha.
+2. Abra o **phpMyAdmin**, selecione o banco **vazio** e vá em **Importar**.
+3. Escolha o arquivo `hostinger_mysql.sql` e clique em **Executar**.
 
-Para criar ou redefinir o admin, rode `php database/ensure_admin.php` pelo terminal do hPanel. Não há mais página web para isso.
+O arquivo cria as tabelas e carrega o catálogo, as configurações, os cupons e as formas de pagamento. Não traz usuários, pedidos, despesas nem reviews.
 
-## Banco de dados
+## 2. Enviar os arquivos
 
-O arquivo `database/mariah_altocostura.db` **não vai para o Git** (contém dados de clientes). Envie-o manualmente pelo File Manager ou FTP para `database/`.
+No File Manager ou FTP, envie **toda a pasta do projeto** para `public_html`, incluindo `app/`, `config/`, `database/`, `public/`, `storage/`, `bootstrap.php`, `routes.php` e `.htaccess`.
 
-## Passo a passo
+**Não envie:** `.git`, `node_modules`, `.env` local e `database/mariah_altocostura.db` (o banco local não é usado na Hostinger).
 
-### 1. Enviar os arquivos
+## 3. Document root
 
-No File Manager ou FTP, envie **toda a pasta do projeto** para `public_html` (ou a pasta do domínio), incluindo:
+No hPanel → **Domínios** → **Document Root**, aponte para `public_html/public`.
 
-- `app/`, `config/`, `database/`, `public/`, `storage/`
-- `bootstrap.php`, `routes.php`, `.htaccess`, `.env.example`
+Se o painel não deixar mudar, o `.htaccess` da raiz já redireciona o tráfego para `public/`.
 
-**Não envie:** `node_modules`, `.next`, `.git` (se houver).
+## 4. Configurar o `.env`
 
-### 2. Document root (importante)
-
-No hPanel → **Domínios** → domínio → **Document Root** (ou Avançado):
-
-Aponte para a pasta **`public`**:
-
-```text
-public_html/public
-```
-
-Se o painel não deixar mudar o document root, o `.htaccess` da raiz já redireciona o tráfego para `/public`.
-
-### 3. Permissões de escrita
-
-Pastas que precisam gravar arquivos (755 ou 775):
-
-- `database/` — cria/atualiza o SQLite `mandalla.db`
-- `public/uploads/` — fotos de produtos
-- `storage/` — logs (se usar)
-
-### 4. Configurar URL e WhatsApp
-
-No File Manager, edite `.env.example` e salve como **`.env`** na raiz do projeto (ao lado de `bootstrap.php`):
+Crie um arquivo `.env` na raiz do projeto (ao lado de `bootstrap.php`), baseado em `.env.example`:
 
 ```env
 APP_URL=https://SEU-DOMINIO.com.br
 APP_ENV=production
 APP_DEBUG=false
-WHATSAPP=5511999999999
+WHATSAPP=5537998086607
+
+DB_HOST=localhost
+DB_NAME=nome_do_banco
+DB_USER=usuario_do_banco
+DB_PASS=senha_do_banco
+
+ADMIN_EMAIL=seu-email@exemplo.com
+ADMIN_PASSWORD=uma-senha-forte
 ```
 
-Use só dígitos no WhatsApp (DDI + DDD + número).
+- Use só dígitos no WhatsApp (DDI + DDD + número).
+- `DB_HOST` costuma ser `localhost` na Hostinger. Confira no hPanel.
+- **Nunca** envie o `.env` para o Git.
 
-Também dá para ajustar nome da loja, PIX e WhatsApp em **Admin → Configurações**.
+## 5. Criar o admin
 
-### 5. PHP
+Pelo terminal do hPanel, na pasta do projeto:
 
-hPanel → **Configuração PHP**:
+```bash
+php database/ensure_admin.php
+```
+
+Depois entre em `https://SEU-DOMINIO/admin/login` com `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Para trocar a senha depois, altere o `.env` e rode o comando de novo, ou use **Minha conta** no painel.
+
+## 6. PHP
+
+No hPanel → **Configuração PHP**:
 
 - Versão **8.2+** (ideal 8.3)
-- Extensões ativas: `pdo_sqlite`, `sqlite3`, `mbstring`, `openssl`
+- Extensões ativas: `pdo_mysql`, `mbstring`, `openssl`
 
-### 6. Catálogo Bali (fotos)
+## 7. Permissões de escrita
 
-O projeto já vem com `database/mandalla.db` + fotos em `public/uploads/products/bali/`.
+Pastas que precisam gravar arquivos (755 ou 775):
 
-Ao subir os arquivos, a loja **atualiza sozinha** na primeira visita (troca o catálogo antigo pela Bali).
+- `public/uploads/` — fotos de produtos e banner
+- `storage/` — sessões e logs
 
-Se ainda aparecer foto antiga:
-1. Confirme que subiu `public/uploads/products/bali/` e o banco `database/mariah_altocostura.db`
-2. Ctrl+F5 na home
+## 8. Testar
 
-### 7. Testar
+1. `https://SEU-DOMINIO/` — home da loja
+2. `https://SEU-DOMINIO/catalogo` — catálogo
+3. `https://SEU-DOMINIO/admin/login` — painel
+4. Troque a senha do admin e confirme o número do WhatsApp em **Admin → Configurações**
 
-1. `https://SEU-DOMINIO/` — home da loja  
-2. `https://SEU-DOMINIO/categoria/colecao-bali` — catálogo Bali  
-3. `https://SEU-DOMINIO/admin` — painel  
-4. Troque a senha do admin e o número do WhatsApp
+## Rodar localmente (seu PC)
 
-Na primeira visita o banco SQLite é criado automaticamente (seed com Coleção Bali).
+O desenvolvimento local também usa MySQL. Opções:
+
+- **XAMPP** ou **Laragon**: instale, crie um banco vazio, importe o `hostinger_mysql.sql` e preencha `DB_*` no `.env` local.
+- Depois rode:
+
+```bash
+php -S localhost:8080 -t public public/router.php
+```
+
+## Problemas comuns
+
+| Sintoma | O que checar |
+|---------|--------------|
+| Erro de conexão com o banco | `DB_HOST`, `DB_NAME`, `DB_USER` e `DB_PASS` no `.env`; extensão `pdo_mysql` ativa |
+| 500 Internal Server Error | Versão do PHP; permissão em `public/uploads/` e `storage/`; log de erros do hPanel |
+| Página em branco | `APP_DEBUG=true` temporário no `.env` para ver o erro |
+| CSS ou imagens não carregam | Document root deve ser `public/` (ou o `.htaccess` da raiz ativo) |
+| Não consigo entrar no admin | Confira `ADMIN_EMAIL` e rode `php database/ensure_admin.php` de novo |
+| Upload de foto falha | Permissão em `public/uploads/` |
 
 ## Estrutura no servidor
 
 ```text
 public_html/
   .htaccess          → manda o tráfego para public/
+  .env               → credenciais (não versionar)
   bootstrap.php
   routes.php
   app/               → código PHP (bloqueado na web)
-  config/
-  database/          → mandalla.db (SQLite)
-  public/            ← document root ideal
+  config/            → bloqueado na web
+  database/          → scripts de manutenção e schema (bloqueado na web)
+  public/            ← document root
     index.php
     assets/
     uploads/
-  storage/
-```
-
-## Problemas comuns
-
-| Sintoma | O que checar |
-|---------|----------------|
-| 500 Internal Server Error | Versão do PHP; `pdo_sqlite`; permissão em `database/` |
-| Página em branco | `APP_DEBUG=true` temporário no `.env` ou log de erros do hPanel |
-| CSS/imagens não carregam | Document root deve ser `public/` (ou `.htaccess` da raiz ativo) |
-| Upload de foto falha | Permissão em `public/uploads/` |
-| Admin não entra | Rode de novo o seed apagando `database/mandalla.db` (cuidado: apaga pedidos) ou crie usuário no admin |
-
-## Local (seu PC)
-
-```bash
-php -S localhost:8080 -t public public/router.php
+  storage/           → sessões, logs e limite de login (bloqueado na web)
 ```

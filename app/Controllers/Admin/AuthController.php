@@ -22,7 +22,7 @@ class AuthController extends Controller
         $password = (string) $this->input('password');
 
         if (!Auth::attempt($email, $password)) {
-            $this->flash('error', 'E-mail ou senha incorretos. Use admin@mariahvendas.com.br e a senha definida para o painel.');
+            $this->flash('error', 'E-mail ou senha incorretos. Use o e-mail e a senha definidos para o painel.');
             $this->redirect('/admin/login');
         }
 
