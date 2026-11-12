@@ -16,7 +16,7 @@ class ProductController extends Controller
             return;
         }
 
-        $images = Product::images((int) $product['id']);
+        $images = Product::images((int) $product['id'], true);
         $variants = Product::variants((int) $product['id']);
         $related = Product::related((int) $product['id'], $product['category_id'] ? (int) $product['category_id'] : null);
         $defaultVariant = Product::firstAvailableVariant($variants);

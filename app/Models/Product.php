@@ -10,11 +10,8 @@ class Product
 {
     public static function withImage(array $product): array
     {
-        $stmt = Database::connection()->prepare(
-            'SELECT path, alt FROM product_images WHERE product_id = ? ORDER BY sort_order LIMIT 1'
-        );
-        $stmt->execute([$product['id']]);
-        $img = $stmt->fetch();
+        // Usa a primeira foto que realmente existe no servidor (evita imagem quebrada).
+        $img = self::images((int) $product['id'], true)[0] ?? null;
         $product['image'] = $img['path'] ?? null;
         $product['image_alt'] = $img['alt'] ?? $product['name'];
         $product['stock_total'] = self::stockTotal((int) $product['id']);
@@ -46,13 +43,22 @@ class Product
         return $row ?: null;
     }
 
-    public static function images(int $productId): array
+    /** Com $onlyExisting, descarta fotos locais (/uploads/...) cujo arquivo sumiu do servidor. */
+    public static function images(int $productId, bool $onlyExisting = false): array
     {
         $stmt = Database::connection()->prepare(
             'SELECT * FROM product_images WHERE product_id = ? ORDER BY sort_order'
         );
         $stmt->execute([$productId]);
-        return $stmt->fetchAll();
+        $rows = $stmt->fetchAll();
+        if (!$onlyExisting) {
+            return $rows;
+        }
+        $public = dirname(__DIR__, 2) . '/public';
+        return array_values(array_filter($rows, static function (array $r) use ($public): bool {
+            $path = (string) $r['path'];
+            return !str_starts_with($path, '/uploads/') || is_file($public . $path);
+        }));
     }
 
     public static function variants(int $productId): array
