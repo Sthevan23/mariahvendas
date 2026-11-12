@@ -60,7 +60,11 @@ class Product
             if (\App\Services\MediaStore::isMediaPath($path)) {
                 return \App\Services\MediaStore::exists($path);
             }
-            return !str_starts_with($path, '/uploads/') || is_file($public . $path);
+            // Só confere as fotos enviadas pelo admin (p_*); o catálogo original nunca é escondido.
+            if (str_starts_with($path, '/uploads/products/p_')) {
+                return is_file($public . $path);
+            }
+            return true;
         }));
     }
 
