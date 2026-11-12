@@ -58,6 +58,7 @@
   <div class="form-group"><label for="product-images">Adicionar fotos do computador/celular (JPG, PNG ou WebP, até 8 MB cada)</label><input type="file" id="product-images" name="images[]" multiple accept="image/jpeg,image/png,image/webp"></div>
 
   <h3 style="font-family:var(--serif);font-weight:500">Variações (tamanho / cor / estoque)</h3>
+  <p class="muted" style="margin:.25rem 0 .75rem">Cada linha é um tamanho de uma cor. Pode digitar vários tamanhos juntos (ex.: <strong>P, M, G</strong>) que o site cria um botão para cada, com o mesmo estoque. Para outra cor, clique em “+ variação”.</p>
   <div id="variants">
     <?php $rows = $variants ?: [['size'=>'M','color'=>'Nude','color_hex'=>'#D2B48C','stock'=>5]]; foreach ($rows as $v): ?>
       <div class="form-grid two" style="margin-bottom:.5rem">
@@ -68,7 +69,7 @@
       </div>
     <?php endforeach; ?>
   </div>
-  <button class="btn btn-outline" type="button" onclick="document.getElementById('variants').insertAdjacentHTML('beforeend', document.getElementById('variants').children[0].outerHTML)">+ variação</button>
+  <button class="btn btn-outline" type="button" onclick="var v=document.getElementById('variants'),r=v.lastElementChild.cloneNode(true);r.querySelector('[name=&quot;variant_size[]&quot;]').value='';r.querySelector('[name=&quot;variant_stock[]&quot;]').value='0';v.appendChild(r);r.querySelector('input').focus()">+ variação</button>
   <button class="btn" type="submit">Salvar</button>
 </form>
 

@@ -186,19 +186,22 @@ class ProductController extends Controller
         $hexes = $_POST['variant_hex'] ?? [];
         $stocks = $_POST['variant_stock'] ?? [];
 
-        foreach ($sizes as $i => $size) {
-            $size = trim((string) $size);
+        foreach ($sizes as $i => $sizeField) {
             $color = trim((string) ($colors[$i] ?? ''));
-            if ($size === '' || $color === '') {
+            // Aceita vários tamanhos no mesmo campo ("P, M, G" / "P M G" / "P/M/G").
+            $list = preg_split('/[\s,;\/|]+/', trim((string) $sizeField), -1, PREG_SPLIT_NO_EMPTY);
+            if (!$list || $color === '') {
                 continue;
             }
-            Product::upsertVariant(
-                $productId,
-                $size,
-                $color,
-                $hexes[$i] ?? null,
-                max(0, (int) ($stocks[$i] ?? 0))
-            );
+            foreach (array_unique(array_map('mb_strtoupper', $list)) as $size) {
+                Product::upsertVariant(
+                    $productId,
+                    $size,
+                    $color,
+                    $hexes[$i] ?? null,
+                    max(0, (int) ($stocks[$i] ?? 0))
+                );
+            }
         }
     }
 }
