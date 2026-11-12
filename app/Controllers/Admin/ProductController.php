@@ -6,6 +6,7 @@ use App\Core\Controller;
 use App\Core\Helpers;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\MediaStore;
 
 class ProductController extends Controller
 {
@@ -35,9 +36,9 @@ class ProductController extends Controller
         $data = $this->productPayload();
         $data['slug'] = $this->uniqueSlug($data['slug']);
         $id = Product::create($data);
-        $this->syncMedia($id);
+        $uploadErrors = $this->syncMedia($id);
         $this->syncVariants($id);
-        $this->flash('success', 'Produto cadastrado.');
+        $this->flashSaved('Produto cadastrado.', $uploadErrors);
         $this->redirect('/admin/produtos');
     }
 
@@ -68,9 +69,9 @@ class ProductController extends Controller
         $data = $this->productPayload();
         $data['slug'] = $current['slug'];
         Product::update((int) $id, $data);
-        $this->syncMedia((int) $id);
+        $uploadErrors = $this->syncMedia((int) $id);
         $this->syncVariants((int) $id);
-        $this->flash('success', 'Produto atualizado.');
+        $this->flashSaved('Produto atualizado.', $uploadErrors);
         $this->redirect('/admin/produtos/' . $id . '/editar');
     }
 
@@ -131,9 +132,15 @@ class ProductController extends Controller
         return $candidate;
     }
 
-    /** Apaga o arquivo só se ele estiver em uploads/products e não for usado por outra foto. */
+    /** Apaga o arquivo só se ele for um upload do admin e não for usado por outra foto. */
     private function removeUploadedFile(string $path): void
     {
+        if (MediaStore::isMediaPath($path)) {
+            if (!Product::imagePathInUse($path)) {
+                MediaStore::delete($path);
+            }
+            return;
+        }
         if (!str_starts_with($path, '/uploads/products/') || Product::imagePathInUse($path)) {
             return;
         }
@@ -143,39 +150,45 @@ class ProductController extends Controller
         }
     }
 
-    private function syncMedia(int $productId): void
+    /** @return string[] erros de upload, um por foto */
+    private function syncMedia(int $productId): array
     {
         $urls = array_filter(array_map('trim', explode("
 ", (string) $this->input('image_urls', ''))));
         $sort = Product::nextImageSort($productId);
         foreach ($urls as $url) {
-            if (preg_match('#^(https?://|/uploads/)#i', $url)) {
+            if (preg_match('#^(https?://|/uploads/|/media/)#i', $url)) {
                 Product::addImage($productId, $url, null, $sort++);
             }
         }
 
-        if (!empty($_FILES['images']['name'][0])) {
-            $dir = dirname(__DIR__, 3) . '/public/uploads/products/';
-            if (!is_dir($dir)) {
-                mkdir($dir, 0755, true);
+        $errors = [];
+        foreach ($_FILES['images']['name'] ?? [] as $i => $name) {
+            if (($_FILES['images']['error'][$i] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+                continue;
             }
-            foreach ($_FILES['images']['name'] as $i => $name) {
-                if ($_FILES['images']['error'][$i] !== UPLOAD_ERR_OK) {
-                    continue;
-                }
-                $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
-                if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) {
-                    continue;
-                }
-                $tmp = $_FILES['images']['tmp_name'][$i];
-                if ($_FILES['images']['size'][$i] > 8 * 1024 * 1024 || @getimagesize($tmp) === false) {
-                    continue;
-                }
-                $filename = uniqid('p_', true) . '.' . ($ext === 'jpeg' ? 'jpg' : $ext);
-                if (move_uploaded_file($tmp, $dir . $filename)) {
-                    Product::addImage($productId, '/uploads/products/' . $filename, null, $sort++);
-                }
+            $result = MediaStore::saveUpload([
+                'name' => $name,
+                'tmp_name' => $_FILES['images']['tmp_name'][$i] ?? '',
+                'size' => $_FILES['images']['size'][$i] ?? 0,
+                'error' => $_FILES['images']['error'][$i] ?? UPLOAD_ERR_NO_FILE,
+            ]);
+            if ($result['ok']) {
+                Product::addImage($productId, $result['path'], null, $sort++);
+            } else {
+                $errors[] = $name . ': ' . $result['error'];
             }
+        }
+        return $errors;
+    }
+
+    /** Mensagem de sucesso, ou aviso se alguma foto não subiu. */
+    private function flashSaved(string $okMessage, array $uploadErrors): void
+    {
+        if ($uploadErrors) {
+            $this->flash('error', $okMessage . ' Mas estas fotos não subiram — ' . implode('; ', $uploadErrors) . '.');
+        } else {
+            $this->flash('success', $okMessage);
         }
     }
 

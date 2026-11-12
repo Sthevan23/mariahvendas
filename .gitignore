@@ -18,6 +18,8 @@ Thumbs.db
 !/public/uploads/banners/.gitkeep
 /public/uploads/products/_check/
 /public/uploads/products/_bali_previews/
+/storage/uploads/*
+!/storage/uploads/.gitkeep
 /storage/logs/*
 !/storage/logs/.gitkeep
 

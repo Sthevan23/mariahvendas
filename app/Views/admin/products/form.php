@@ -55,7 +55,7 @@
     <?php endforeach; ?>
   </div>
   <div class="form-group"><label for="product-image-urls">Adicionar fotos por link (uma por linha)</label><textarea class="form-control" id="product-image-urls" name="image_urls" rows="3" placeholder="https://..."></textarea></div>
-  <div class="form-group"><label for="product-images">Adicionar fotos do computador/celular (JPG, PNG ou WebP, até 8 MB cada)</label><input type="file" id="product-images" name="images[]" multiple accept="image/jpeg,image/png,image/webp"></div>
+  <div class="form-group"><label for="product-images">Adicionar fotos do computador/celular (JPG, PNG ou WebP, até 12 MB cada)</label><input type="file" id="product-images" name="images[]" multiple accept="image/*"></div>
 
   <h3 style="font-family:var(--serif);font-weight:500">Variações (tamanho / cor / estoque)</h3>
   <p class="muted" style="margin:.25rem 0 .75rem">Cada linha é um tamanho de uma cor. Pode digitar vários tamanhos juntos (ex.: <strong>P, M, G</strong>) que o site cria um botão para cada, com o mesmo estoque. Para outra cor, clique em “+ variação”.</p>

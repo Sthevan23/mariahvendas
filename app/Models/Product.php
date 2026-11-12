@@ -57,6 +57,9 @@ class Product
         $public = dirname(__DIR__, 2) . '/public';
         return array_values(array_filter($rows, static function (array $r) use ($public): bool {
             $path = (string) $r['path'];
+            if (\App\Services\MediaStore::isMediaPath($path)) {
+                return \App\Services\MediaStore::exists($path);
+            }
             return !str_starts_with($path, '/uploads/') || is_file($public . $path);
         }));
     }

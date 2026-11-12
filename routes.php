@@ -28,6 +28,8 @@ $router->get('/categoria/{slug}', [CatalogController::class, 'index']);
 $router->get('/busca', [CatalogController::class, 'search']);
 $router->get('/produto/{slug}', [ProductController::class, 'show']);
 
+$router->get('/media/{name}', [\App\Controllers\MediaController::class, 'show']);
+
 $router->get('/carrinho', [CartController::class, 'index']);
 $router->post('/carrinho/adicionar', [CartController::class, 'add']);
 $router->post('/carrinho/atualizar', [CartController::class, 'update']);
