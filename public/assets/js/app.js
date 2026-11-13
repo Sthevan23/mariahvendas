@@ -165,7 +165,7 @@
     if (variantInput) variantInput.value = match && match.stock > 0 ? match.id : '';
     if (stockLabel) {
       stockLabel.textContent = match
-        ? (match.stock > 0 ? `Disponível (${match.stock})` : 'Esgotado nesta combinação')
+        ? (match.stock > 0 ? `Disponível (${match.stock}) · ${match.color}` : 'Esgotado nesta combinação')
         : 'Selecione tamanho e cor';
     }
     const enabled = !!(match && match.stock > 0);
@@ -185,9 +185,31 @@
     tagged[0].click();
   };
 
+  // Ao escolher o tamanho, só ficam as cores que têm esse tamanho em estoque.
+  const filterColors = () => {
+    const size = document.querySelector('[data-size].active')?.dataset.size;
+    const available = new Set(variantMap.filter((v) => v.size === size && v.stock > 0).map((v) => v.color));
+    if (!available.size) {
+      colorInputs.forEach((c) => { c.hidden = false; }); // tamanho esgotado: mostra tudo (o aviso diz que esgotou)
+      return;
+    }
+    colorInputs.forEach((c) => { c.hidden = !available.has(c.dataset.color); });
+    const active = document.querySelector('[data-color].active');
+    if (!active || active.hidden) {
+      [...colorInputs].find((c) => !c.hidden)?.click();
+    }
+  };
+
+  // Tamanho que não tem nenhuma cor em estoque fica apagado.
+  sizeInputs.forEach((s) => {
+    const has = variantMap.some((v) => v.size === s.dataset.size && v.stock > 0);
+    s.classList.toggle('is-out', !has);
+  });
+
   sizeInputs.forEach((el) => el.addEventListener('click', () => {
     sizeInputs.forEach((s) => s.classList.remove('active'));
     el.classList.add('active');
+    filterColors();
     syncVariant();
   }));
   colorInputs.forEach((el) => el.addEventListener('click', () => {
@@ -196,6 +218,7 @@
     syncVariant();
     showColorPhotos(el.dataset.color);
   }));
+  filterColors();
   syncVariant();
   showColorPhotos(document.querySelector('[data-color].active')?.dataset.color);
 

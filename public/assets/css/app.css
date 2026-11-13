@@ -1030,6 +1030,8 @@ button, input, select, textarea { font: inherit; color: inherit; }
   min-width: 42px; height: 42px; border: 1px solid var(--line); background: #fff;
   cursor: pointer; display: grid; place-items: center; font-size: .8rem;
 }
+.swatch[hidden], .gallery-thumbs button[hidden] { display: none; }
+.size-opt.is-out { opacity: .45; text-decoration: line-through; }
 .swatch { border-radius: 999px; width: 28px; height: 28px; min-width: 28px; }
 .swatch.active, .size-opt.active { border-color: var(--ink); outline: 1px solid var(--ink); }
 .qty-row { display: flex; align-items: center; gap: .75rem; margin: 1rem 0 1.25rem; }
