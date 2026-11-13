@@ -48,7 +48,7 @@ class PageController extends Controller
     public function robots(): void
     {
         header('Content-Type: text/plain');
-        echo "User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: " . Helpers::setting('store_url', 'http://localhost:8080') . "/sitemap.xml\n";
+        echo "User-agent: *\nAllow: /\nDisallow: /admin\nDisallow: /carrinho\nDisallow: /checkout\nDisallow: /conta\nDisallow: /login\nSitemap: " . Helpers::appUrl() . "/sitemap.xml\n";
     }
 
     public function sitemap(): void
@@ -60,7 +60,7 @@ class PageController extends Controller
 
         echo '<?xml version="1.0" encoding="UTF-8"?>';
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-        foreach (['/', '/catalogo', '/carrinho'] as $path) {
+        foreach (['/', '/catalogo', '/trocas', '/privacidade'] as $path) {
             echo '<url><loc>' . htmlspecialchars($base . $path) . '</loc></url>';
         }
         foreach ($cats as $c) {

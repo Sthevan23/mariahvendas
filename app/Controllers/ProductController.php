@@ -8,6 +8,43 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
+    /** Dados estruturados (schema.org) para o Google mostrar preço e disponibilidade. */
+    private function productJsonLd(array $product, array $images, array $variants): array
+    {
+        $inStock = false;
+        foreach ($variants as $v) {
+            if ((int) $v['stock'] > 0) {
+                $inStock = true;
+                break;
+            }
+        }
+        $photos = array_map(fn($i) => Helpers::absoluteUrl($i['path']), array_slice($images, 0, 5));
+        $colors = array_values(array_unique(array_map(fn($v) => $v['color'], $variants)));
+        $url = Helpers::absoluteUrl('/produto/' . $product['slug']);
+        $data = [
+            '@context' => 'https://schema.org',
+            '@type' => 'Product',
+            'name' => $product['name'],
+            'description' => mb_substr(strip_tags((string) $product['description']), 0, 300) ?: $product['name'],
+            'url' => $url,
+            'brand' => ['@type' => 'Brand', 'name' => (string) Helpers::setting('store_name', 'Ateliê Mariah')],
+            'offers' => [
+                '@type' => 'Offer',
+                'priceCurrency' => 'BRL',
+                'price' => number_format((float) $product['price'], 2, '.', ''),
+                'availability' => $inStock ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+                'url' => $url,
+            ],
+        ];
+        if ($photos) {
+            $data['image'] = $photos;
+        }
+        if ($colors) {
+            $data['color'] = implode(', ', $colors);
+        }
+        return $data;
+    }
+
     public function show(string $slug): void
     {
         $product = Product::findBySlug($slug);
@@ -28,6 +65,12 @@ class ProductController extends Controller
                 $sizes[] = $v['size'];
             }
         }
+        // Vestidos em tamanhos de letra mostram a grade completa; o que não tem estoque aparece riscado.
+        $standardSizes = ['PP', 'P', 'M', 'G', 'GG'];
+        if ($sizes && !array_diff($sizes, array_merge($standardSizes, ['XG', 'XGG']))) {
+            $sizes = array_values(array_unique(array_merge($standardSizes, $sizes)));
+            usort($sizes, static fn($a, $b) => (array_search($a, ['PP', 'P', 'M', 'G', 'GG', 'XG', 'XGG']) ?: 0) <=> (array_search($b, ['PP', 'P', 'M', 'G', 'GG', 'XG', 'XGG']) ?: 0));
+        }
         $colors = [];
         foreach ($variants as $v) {
             $colors[$v['color']] = Helpers::swatchHex($v['color'], $v['color_hex']);
@@ -35,7 +78,9 @@ class ProductController extends Controller
 
         $this->render('product/show', [
             'title' => $product['name'],
-            'meta_description' => mb_substr(strip_tags((string) $product['description']), 0, 160),
+            'meta_description' => mb_substr(trim($product['name'] . ' — ' . strip_tags((string) $product['description'])), 0, 160),
+            'og_type' => 'product',
+            'jsonld' => $this->productJsonLd($product, $images, $variants),
             'product' => $product,
             'images' => $images,
             'variants' => $variants,

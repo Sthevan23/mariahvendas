@@ -166,7 +166,7 @@
     if (stockLabel) {
       stockLabel.textContent = match
         ? (match.stock > 0 ? `Disponível (${match.stock}) · ${match.color}` : 'Esgotado nesta combinação')
-        : 'Selecione tamanho e cor';
+        : 'Esgotado neste tamanho';
     }
     const enabled = !!(match && match.stock > 0);
     addBtns.forEach((btn) => { btn.disabled = !enabled; });

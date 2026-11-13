@@ -76,7 +76,7 @@ class CatalogController extends Controller
 
         $this->render('catalog/index', [
             'title' => $title,
-            'meta_description' => 'Explore a coleção Ateliê Mariah de vestidos de festa.',
+            'meta_description' => 'Veja os vestidos de festa do Ateliê Mariah: modelos para formatura, debutante, madrinha e eventos, em vários tamanhos e cores. Entrega em Divinópolis-MG.',
             'products' => $products,
             'categories' => Category::allActive(),
             'storeEmpty' => $storeEmpty,
