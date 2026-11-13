@@ -79,7 +79,8 @@
       <div class="form-grid two" style="margin-bottom:.5rem">
         <input class="form-control" name="variant_size[]" aria-label="Tamanho da variação" placeholder="Tamanho" value="<?= Helpers::e($v['size']) ?>">
         <input class="form-control" name="variant_color[]" aria-label="Cor da variação" placeholder="Cor" value="<?= Helpers::e($v['color']) ?>">
-        <?php $hexVal = !empty($v['color_hex']) ? $v['color_hex'] : Helpers::colorHex($v['color'] ?? ''); ?>
+        <?php $hexVal = Helpers::swatchHex($v['color'] ?? '', $v['color_hex'] ?? '');
+          if (strlen($hexVal) === 4) { $hexVal = '#' . $hexVal[1] . $hexVal[1] . $hexVal[2] . $hexVal[2] . $hexVal[3] . $hexVal[3]; } ?>
         <div style="display:flex;gap:.5rem;align-items:center">
           <input type="color" aria-label="Escolher a cor (bolinha)" title="Clique para escolher a cor" value="<?= Helpers::e($hexVal) ?>" style="width:2.6rem;height:2.4rem;padding:0;border:1px solid #ccc;border-radius:50%;cursor:pointer;flex:none" oninput="this.nextElementSibling.value=this.value">
           <input class="form-control" name="variant_hex[]" aria-label="Código hex da cor" placeholder="#hex" value="<?= Helpers::e($hexVal) ?>" oninput="if(/^#[0-9a-fA-F]{6}$/.test(this.value))this.previousElementSibling.value=this.value">

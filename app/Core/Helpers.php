@@ -45,6 +45,21 @@ class Helpers
         return $fallback;
     }
 
+    /**
+     * Cor a mostrar na bolinha: o código salvo, ou a cor pelo nome quando o código falta
+     * ou é branco/cinza por engano (ex.: #fff, #ddd numa cor que não é branca).
+     */
+    public static function swatchHex(?string $name, ?string $hex): string
+    {
+        $hex = strtolower(trim((string) $hex));
+        $byName = self::colorHex($name, '');
+        $washedOut = $hex === '' || in_array($hex, ['#fff', '#ffffff', '#ddd', '#dddddd', '#eee', '#eeeeee', '#000', '#000000'], true);
+        if (preg_match('/^#([0-9a-f]{3}|[0-9a-f]{6})$/', $hex) && (!$washedOut || $byName === '')) {
+            return $hex;
+        }
+        return $byName !== '' ? $byName : ($hex !== '' && preg_match('/^#[0-9a-f]{3,6}$/', $hex) ? $hex : '#d9d4cf');
+    }
+
     public static function e(?string $value): string
     {
         return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
