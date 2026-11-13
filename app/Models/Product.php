@@ -457,6 +457,17 @@ class Product
         return (int) $pdo->lastInsertId();
     }
 
+    /** Apaga as variações do produto que não estão na lista de ids a manter. */
+    public static function deleteVariantsExcept(int $productId, array $keepIds): void
+    {
+        $keepIds = array_values(array_unique(array_map('intval', $keepIds)));
+        $marks = implode(',', array_fill(0, count($keepIds), '?'));
+        $stmt = Database::connection()->prepare(
+            "DELETE FROM product_variants WHERE product_id = ? AND id NOT IN ($marks)"
+        );
+        $stmt->execute(array_merge([$productId], $keepIds));
+    }
+
     public static function lowStock(int $threshold = 3, int $limit = 6): array
     {
         $stmt = Database::connection()->prepare(

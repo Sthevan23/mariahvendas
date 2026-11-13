@@ -199,6 +199,7 @@ class ProductController extends Controller
         $hexes = $_POST['variant_hex'] ?? [];
         $stocks = $_POST['variant_stock'] ?? [];
 
+        $keep = [];
         foreach ($sizes as $i => $sizeField) {
             $color = trim((string) ($colors[$i] ?? ''));
             // Aceita vários tamanhos no mesmo campo ("P, M, G" / "P M G" / "P/M/G").
@@ -207,7 +208,7 @@ class ProductController extends Controller
                 continue;
             }
             foreach (array_unique(array_map('mb_strtoupper', $list)) as $size) {
-                Product::upsertVariant(
+                $keep[] = Product::upsertVariant(
                     $productId,
                     $size,
                     $color,
@@ -215,6 +216,12 @@ class ProductController extends Controller
                     max(0, (int) ($stocks[$i] ?? 0))
                 );
             }
+        }
+
+        // Variação que saiu do formulário (cor removida) some do site.
+        // Só apaga se o formulário enviou variações, para nunca zerar o produto por engano.
+        if ($keep) {
+            Product::deleteVariantsExcept($productId, $keep);
         }
     }
 }

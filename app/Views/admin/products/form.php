@@ -66,6 +66,7 @@
         <input class="form-control" name="variant_color[]" aria-label="Cor da variação" placeholder="Cor" value="<?= Helpers::e($v['color']) ?>">
         <input class="form-control" name="variant_hex[]" aria-label="Código hex da cor" placeholder="#hex" value="<?= Helpers::e($v['color_hex'] ?? '') ?>">
         <input class="form-control" name="variant_stock[]" type="number" min="0" aria-label="Estoque da variação" placeholder="Estoque" value="<?= (int)($v['stock'] ?? 0) ?>">
+        <button class="btn btn-outline" type="button" onclick="var row=this.parentNode,list=document.getElementById('variants');if(list.children.length>1){row.remove()}else{row.querySelectorAll('input').forEach(function(i){i.value=''})}">Remover</button>
       </div>
     <?php endforeach; ?>
   </div>
