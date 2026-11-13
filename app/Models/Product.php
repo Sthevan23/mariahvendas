@@ -124,7 +124,8 @@ class Product
         }
         if (!empty($filters['category_slug'])) {
             if ($filters['category_slug'] === 'colecao-atelier') {
-                $sql .= " AND p.slug LIKE 'mariah-look-%'";
+                // Produtos da categoria Coleção Festa (cadastrados no painel) + os do catálogo antigo (mariah-look-*).
+                $sql .= " AND (c.slug = 'colecao-atelier' OR p.slug LIKE 'mariah-look-%')";
             } else {
                 $sql .= ' AND c.slug = ?';
                 $params[] = $filters['category_slug'];
@@ -209,7 +210,8 @@ class Product
         }
         if (!empty($filters['category_slug'])) {
             if ($filters['category_slug'] === 'colecao-atelier') {
-                $sql .= " AND p.slug LIKE 'mariah-look-%'";
+                // Produtos da categoria Coleção Festa (cadastrados no painel) + os do catálogo antigo (mariah-look-*).
+                $sql .= " AND (c.slug = 'colecao-atelier' OR p.slug LIKE 'mariah-look-%')";
             } else {
                 $sql .= ' AND c.slug = ?';
                 $params[] = $filters['category_slug'];
