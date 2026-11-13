@@ -165,7 +165,7 @@
     if (variantInput) variantInput.value = match && match.stock > 0 ? match.id : '';
     if (stockLabel) {
       stockLabel.textContent = match
-        ? (match.stock > 0 ? `Disponível (${match.stock})` : 'Indisponível nesta combinação')
+        ? (match.stock > 0 ? `Disponível (${match.stock})` : 'Esgotado nesta combinação')
         : 'Selecione tamanho e cor';
     }
     const enabled = !!(match && match.stock > 0);

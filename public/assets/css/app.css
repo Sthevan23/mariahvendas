@@ -737,6 +737,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
   backdrop-filter: blur(6px);
   box-shadow: 0 4px 12px rgba(20, 17, 15, 0.08);
 }
+.tag--soldout {
+  background: #2b2623;
+  color: #fff;
+}
 .fav-form {
   position: absolute;
   top: .55rem;

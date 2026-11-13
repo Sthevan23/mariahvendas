@@ -13,6 +13,11 @@ class CheckoutController extends Controller
 {
     public function index(): void
     {
+        if ($warnings = CartService::reconcileStock()) {
+            $this->flash('error', implode(' ', $warnings));
+            $this->redirect('/carrinho');
+            return;
+        }
         if (!CartService::items()) {
             $this->flash('error', 'Sua sacola está vazia.');
             $this->redirect('/carrinho');
@@ -86,6 +91,13 @@ class CheckoutController extends Controller
         if (!CartService::items()) {
             $this->flash('error', 'Sua sacola está vazia.');
             $this->redirect('/carrinho');
+        }
+
+        // Outra pessoa pode ter comprado a peça enquanto esta estava na sacola.
+        if ($warnings = CartService::reconcileStock()) {
+            $this->flash('error', implode(' ', $warnings));
+            $this->redirect('/carrinho');
+            return;
         }
 
         $paymentId = (int) $this->input('payment_method_id');
@@ -186,6 +198,13 @@ class CheckoutController extends Controller
         try {
             $orderId = Order::create($orderData, $items);
         } catch (\Throwable $e) {
+            // Compra simultânea: a transação foi desfeita, então o estoque não foi baixado.
+            $warnings = CartService::reconcileStock();
+            if ($warnings) {
+                $this->flash('error', 'Poxa, outra pessoa acabou de levar esta peça. ' . implode(' ', $warnings));
+                $this->redirect('/carrinho');
+                return;
+            }
             $this->flash('error', $e->getMessage());
             $this->redirect('/checkout');
             return;

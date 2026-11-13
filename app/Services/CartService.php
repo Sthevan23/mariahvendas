@@ -30,6 +30,30 @@ class CartService
         return array_values($clean);
     }
 
+    /**
+     * Confere o estoque atual de cada item da sacola e corrige o que não dá mais.
+     * Item esgotado sai da sacola; quantidade maior que o estoque é reduzida.
+     * @return string[] avisos para mostrar ao cliente (vazio = tudo certo)
+     */
+    public static function reconcileStock(): array
+    {
+        $messages = [];
+        foreach (self::items() as $item) {
+            $variant = Product::findVariant((int) $item['variant_id']);
+            $stock = (int) ($variant['stock'] ?? 0);
+            $label = $item['name'] . ' (' . $item['size'] . '/' . $item['color'] . ')';
+            $key = (string) $item['variant_id'];
+            if ($stock < 1) {
+                unset($_SESSION['cart'][$key]);
+                $messages[] = $label . ' esgotou e saiu da sua sacola.';
+            } elseif ((int) $item['qty'] > $stock) {
+                $_SESSION['cart'][$key]['qty'] = $stock;
+                $messages[] = 'Só restam ' . $stock . ' de ' . $label . '; ajustamos a quantidade.';
+            }
+        }
+        return $messages;
+    }
+
     public static function add(int $variantId, int $qty = 1): array
     {
         $variant = Product::findVariant($variantId);

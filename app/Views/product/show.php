@@ -64,7 +64,7 @@ $main = $images[0]['path'] ?? null;
         <div class="qty-row">
           <label for="qty">Qtd</label>
           <input id="qty" type="number" name="qty" min="1" value="1">
-          <span class="muted" data-stock-label><?= $canBuy ? 'Disponível (' . $defaultStock . ')' : 'Indisponível' ?></span>
+          <span class="muted" data-stock-label><?= $canBuy ? 'Disponível (' . $defaultStock . ')' : 'Esgotado' ?></span>
         </div>
         <div class="detail-actions">
           <button class="btn btn-block" type="submit" data-add-btn data-action="add" <?= $canBuy ? '' : 'disabled' ?>>Adicionar à sacola</button>

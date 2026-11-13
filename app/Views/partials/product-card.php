@@ -12,6 +12,7 @@ $productUrl = '/produto/' . ($p['slug'] ?? '');
         <img src="<?= Helpers::e($p['image']) ?>" alt="<?= Helpers::e($p['image_alt'] ?? $p['name']) ?>" loading="lazy">
       <?php endif; ?>
       <span class="tags">
+        <?php if (isset($p['stock_total']) && (int) $p['stock_total'] < 1): ?><span class="tag tag--soldout">Esgotado</span><?php endif; ?>
         <?php if (!empty($p['is_new'])): ?><span class="tag">Novo</span><?php endif; ?>
         <?php if (!empty($p['is_sale'])): ?><span class="tag">Promoção</span><?php endif; ?>
         <?php if (!empty($p['is_bestseller'])): ?><span class="tag">Mais vendido</span><?php endif; ?>
