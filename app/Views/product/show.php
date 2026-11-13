@@ -58,7 +58,7 @@ $main = $images[0]['path'] ?? null;
         <p class="detail-label detail-label--tight">Cor</p>
         <div class="swatches">
           <?php foreach ($colors as $color => $hex): ?>
-            <button type="button" class="swatch <?= $color === $defaultColor ? 'active' : '' ?>" data-color="<?= Helpers::e($color) ?>" title="<?= Helpers::e($color) ?>" aria-label="<?= Helpers::e($color) ?>"><span class="swatch-dot" style="background:<?= Helpers::e($hex ?: '#ddd') ?>"></span><span class="swatch-name"><?= Helpers::e($color) ?></span></button>
+            <button type="button" class="swatch <?= $color === $defaultColor ? 'active' : '' ?>" data-color="<?= Helpers::e($color) ?>" title="<?= Helpers::e($color) ?>" aria-label="<?= Helpers::e($color) ?>" style="background:<?= Helpers::e($hex ?: '#ddd') ?>"></button>
           <?php endforeach; ?>
         </div>
         <div class="qty-row">

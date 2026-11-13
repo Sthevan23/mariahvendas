@@ -1032,9 +1032,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
 }
 .swatch[hidden], .gallery-thumbs button[hidden] { display: none; }
 .size-opt.is-out { opacity: .45; text-decoration: line-through; }
-.swatch { border-radius: 999px; width: auto; height: auto; min-width: 0; padding: .3rem .85rem .3rem .4rem; display: inline-flex; align-items: center; gap: .5rem; }
-.swatch-dot { width: 20px; height: 20px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, .18); flex: none; }
-.swatch-name { font-size: .78rem; letter-spacing: .02em; }
+.swatch { border-radius: 999px; width: 28px; height: 28px; min-width: 28px; }
 .swatch.active, .size-opt.active { border-color: var(--ink); outline: 1px solid var(--ink); }
 .qty-row { display: flex; align-items: center; gap: .75rem; margin: 1rem 0 1.25rem; }
 .qty-row input { width: 72px; text-align: center; border: 1px solid var(--line); padding: .65rem; }
