@@ -267,24 +267,29 @@
     const selSize = filterForm.querySelector('select[name="tamanho"]');
     const selColor = filterForm.querySelector('select[name="cor"]');
     const low = (v) => (v || '').toLowerCase();
+    const allSize = selSize ? [...selSize.options].map((o) => ({ value: o.value, text: o.text })) : [];
+    const allColor = selColor ? [...selColor.options].map((o) => ({ value: o.value, text: o.text })) : [];
+    const fill = (select, items, keep) => {
+      select.innerHTML = '';
+      items.forEach((it) => {
+        const o = document.createElement('option');
+        o.value = it.value;
+        o.textContent = it.text;
+        if (it.value === keep) o.selected = true;
+        select.appendChild(o);
+      });
+    };
+    // Cada lista mostra só as opções que existem em estoque (junto com a outra escolha, se houver).
     const syncFilterOptions = () => {
       if (!selSize || !selColor || !combos.length) return;
       const size = low(selSize.value);
       const color = low(selColor.value);
-      [...selSize.options].forEach((o) => {
-        if (!o.value) return;
-        o.disabled = !combos.some((c) => low(c.size) === low(o.value) && (!color || low(c.color) === color));
-      });
-      [...selColor.options].forEach((o) => {
-        if (!o.value) return;
-        o.disabled = !combos.some((c) => low(c.color) === low(o.value) && (!size || low(c.size) === size));
-      });
+      fill(selSize, allSize.filter((o) => !o.value || combos.some((c) => low(c.size) === low(o.value) && (!color || low(c.color) === color))), selSize.value);
+      fill(selColor, allColor.filter((o) => !o.value || combos.some((c) => low(c.color) === low(o.value) && (!size || low(c.size) === size))), selColor.value);
     };
     syncFilterOptions();
     const apply = () => {
       syncFilterOptions();
-      if (selSize?.selectedOptions[0]?.disabled) selSize.value = '';
-      if (selColor?.selectedOptions[0]?.disabled) selColor.value = '';
       filterForm.requestSubmit();
     };
     filterForm.querySelectorAll('select, input[type="checkbox"], input[type="number"]').forEach((el) => {

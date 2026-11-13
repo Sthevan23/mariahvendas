@@ -59,6 +59,19 @@ class CatalogController extends Controller
         }
 
         $products = Product::query($filters);
+        if (!empty($filters['color'])) {
+            // Com uma cor escolhida, o card mostra a foto daquela cor (se o vestido tiver foto marcada).
+            $want = mb_strtolower((string) $filters['color']);
+            foreach ($products as &$p) {
+                foreach (Product::images((int) $p['id'], true) as $img) {
+                    if (mb_strtolower((string) ($img['color'] ?? '')) === $want) {
+                        $p['image'] = $img['path'];
+                        break;
+                    }
+                }
+            }
+            unset($p);
+        }
 
         $title = 'Vestidos';
         if ($filters['search']) {
