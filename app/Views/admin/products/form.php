@@ -1,4 +1,6 @@
-<?php use App\Core\Helpers; $isEdit = !empty($product); ?>
+<?php use App\Core\Helpers; $isEdit = !empty($product);
+// Botões de tamanho: os padrão (com PP) mais qualquer tamanho que o cliente já tenha usado em algum vestido.
+$chipSizes = array_values(array_unique(array_merge(['PP', 'P', 'M', 'G', 'GG', 'Único'], array_filter(\App\Models\Product::sizes(), fn($x) => $x !== 'U')))); ?>
 <h1 class="page-title"><?= $isEdit ? 'Editar produto' : 'Novo produto' ?></h1>
 
 <?php if ($isEdit): ?>
@@ -82,7 +84,7 @@
   <div class="form-group"><label for="product-measures">Medidas deste vestido (aparece na página dele)</label><textarea class="form-control" id="product-measures" name="measures" rows="4" placeholder="P: busto 88 · cintura 68 · comprimento 95&#10;M: busto 92 · cintura 72 · comprimento 96"><?= Helpers::e((string) ($product['measures'] ?? '')) ?></textarea>
     <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem;align-items:center">
       <span class="muted">Clique para adicionar o tamanho:</span>
-      <?php foreach (['P', 'M', 'G', 'GG', 'Único'] as $sz): ?>
+      <?php foreach ($chipSizes as $sz): ?>
         <button type="button" class="btn btn-outline" style="padding:.25rem .7rem" onclick="var t=document.getElementById('product-measures'),s=this.textContent;if(!new RegExp('^'+s+':','m').test(t.value)){t.value=(t.value&&!/\n$/.test(t.value)?t.value+'\n':t.value)+s+': busto  · cintura  · comprimento ';}t.focus()"><?= $sz ?></button>
       <?php endforeach; ?>
     </div>
@@ -92,9 +94,14 @@
   <p class="muted" style="margin:.25rem 0 .75rem">Cada linha é um tamanho de uma cor. Pode digitar vários tamanhos juntos (ex.: <strong>P, M, G</strong>) que o site cria um botão para cada, com o mesmo estoque. Para outra cor, clique em “+ variação”.</p>
   <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem;align-items:center">
     <span class="muted">Clique para adicionar tamanho na linha que você está editando:</span>
-    <?php foreach (['P', 'M', 'G', 'GG', 'Único'] as $sz): ?>
+    <?php foreach ($chipSizes as $sz): ?>
       <button type="button" class="btn btn-outline" style="padding:.25rem .7rem" onmousedown="event.preventDefault()" onclick="var f=window.__lastSize||document.querySelector('#variants [name=&quot;variant_size[]&quot;]'),s=this.textContent;if(f){var l=f.value.split(/[\s,;\/|]+/).filter(Boolean);if(l.map(function(x){return x.toUpperCase()}).indexOf(s.toUpperCase())<0){l.push(s);f.value=l.join(', ')}f.focus()}"><?= $sz ?></button>
     <?php endforeach; ?>
+  </div>
+  <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem;align-items:center">
+    <span class="muted">Outro tamanho (ex.: XG, 36, 2 anos):</span>
+    <input class="form-control" id="custom-size" style="width:9rem" placeholder="Digite o tamanho" onkeydown="if(event.key==='Enter'){event.preventDefault();document.getElementById('custom-size-add').click()}">
+    <button type="button" class="btn btn-outline" id="custom-size-add" style="padding:.25rem .8rem" onclick="var i=document.getElementById('custom-size'),s=i.value.trim().toUpperCase();if(!s)return;var f=window.__lastSize||document.querySelector('#variants [name=&quot;variant_size[]&quot;]');if(f){var l=f.value.split(/[\s,;\/|]+/).filter(Boolean);if(l.map(function(x){return x.toUpperCase()}).indexOf(s)<0){l.push(s);f.value=l.join(', ')}}i.value='';i.focus()">Adicionar tamanho</button>
   </div>
   <div id="variants" onfocusin="if(event.target.name==='variant_size[]')window.__lastSize=event.target">
     <?php $rows = $variants ?: [['size'=>'M','color'=>'Nude','color_hex'=>'#D2B48C','stock'=>5]]; foreach ($rows as $v): ?>
