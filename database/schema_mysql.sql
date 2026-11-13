@@ -193,3 +193,12 @@ CREATE TABLE IF NOT EXISTS settings (
     `key` VARCHAR(100) PRIMARY KEY,
     value TEXT
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Cópia das fotos enviadas pelo admin (restaura a foto se o arquivo sumir do disco)
+CREATE TABLE IF NOT EXISTS media_files (
+    filename VARCHAR(190) NOT NULL PRIMARY KEY,
+    mime VARCHAR(64) NOT NULL DEFAULT 'image/jpeg',
+    data LONGBLOB NOT NULL,
+    bytes INT UNSIGNED NOT NULL DEFAULT 0,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

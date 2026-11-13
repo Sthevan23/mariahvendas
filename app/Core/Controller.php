@@ -44,6 +44,11 @@ class Controller
 
     protected function verifyCsrf(?string $redirectTo = null): void
     {
+        // Se as fotos passam do limite do servidor (post_max_size), o PHP descarta o formulário inteiro.
+        if (!$_POST && (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0) {
+            $this->flash('error', 'As fotos são grandes demais para enviar de uma vez. Envie 2 ou 3 fotos por vez e tente de novo.');
+            $this->redirect($redirectTo ?? ($_SERVER['HTTP_REFERER'] ?? '/'));
+        }
         $token = $_POST['_csrf'] ?? '';
         if (!$token || !hash_equals($_SESSION['_csrf'] ?? '', $token)) {
             $this->flash('error', 'Sessão expirada ou cookie bloqueado. Feche abas antigas e tente de novo.');

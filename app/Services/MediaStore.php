@@ -16,7 +16,7 @@ class MediaStore
 {
     public const URL_PREFIX = '/media/';
     private const MAX_UPLOAD = 12 * 1024 * 1024;
-    private const MAX_MIRROR = 4 * 1024 * 1024;
+    private const MAX_MIRROR = 6 * 1024 * 1024;
     private const MAX_SIDE = 1600;
 
     private const MIME_EXT = [
@@ -203,9 +203,25 @@ class MediaStore
         return null;
     }
 
+    /** Confere se a foto existe no disco ou no banco, sem carregar o arquivo inteiro. */
     public static function exists(string $path): bool
     {
-        return self::read(self::nameFromPath($path)) !== null;
+        $name = self::nameFromPath($path);
+        if (!self::validName($name)) {
+            return false;
+        }
+        if (is_file(self::dir() . '/' . $name)) {
+            return true;
+        }
+        try {
+            $pdo = Database::connection();
+            self::ensureTable($pdo);
+            $stmt = $pdo->prepare('SELECT 1 FROM media_files WHERE filename = ? LIMIT 1');
+            $stmt->execute([$name]);
+            return (bool) $stmt->fetchColumn();
+        } catch (Throwable $e) {
+            return false;
+        }
     }
 
     public static function delete(string $path): void
