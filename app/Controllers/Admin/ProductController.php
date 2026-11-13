@@ -38,6 +38,7 @@ class ProductController extends Controller
         $id = Product::create($data);
         $uploadErrors = $this->syncMedia($id);
         $this->syncVariants($id);
+        Product::saveMeasures($id, trim((string) $this->input('measures')));
         $this->flashSaved('Produto cadastrado.', $uploadErrors);
         $this->redirect('/admin/produtos');
     }
@@ -71,6 +72,7 @@ class ProductController extends Controller
         Product::update((int) $id, $data);
         $uploadErrors = $this->syncMedia((int) $id);
         $this->syncVariants((int) $id);
+        Product::saveMeasures((int) $id, trim((string) $this->input('measures')));
         $this->flashSaved('Produto atualizado.', $uploadErrors);
         $this->redirect('/admin/produtos/' . $id . '/editar');
     }
@@ -208,11 +210,15 @@ class ProductController extends Controller
                 continue;
             }
             foreach (array_unique(array_map('mb_strtoupper', $list)) as $size) {
+                $hex = trim((string) ($hexes[$i] ?? ''));
+                if (!preg_match('/^#[0-9a-fA-F]{6}$/', $hex)) {
+                    $hex = Helpers::colorHex($color);
+                }
                 $keep[] = Product::upsertVariant(
                     $productId,
                     $size,
                     $color,
-                    $hexes[$i] ?? null,
+                    $hex,
                     max(0, (int) ($stocks[$i] ?? 0))
                 );
             }

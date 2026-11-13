@@ -74,7 +74,11 @@ $main = $images[0]['path'] ?? null;
       </form>
 
       <div class="info-box">
-        <p><strong>Guia de medidas:</strong> P (36), M (38), G (40), GG (42). Em caso de dúvida, fale conosco.</p>
+        <?php if (!empty(trim((string) ($product['measures'] ?? '')))): ?>
+          <p><strong>Medidas desta peça (cm):</strong><br><?= nl2br(Helpers::e(trim($product['measures']))) ?></p>
+        <?php else: ?>
+          <p><strong>Guia de medidas:</strong> P (36), M (38), G (40), GG (42). Em caso de dúvida, fale conosco.</p>
+        <?php endif; ?>
         <p><strong>Trocas e entrega:</strong> <?= Helpers::e(Helpers::setting('delivery_info')) ?> <?= Helpers::e(Helpers::setting('exchange_policy')) ?></p>
       </div>
     </div>

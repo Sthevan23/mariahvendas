@@ -30,7 +30,7 @@ class ProductController extends Controller
         }
         $colors = [];
         foreach ($variants as $v) {
-            $colors[$v['color']] = $v['color_hex'];
+            $colors[$v['color']] = $v['color_hex'] ?: Helpers::colorHex($v['color']);
         }
 
         $this->render('product/show', [

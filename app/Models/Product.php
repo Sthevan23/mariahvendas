@@ -457,6 +457,35 @@ class Product
         return (int) $pdo->lastInsertId();
     }
 
+    private static ?bool $measuresColumn = null;
+
+    /** Garante a coluna "measures" (guia de medidas por produto); cria sozinha na primeira vez. */
+    public static function hasMeasures(): bool
+    {
+        if (self::$measuresColumn !== null) {
+            return self::$measuresColumn;
+        }
+        $pdo = Database::connection();
+        try {
+            $exists = $pdo->query("SHOW COLUMNS FROM products LIKE 'measures'")->fetch();
+            if (!$exists) {
+                $pdo->exec('ALTER TABLE products ADD COLUMN measures TEXT NULL');
+            }
+            return self::$measuresColumn = true;
+        } catch (\Throwable $e) {
+            return self::$measuresColumn = false;
+        }
+    }
+
+    public static function saveMeasures(int $productId, string $measures): void
+    {
+        if (!self::hasMeasures()) {
+            return;
+        }
+        $stmt = Database::connection()->prepare('UPDATE products SET measures = ? WHERE id = ?');
+        $stmt->execute([$measures !== '' ? $measures : null, $productId]);
+    }
+
     /** Apaga as variações do produto que não estão na lista de ids a manter. */
     public static function deleteVariantsExcept(int $productId, array $keepIds): void
     {
