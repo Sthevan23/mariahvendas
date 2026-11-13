@@ -59,7 +59,7 @@ $ogPageUrl = Helpers::absoluteUrl(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/app.css?v=23">
+  <link rel="stylesheet" href="/assets/css/app.css?v=24">
   <script type="application/ld+json">
   <?= json_encode([
       '@context' => 'https://schema.org',
@@ -198,6 +198,6 @@ $accountHref = \App\Core\Auth::check() ? '/conta' : '/login';
   <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.7 14.9L2 22l5.3-1.4A10 10 0 1 0 12 2zm0 2a8 8 0 0 1 6.7 12.3l-.3.4.8 2.9-3-.8-.4.2A8 8 0 1 1 12 4zm4.2 9.6c-.2-.1-1.3-.6-1.5-.7s-.3-.1-.5.1-.6.7-.7.8-.3.2-.5.1a6.4 6.4 0 0 1-1.9-1.2 7.1 7.1 0 0 1-1.3-1.6c-.1-.2 0-.3.1-.4l.3-.4.1-.2a.5.5 0 0 0 0-.5c0-.1-.5-1.2-.7-1.6s-.4-.4-.5-.4h-.4a.8.8 0 0 0-.6.3 2.4 2.4 0 0 0-.8 1.8 4.2 4.2 0 0 0 .9 2.2 9.6 9.6 0 0 0 3.7 3.3 12 12 0 0 0 1.3.5 3.1 3.1 0 0 0 1.4.1 2.6 2.6 0 0 0 1.7-1.2 2.1 2.1 0 0 0 .1-1.2c-.1 0-.2-.1-.4-.2z"/></svg>
 </a>
 
-<script src="/assets/js/app.js?v=7" defer></script>
+<script src="/assets/js/app.js?v=8" defer></script>
 </body>
 </html>

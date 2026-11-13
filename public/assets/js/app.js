@@ -204,6 +204,12 @@
   sizeInputs.forEach((s) => {
     const has = variantMap.some((v) => v.size === s.dataset.size && v.stock > 0);
     s.classList.toggle('is-out', !has);
+    // Tamanho sem estoque não pode ser escolhido (o que já está selecionado fica, para não sumir a seleção).
+    if (!has && !s.classList.contains('active')) {
+      s.disabled = true;
+      s.setAttribute('aria-disabled', 'true');
+      s.title = 'Esgotado';
+    }
   });
 
   sizeInputs.forEach((el) => el.addEventListener('click', () => {

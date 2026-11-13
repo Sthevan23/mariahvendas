@@ -1031,6 +1031,7 @@ button, input, select, textarea { font: inherit; color: inherit; }
   cursor: pointer; display: grid; place-items: center; font-size: .8rem;
 }
 .swatch[hidden], .gallery-thumbs button[hidden] { display: none; }
+.size-opt:disabled { cursor: not-allowed; }
 .size-opt.is-out { opacity: .45; text-decoration: line-through; }
 .swatch { border-radius: 999px; width: 28px; height: 28px; min-width: 28px; }
 .swatch.active, .size-opt.active { border-color: var(--ink); outline: 1px solid var(--ink); }
