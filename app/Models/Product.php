@@ -115,7 +115,8 @@ class Product
         $params = [];
 
         if (!empty($filters['active_only'])) {
-            $sql .= ' AND p.is_active = 1';
+            // Na loja só aparecem produtos que têm foto (evita card vazio).
+            $sql .= ' AND p.is_active = 1 AND EXISTS (SELECT 1 FROM product_images pi WHERE pi.product_id = p.id)';
         }
         if (!empty($filters['category_id'])) {
             $sql .= ' AND p.category_id = ?';
@@ -203,7 +204,8 @@ class Product
         $sql = 'SELECT COUNT(*) FROM products p LEFT JOIN categories c ON c.id = p.category_id WHERE 1=1';
         $params = [];
         if (!empty($filters['active_only'])) {
-            $sql .= ' AND p.is_active = 1';
+            // Na loja só aparecem produtos que têm foto (evita card vazio).
+            $sql .= ' AND p.is_active = 1 AND EXISTS (SELECT 1 FROM product_images pi WHERE pi.product_id = p.id)';
         }
         if (!empty($filters['category_slug'])) {
             if ($filters['category_slug'] === 'colecao-atelier') {
@@ -257,7 +259,7 @@ class Product
         $pdo = Database::connection();
         if ($categoryId) {
             $stmt = $pdo->prepare(
-                'SELECT * FROM products WHERE is_active = 1 AND id != ? AND category_id = ?
+                'SELECT * FROM products WHERE is_active = 1 AND EXISTS (SELECT 1 FROM product_images pi WHERE pi.product_id = products.id) AND id != ? AND category_id = ?
                  ORDER BY is_featured DESC, sold_count DESC LIMIT ?'
             );
             $stmt->bindValue(1, $productId, PDO::PARAM_INT);
@@ -265,7 +267,7 @@ class Product
             $stmt->bindValue(3, $limit, PDO::PARAM_INT);
         } else {
             $stmt = $pdo->prepare(
-                'SELECT * FROM products WHERE is_active = 1 AND id != ?
+                'SELECT * FROM products WHERE is_active = 1 AND EXISTS (SELECT 1 FROM product_images pi WHERE pi.product_id = products.id) AND id != ?
                  ORDER BY is_featured DESC, sold_count DESC LIMIT ?'
             );
             $stmt->bindValue(1, $productId, PDO::PARAM_INT);
