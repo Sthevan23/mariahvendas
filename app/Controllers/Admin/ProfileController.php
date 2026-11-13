@@ -44,6 +44,7 @@ class ProfileController extends Controller
         $hash = password_hash($next, PASSWORD_DEFAULT);
         Database::connection()->prepare('UPDATE users SET password = ? WHERE id = ?')->execute([$hash, (int) $user['id']]);
 
+        \App\Core\RememberMe::forgetAll((int) $user['id']);
         $this->flash('success', 'Senha atualizada com sucesso.');
         $this->redirect('/admin/conta');
     }

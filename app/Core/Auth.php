@@ -39,7 +39,7 @@ class Auth
 
     public static function check(): bool
     {
-        return isset($_SESSION['user']);
+        return isset($_SESSION['user']) || RememberMe::restore();
     }
 
     public static function isAdmin(): bool
@@ -55,6 +55,7 @@ class Auth
     public static function logout(): void
     {
         unset($_SESSION['user']);
+        RememberMe::forget();
     }
 
     public static function loginUser(array $user): void

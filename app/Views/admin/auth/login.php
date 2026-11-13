@@ -22,6 +22,9 @@
           </button>
         </div>
       </div>
+      <label style="display:flex;align-items:center;gap:.5rem;font-size:.9rem;cursor:pointer">
+        <input type="checkbox" name="remember" value="1" checked style="width:auto"> Manter conectado neste aparelho
+      </label>
       <button class="btn btn-glow" type="submit">Entrar no painel</button>
     </form>
     <p style="text-align:center;margin:1.25rem 0 0;font-size:.85rem">

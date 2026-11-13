@@ -202,3 +202,12 @@ CREATE TABLE IF NOT EXISTS media_files (
     bytes INT UNSIGNED NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- "Manter conectado" do painel admin
+CREATE TABLE IF NOT EXISTS remember_tokens (
+    selector CHAR(24) NOT NULL PRIMARY KEY,
+    user_id INT NOT NULL,
+    token_hash CHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    INDEX (user_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

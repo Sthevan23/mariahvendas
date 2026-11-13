@@ -4,6 +4,7 @@ namespace App\Controllers\Admin;
 
 use App\Core\Auth;
 use App\Core\Controller;
+use App\Core\RememberMe;
 
 class AuthController extends Controller
 {
@@ -30,6 +31,10 @@ class AuthController extends Controller
             Auth::logout();
             $this->flash('error', 'Esta conta não é administradora. Acesse pelo login da loja em /login.');
             $this->redirect('/admin/login');
+        }
+
+        if ($this->input('remember')) {
+            RememberMe::issue((int) Auth::id());
         }
 
         $this->redirect('/admin');
