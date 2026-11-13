@@ -172,17 +172,13 @@
     addBtns.forEach((btn) => { btn.disabled = !enabled; });
   };
 
-  // Fotos por cor: ao escolher a bolinha, mostra as fotos daquela cor (mais as fotos gerais, sem cor).
+  // Fotos por cor: ao escolher a bolinha, a foto principal vira a primeira foto daquela cor.
   const thumbs = document.querySelectorAll('[data-thumb]');
   const showColorPhotos = (color) => {
     const key = (color || '').toLowerCase();
     const tagged = [...thumbs].filter((t) => t.dataset.photoColor === key);
     if (!tagged.length) return; // nenhuma foto marcada para esta cor: mantém a galeria como está
-    thumbs.forEach((t) => {
-      const pc = t.dataset.photoColor;
-      t.hidden = !(pc === key || pc === '');
-    });
-    tagged[0].click();
+    tagged[0].click(); // clique do código (não do cliente): só troca a foto
   };
 
   // Ao escolher o tamanho, só ficam as cores que têm esse tamanho em estoque.
@@ -224,6 +220,32 @@
     syncVariant();
     showColorPhotos(el.dataset.color);
   }));
+  // Clicar numa foto escolhe a cor dela; se o tamanho atual não existe nessa cor, vai para um tamanho que exista.
+  const selectColorFromPhoto = (color) => {
+    const key = color.toLowerCase();
+    const sw = [...colorInputs].find((c) => c.dataset.color.toLowerCase() === key);
+    if (!sw || sw.classList.contains('active')) return;
+    colorInputs.forEach((c) => c.classList.remove('active'));
+    sw.classList.add('active');
+    const hasStock = (size, c) => variantMap.some((v) => v.size === size && v.color === c && v.stock > 0);
+    const size = document.querySelector('[data-size].active')?.dataset.size;
+    if (!hasStock(size, sw.dataset.color)) {
+      const alt = [...sizeInputs].find((s) => !s.disabled && hasStock(s.dataset.size, sw.dataset.color));
+      if (!alt) { // cor esgotada em todos os tamanhos: mostra a cor e o aviso, sem trocar de cor
+        colorInputs.forEach((c) => { c.hidden = false; });
+        syncVariant();
+        return;
+      }
+      sizeInputs.forEach((s) => s.classList.remove('active'));
+      alt.classList.add('active');
+    }
+    filterColors();
+    syncVariant();
+  };
+  thumbs.forEach((t) => t.addEventListener('click', (e) => {
+    if (e.isTrusted && t.dataset.photoColor) selectColorFromPhoto(t.dataset.photoColor);
+  }));
+
   filterColors();
   syncVariant();
   showColorPhotos(document.querySelector('[data-color].active')?.dataset.color);
