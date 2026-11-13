@@ -82,6 +82,7 @@ class CatalogController extends Controller
             'storeEmpty' => $storeEmpty,
             'sizes' => Product::sizes(),
             'colors' => Product::colors(),
+            'combos' => Product::filterCombos(),
             'filters' => $filters,
             'category' => $category,
             'page' => $page,

@@ -172,7 +172,7 @@ class Product
                 $sql .= ' AND v.color = ?';
                 $params[] = $filters['color'];
             }
-            if (!empty($filters['in_stock'])) {
+            if (!empty($filters['in_stock']) || !empty($filters['size']) || !empty($filters['color'])) {
                 $sql .= ' AND v.stock > 0';
             }
             $sql .= ')';
@@ -238,7 +238,7 @@ class Product
                 $sql .= ' AND v.color = ?';
                 $params[] = $filters['color'];
             }
-            if (!empty($filters['in_stock'])) {
+            if (!empty($filters['in_stock']) || !empty($filters['size']) || !empty($filters['color'])) {
                 $sql .= ' AND v.stock > 0';
             }
             $sql .= ')';
@@ -311,6 +311,25 @@ class Product
             }
         }
         return $out;
+    }
+
+    /** Pares tamanho/cor que existem em estoque em produtos à venda (para o filtro do catálogo). */
+    public static function filterCombos(): array
+    {
+        $rows = Database::connection()->query(
+            "SELECT DISTINCT v.size, v.color FROM product_variants v
+             JOIN products p ON p.id = v.product_id
+             WHERE p.is_active = 1 AND v.stock > 0 AND v.color NOT IN ('', '0') AND v.size NOT IN ('', '0')
+               AND EXISTS (SELECT 1 FROM product_images pi WHERE pi.product_id = p.id)"
+        )->fetchAll();
+        $out = [];
+        foreach ($rows as $r) {
+            $out[mb_strtolower($r['size']) . '|' . mb_strtolower(self::normalizeColor($r['color']))] = [
+                'size' => $r['size'],
+                'color' => self::normalizeColor($r['color']),
+            ];
+        }
+        return array_values($out);
     }
 
     public static function create(array $data): int

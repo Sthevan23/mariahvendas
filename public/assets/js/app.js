@@ -260,6 +260,38 @@
     setTimeout(() => el.remove(), 4000);
   }
 
+  // Filtros do catálogo: aplicam assim que a pessoa escolhe, e só deixam escolher combinações que existem.
+  const filterForm = document.querySelector('form.filters');
+  if (filterForm) {
+    const combos = window.MARIAH_COMBOS || [];
+    const selSize = filterForm.querySelector('select[name="tamanho"]');
+    const selColor = filterForm.querySelector('select[name="cor"]');
+    const low = (v) => (v || '').toLowerCase();
+    const syncFilterOptions = () => {
+      if (!selSize || !selColor || !combos.length) return;
+      const size = low(selSize.value);
+      const color = low(selColor.value);
+      [...selSize.options].forEach((o) => {
+        if (!o.value) return;
+        o.disabled = !combos.some((c) => low(c.size) === low(o.value) && (!color || low(c.color) === color));
+      });
+      [...selColor.options].forEach((o) => {
+        if (!o.value) return;
+        o.disabled = !combos.some((c) => low(c.color) === low(o.value) && (!size || low(c.size) === size));
+      });
+    };
+    syncFilterOptions();
+    const apply = () => {
+      syncFilterOptions();
+      if (selSize?.selectedOptions[0]?.disabled) selSize.value = '';
+      if (selColor?.selectedOptions[0]?.disabled) selColor.value = '';
+      filterForm.requestSubmit();
+    };
+    filterForm.querySelectorAll('select, input[type="checkbox"], input[type="number"]').forEach((el) => {
+      el.addEventListener('change', apply);
+    });
+  }
+
   const filtersDisclosure = document.querySelector('[data-filters]');
   if (filtersDisclosure) {
     const desktopQuery = window.matchMedia('(min-width: 768px)');

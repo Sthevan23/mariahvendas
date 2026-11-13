@@ -52,6 +52,7 @@
       </label>
       <button class="btn btn-block" type="submit">Filtrar</button>
     </form>
+    <script>window.MARIAH_COMBOS = <?= json_encode($combos ?? [], JSON_UNESCAPED_UNICODE) ?>;</script>
     </details>
 
     <div>
