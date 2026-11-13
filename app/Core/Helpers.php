@@ -19,6 +19,11 @@ class Helpers
         }
         // Ordem importa: nomes compostos antes dos simples ("azul marinho" antes de "azul").
         $map = [
+            // Nomes específicos do ateliê (e grafias comuns) antes dos genéricos.
+            'azul serenity' => '#92a8d1', 'azul serenite' => '#92a8d1', 'serenity' => '#92a8d1', 'serenite' => '#92a8d1',
+            'verde tiffany' => '#0abab5', 'tiffany' => '#0abab5', 'verde bandeira' => '#009c3b', 'verde oliva' => '#708238', 'oliva' => '#708238',
+            'verde petrolio' => '#1f5f5b', 'verde claro cinza' => '#b7c4b0', 'vermelho escuro' => '#8b1a1a', 'amarelo manteiga' => '#f3e5ab',
+            'terra cota' => '#b8593a', 'marron' => '#6b4429', 'bronze' => '#a8743a',
             'off white' => '#f5f1e6', 'off-white' => '#f5f1e6', 'marfim' => '#fffff0', 'creme' => '#f3e9d2', 'perola' => '#f1ebe0',
             'azul marinho' => '#1f2a44', 'azul royal' => '#2a4bd7', 'azul bebe' => '#a9cdf0', 'azul claro' => '#a9cdf0', 'azul petroleo' => '#1b5361',
             'azul turquesa' => '#2bb5b8', 'azul' => '#2f5fb3', 'marinho' => '#1f2a44', 'turquesa' => '#2bb5b8', 'petroleo' => '#1b5361',
