@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Core\Controller;
+use App\Core\Helpers;
 use App\Models\Product;
 
 class ProductController extends Controller
