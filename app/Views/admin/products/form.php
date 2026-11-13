@@ -108,6 +108,7 @@
           <input class="form-control" name="variant_hex[]" aria-label="Código hex da cor" placeholder="#hex" value="<?= Helpers::e($hexVal) ?>" oninput="if(/^#[0-9a-fA-F]{6}$/.test(this.value))this.previousElementSibling.value=this.value">
         </div>
         <input class="form-control" name="variant_stock[]" type="number" min="0" aria-label="Estoque da variação" placeholder="Estoque" value="<?= (int)($v['stock'] ?? 0) ?>">
+        <input class="form-control" name="variant_sku[]" aria-label="Código do vestido (anotação interna)" placeholder="Código (ex.: 2475)" value="<?= Helpers::e($v['sku'] ?? '') ?>">
         <button class="btn btn-outline" type="button" onclick="var row=this.parentNode,list=document.getElementById('variants');if(list.children.length>1){row.remove()}else{row.querySelectorAll('input').forEach(function(i){i.value=''})}">Remover</button>
       </div>
     <?php endforeach; ?>

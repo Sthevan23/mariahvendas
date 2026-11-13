@@ -209,6 +209,7 @@ class ProductController extends Controller
         $colors = $_POST['variant_color'] ?? [];
         $hexes = $_POST['variant_hex'] ?? [];
         $stocks = $_POST['variant_stock'] ?? [];
+        $skus = $_POST['variant_sku'] ?? [];
 
         $keep = [];
         foreach ($sizes as $i => $sizeField) {
@@ -228,7 +229,8 @@ class ProductController extends Controller
                     $size,
                     $color,
                     $hex,
-                    max(0, (int) ($stocks[$i] ?? 0))
+                    max(0, (int) ($stocks[$i] ?? 0)),
+                    ($code = trim((string) ($skus[$i] ?? ''))) !== '' ? mb_substr($code, 0, 100) : null
                 );
             }
         }

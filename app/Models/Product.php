@@ -481,7 +481,7 @@ class Product
         $existing = $stmt->fetch();
 
         if ($existing) {
-            $upd = $pdo->prepare('UPDATE product_variants SET stock = ?, color_hex = ?, sku = ? WHERE id = ?');
+            $upd = $pdo->prepare('UPDATE product_variants SET stock = ?, color_hex = ?, sku = COALESCE(?, sku) WHERE id = ?');
             $upd->execute([$stock, $hex, $sku, $existing['id']]);
             return (int) $existing['id'];
         }
@@ -491,6 +491,16 @@ class Product
         );
         $ins->execute([$productId, $size, $color, $hex, $sku, $stock]);
         return (int) $pdo->lastInsertId();
+    }
+
+    /** Códigos (referências) digitados nas variações do produto, sem repetir. */
+    public static function codes(int $productId): array
+    {
+        $stmt = Database::connection()->prepare(
+            "SELECT DISTINCT sku FROM product_variants WHERE product_id = ? AND sku IS NOT NULL AND sku <> '' ORDER BY sku"
+        );
+        $stmt->execute([$productId]);
+        return $stmt->fetchAll(PDO::FETCH_COLUMN);
     }
 
     private static ?bool $measuresColumn = null;

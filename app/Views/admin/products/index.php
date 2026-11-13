@@ -19,6 +19,7 @@
           <div>
             <strong><?= Helpers::e($p['name']) ?></strong><br>
             <span class="muted"><?= Helpers::e($p['category_name'] ?? '-') ?></span>
+            <?php if ($codes = \App\Models\Product::codes((int) $p['id'])): ?><br><span class="muted">Código: <?= Helpers::e(implode(', ', $codes)) ?></span><?php endif; ?>
           </div>
         </div>
       </td>
