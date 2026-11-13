@@ -39,6 +39,7 @@ class CatalogController extends Controller
         }
 
         $total = Product::count($filters);
+        $storeEmpty = $total === 0 && Product::count(['active_only' => true]) === 0;
         $totalPages = max(1, (int) ceil($total / $perPage));
         if ($page > $totalPages) {
             $page = $totalPages;
@@ -78,6 +79,7 @@ class CatalogController extends Controller
             'meta_description' => 'Explore a coleção Ateliê Mariah de vestidos de festa.',
             'products' => $products,
             'categories' => Category::allActive(),
+            'storeEmpty' => $storeEmpty,
             'sizes' => Product::sizes(),
             'colors' => Product::colors(),
             'filters' => $filters,

@@ -279,7 +279,8 @@ class Product
 
     public static function sizes(): array
     {
-        $sizes = Database::connection()->query('SELECT DISTINCT size FROM product_variants')->fetchAll(PDO::FETCH_COLUMN);
+        $sizes = Database::connection()->query("SELECT DISTINCT size FROM product_variants WHERE size NOT IN ('', '0')")->fetchAll(PDO::FETCH_COLUMN);
+        $sizes = array_values(array_unique(array_map([self::class, 'normalizeSize'], $sizes)));
         $order = ['PP', 'P', 'M', 'G', 'GG', 'XG', 'XGG', 'U'];
         usort($sizes, function ($a, $b) use ($order) {
             $ia = array_search($a, $order, true);
@@ -293,7 +294,21 @@ class Product
 
     public static function colors(): array
     {
-        return Database::connection()->query('SELECT DISTINCT color, color_hex FROM product_variants ORDER BY color')->fetchAll();
+        // Uma linha por cor (ignora maiúsculas/minúsculas e valores inválidos como "0").
+        $rows = Database::connection()->query(
+            "SELECT color, MIN(color_hex) AS color_hex FROM product_variants WHERE color NOT IN ('', '0') GROUP BY color ORDER BY color"
+        )->fetchAll();
+        $seen = [];
+        $out = [];
+        foreach ($rows as $row) {
+            $row['color'] = self::normalizeColor($row['color']);
+            $key = mb_strtolower($row['color']);
+            if (!isset($seen[$key])) {
+                $seen[$key] = true;
+                $out[] = $row;
+            }
+        }
+        return $out;
     }
 
     public static function create(array $data): int
@@ -408,8 +423,22 @@ class Product
         return (int) $stmt->fetchColumn() > 0;
     }
 
+    /** Tamanho sempre em maiúsculas e sem espaços sobrando (p -> P). */
+    public static function normalizeSize(string $size): string
+    {
+        return mb_strtoupper(trim(preg_replace('/\s+/u', ' ', $size)));
+    }
+
+    /** Cor com a primeira letra de cada palavra maiúscula (azul  marinho -> Azul Marinho). */
+    public static function normalizeColor(string $color): string
+    {
+        return mb_convert_case(trim(preg_replace('/\s+/u', ' ', $color)), MB_CASE_TITLE, 'UTF-8');
+    }
+
     public static function upsertVariant(int $productId, string $size, string $color, ?string $hex, int $stock, ?string $sku = null): int
     {
+        $size = self::normalizeSize($size);
+        $color = self::normalizeColor($color);
         $pdo = Database::connection();
         $stmt = $pdo->prepare('SELECT id, stock FROM product_variants WHERE product_id = ? AND size = ? AND color = ?');
         $stmt->execute([$productId, $size, $color]);

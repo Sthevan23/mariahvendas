@@ -55,7 +55,13 @@
     </details>
 
     <div>
-      <?php if (!$products): ?>
+      <?php if (!$products && !empty($storeEmpty)): ?>
+        <div class="empty-state">
+          <h2>Novidades chegando</h2>
+          <p>Estamos preparando a vitrine com as peças do ateliê. Fale com a gente no WhatsApp e veja os modelos disponíveis.</p>
+          <p><a class="btn" href="<?= Helpers::e(Helpers::whatsappLink('Olá! Gostaria de ver os vestidos disponíveis.')) ?>" target="_blank" rel="noopener">Chamar no WhatsApp</a></p>
+        </div>
+      <?php elseif (!$products): ?>
         <div class="empty-state">
           <h2>Nenhuma peça encontrada</h2>
           <p>Ajuste os filtros ou explore a Coleção Festa.</p>
