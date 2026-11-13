@@ -57,11 +57,24 @@
   <div class="form-group"><label for="product-image-urls">Adicionar fotos por link (uma por linha)</label><textarea class="form-control" id="product-image-urls" name="image_urls" rows="3" placeholder="https://..."></textarea></div>
   <div class="form-group"><label for="product-images">Adicionar fotos do computador/celular (JPG, PNG ou WebP, até 12 MB cada)</label><input type="file" id="product-images" name="images[]" multiple accept="image/*"></div>
 
-  <div class="form-group"><label for="product-measures">Medidas deste vestido (aparece na página dele)</label><textarea class="form-control" id="product-measures" name="measures" rows="4" placeholder="P: busto 88 · cintura 68 · comprimento 95&#10;M: busto 92 · cintura 72 · comprimento 96"><?= Helpers::e((string) ($product['measures'] ?? '')) ?></textarea></div>
+  <div class="form-group"><label for="product-measures">Medidas deste vestido (aparece na página dele)</label><textarea class="form-control" id="product-measures" name="measures" rows="4" placeholder="P: busto 88 · cintura 68 · comprimento 95&#10;M: busto 92 · cintura 72 · comprimento 96"><?= Helpers::e((string) ($product['measures'] ?? '')) ?></textarea>
+    <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.4rem;align-items:center">
+      <span class="muted">Clique para adicionar o tamanho:</span>
+      <?php foreach (['P', 'M', 'G', 'GG', 'Único'] as $sz): ?>
+        <button type="button" class="btn btn-outline" style="padding:.25rem .7rem" onclick="var t=document.getElementById('product-measures'),s=this.textContent;if(!new RegExp('^'+s+':','m').test(t.value)){t.value=(t.value&&!/\n$/.test(t.value)?t.value+'\n':t.value)+s+': busto  · cintura  · comprimento ';}t.focus()"><?= $sz ?></button>
+      <?php endforeach; ?>
+    </div>
+  </div>
 
   <h3 style="font-family:var(--serif);font-weight:500">Variações (tamanho / cor / estoque)</h3>
   <p class="muted" style="margin:.25rem 0 .75rem">Cada linha é um tamanho de uma cor. Pode digitar vários tamanhos juntos (ex.: <strong>P, M, G</strong>) que o site cria um botão para cada, com o mesmo estoque. Para outra cor, clique em “+ variação”.</p>
-  <div id="variants">
+  <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:.6rem;align-items:center">
+    <span class="muted">Clique para adicionar tamanho na linha que você está editando:</span>
+    <?php foreach (['P', 'M', 'G', 'GG', 'Único'] as $sz): ?>
+      <button type="button" class="btn btn-outline" style="padding:.25rem .7rem" onmousedown="event.preventDefault()" onclick="var f=window.__lastSize||document.querySelector('#variants [name=&quot;variant_size[]&quot;]'),s=this.textContent;if(f){var l=f.value.split(/[\s,;\/|]+/).filter(Boolean);if(l.map(function(x){return x.toUpperCase()}).indexOf(s.toUpperCase())<0){l.push(s);f.value=l.join(', ')}f.focus()}"><?= $sz ?></button>
+    <?php endforeach; ?>
+  </div>
+  <div id="variants" onfocusin="if(event.target.name==='variant_size[]')window.__lastSize=event.target">
     <?php $rows = $variants ?: [['size'=>'M','color'=>'Nude','color_hex'=>'#D2B48C','stock'=>5]]; foreach ($rows as $v): ?>
       <div class="form-grid two" style="margin-bottom:.5rem">
         <input class="form-control" name="variant_size[]" aria-label="Tamanho da variação" placeholder="Tamanho" value="<?= Helpers::e($v['size']) ?>">
