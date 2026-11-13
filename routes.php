@@ -68,6 +68,7 @@ $router->get('/admin/produtos/{id}/editar', [AdminProductController::class, 'edi
 $router->post('/admin/produtos/{id}', [AdminProductController::class, 'update'], $admin);
 $router->post('/admin/produtos/{id}/excluir', [AdminProductController::class, 'destroy'], $admin);
 $router->post('/admin/produtos/{id}/imagens/{imageId}/excluir', [AdminProductController::class, 'deleteImage'], $admin);
+$router->post('/admin/produtos/{id}/imagens/{imageId}/cor', [AdminProductController::class, 'imageColor'], $admin);
 $router->post('/admin/produtos/{id}/imagens/{imageId}/capa', [AdminProductController::class, 'primaryImage'], $admin);
 $router->get('/admin/promocoes', [PromotionController::class, 'index'], $admin);
 $router->post('/admin/promocoes/aplicar', [PromotionController::class, 'apply'], $admin);

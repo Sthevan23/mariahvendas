@@ -172,6 +172,19 @@
     addBtns.forEach((btn) => { btn.disabled = !enabled; });
   };
 
+  // Fotos por cor: ao escolher a bolinha, mostra as fotos daquela cor (mais as fotos gerais, sem cor).
+  const thumbs = document.querySelectorAll('[data-thumb]');
+  const showColorPhotos = (color) => {
+    const key = (color || '').toLowerCase();
+    const tagged = [...thumbs].filter((t) => t.dataset.photoColor === key);
+    if (!tagged.length) return; // nenhuma foto marcada para esta cor: mantém a galeria como está
+    thumbs.forEach((t) => {
+      const pc = t.dataset.photoColor;
+      t.hidden = !(pc === key || pc === '');
+    });
+    tagged[0].click();
+  };
+
   sizeInputs.forEach((el) => el.addEventListener('click', () => {
     sizeInputs.forEach((s) => s.classList.remove('active'));
     el.classList.add('active');
@@ -181,8 +194,10 @@
     colorInputs.forEach((c) => c.classList.remove('active'));
     el.classList.add('active');
     syncVariant();
+    showColorPhotos(el.dataset.color);
   }));
   syncVariant();
+  showColorPhotos(document.querySelector('[data-color].active')?.dataset.color);
 
   function showToast(message, type) {
     document.querySelector('[data-flash]')?.remove();

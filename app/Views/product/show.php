@@ -19,7 +19,7 @@ $main = $images[0]['path'] ?? null;
       <?php if (count($images) > 1): ?>
         <div class="gallery-thumbs">
           <?php foreach ($images as $i => $img): ?>
-            <button type="button" data-thumb data-src="<?= Helpers::e($img['path']) ?>" class="<?= $i === 0 ? 'active' : '' ?>">
+            <button type="button" data-thumb data-src="<?= Helpers::e($img['path']) ?>" data-photo-color="<?= Helpers::e(mb_strtolower((string) ($img['color'] ?? ''))) ?>" class="<?= $i === 0 ? 'active' : '' ?>">
               <img src="<?= Helpers::e($img['path']) ?>" alt="">
             </button>
           <?php endforeach; ?>

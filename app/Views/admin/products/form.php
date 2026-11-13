@@ -11,6 +11,18 @@
         <figure class="photo-item">
           <img src="<?= Helpers::e($img['path']) ?>" alt="">
           <?php if ($i === 0): ?><span class="tag">Capa</span><?php endif; ?>
+          <?php $photoColors = array_values(array_unique(array_map(fn($v) => $v['color'], $variants))); ?>
+          <?php if ($photoColors): ?>
+            <form method="post" action="/admin/produtos/<?= (int)$product['id'] ?>/imagens/<?= (int)$img['id'] ?>/cor" style="display:flex;gap:.3rem;align-items:center;margin:.4rem 0">
+              <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
+              <select class="form-control" name="color" aria-label="Cor desta foto" onchange="this.form.submit()">
+                <option value="">Todas as cores</option>
+                <?php foreach ($photoColors as $pc): ?>
+                  <option value="<?= Helpers::e($pc) ?>" <?= mb_strtolower((string)($img['color'] ?? '')) === mb_strtolower((string)$pc) ? 'selected' : '' ?>><?= Helpers::e($pc) ?></option>
+                <?php endforeach; ?>
+              </select>
+            </form>
+          <?php endif; ?>
           <div class="photo-actions">
             <?php if ($i !== 0): ?>
               <form method="post" action="/admin/produtos/<?= (int)$product['id'] ?>/imagens/<?= (int)$img['id'] ?>/capa">
@@ -54,6 +66,16 @@
       <label><input type="checkbox" name="<?= $k ?>" value="1" <?= (($product[$k] ?? ($k==='is_active'?1:0)) ? 'checked' : '') ?>> <?= $label ?></label>
     <?php endforeach; ?>
   </div>
+  <?php $allColors = array_values(array_unique(array_map(fn($v) => $v['color'], $variants))); ?>
+  <?php if ($allColors): ?>
+    <div class="form-group"><label for="new-image-color">As fotos novas são de qual cor?</label>
+      <select class="form-control" id="new-image-color" name="new_image_color">
+        <option value="">Todas as cores (foto geral)</option>
+        <?php foreach ($allColors as $pc): ?><option value="<?= Helpers::e($pc) ?>"><?= Helpers::e($pc) ?></option><?php endforeach; ?>
+      </select>
+      <p class="muted" style="margin:.25rem 0 0">Na loja, ao clicar na bolinha dessa cor, aparecem as fotos dela. Dá para mudar a cor de cada foto lá em cima, em "Fotos".</p>
+    </div>
+  <?php endif; ?>
   <div class="form-group"><label for="product-image-urls">Adicionar fotos por link (uma por linha)</label><textarea class="form-control" id="product-image-urls" name="image_urls" rows="3" placeholder="https://..."></textarea></div>
   <div class="form-group"><label for="product-images">Adicionar fotos do computador/celular (JPG, PNG ou WebP, até 12 MB cada)</label><input type="file" id="product-images" name="images[]" multiple accept="image/*"></div>
 

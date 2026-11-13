@@ -116,6 +116,14 @@ class ProductController extends Controller
         $this->redirect('/admin/produtos/' . (int) $id . '/editar');
     }
 
+    public function imageColor(string $id, string $imageId): void
+    {
+        $this->verifyCsrf('/admin/produtos/' . (int) $id . '/editar');
+        $ok = Product::setImageColor((int) $id, (int) $imageId, (string) $this->input('color', ''));
+        $this->flash($ok ? 'success' : 'error', $ok ? 'Cor da foto salva.' : 'Não foi possível salvar a cor da foto.');
+        $this->redirect('/admin/produtos/' . (int) $id . '/editar');
+    }
+
     public function primaryImage(string $id, string $imageId): void
     {
         $this->verifyCsrf('/admin/produtos/' . (int) $id . '/editar');
@@ -158,9 +166,10 @@ class ProductController extends Controller
         $urls = array_filter(array_map('trim', explode("
 ", (string) $this->input('image_urls', ''))));
         $sort = Product::nextImageSort($productId);
+        $newColor = trim((string) $this->input('new_image_color', ''));
         foreach ($urls as $url) {
             if (preg_match('#^(https?://|/uploads/|/media/)#i', $url)) {
-                Product::addImage($productId, $url, null, $sort++);
+                Product::addImage($productId, $url, null, $sort++, $newColor);
             }
         }
 
@@ -176,7 +185,7 @@ class ProductController extends Controller
                 'error' => $_FILES['images']['error'][$i] ?? UPLOAD_ERR_NO_FILE,
             ]);
             if ($result['ok']) {
-                Product::addImage($productId, $result['path'], null, $sort++);
+                Product::addImage($productId, $result['path'], null, $sort++, $newColor);
             } else {
                 $errors[] = $name . ': ' . $result['error'];
             }

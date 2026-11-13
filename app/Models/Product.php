@@ -365,12 +365,48 @@ class Product
         $stmt->execute([$id]);
     }
 
-    public static function addImage(int $productId, string $path, ?string $alt = null, int $sort = 0): void
+    private static ?bool $imageColorColumn = null;
+
+    /** Garante a coluna "color" em product_images (cor a que a foto pertence); cria sozinha na primeira vez. */
+    public static function hasImageColor(): bool
     {
-        $stmt = Database::connection()->prepare(
-            'INSERT INTO product_images (product_id, path, alt, sort_order) VALUES (?, ?, ?, ?)'
-        );
+        if (self::$imageColorColumn !== null) {
+            return self::$imageColorColumn;
+        }
+        $pdo = Database::connection();
+        try {
+            $exists = $pdo->query("SHOW COLUMNS FROM product_images LIKE 'color'")->fetch();
+            if (!$exists) {
+                $pdo->exec('ALTER TABLE product_images ADD COLUMN color VARCHAR(80) NULL');
+            }
+            return self::$imageColorColumn = true;
+        } catch (\Throwable $e) {
+            return self::$imageColorColumn = false;
+        }
+    }
+
+    public static function addImage(int $productId, string $path, ?string $alt = null, int $sort = 0, ?string $color = null): void
+    {
+        $pdo = Database::connection();
+        $color = $color !== null && trim($color) !== '' ? self::normalizeColor($color) : null;
+        if ($color !== null && self::hasImageColor()) {
+            $stmt = $pdo->prepare('INSERT INTO product_images (product_id, path, alt, sort_order, color) VALUES (?, ?, ?, ?, ?)');
+            $stmt->execute([$productId, $path, $alt, $sort, $color]);
+            return;
+        }
+        $stmt = $pdo->prepare('INSERT INTO product_images (product_id, path, alt, sort_order) VALUES (?, ?, ?, ?)');
         $stmt->execute([$productId, $path, $alt, $sort]);
+    }
+
+    public static function setImageColor(int $productId, int $imageId, ?string $color): bool
+    {
+        if (!self::hasImageColor() || !self::findImage($productId, $imageId)) {
+            return false;
+        }
+        $color = $color !== null && trim($color) !== '' ? self::normalizeColor($color) : null;
+        Database::connection()->prepare('UPDATE product_images SET color = ? WHERE id = ? AND product_id = ?')
+            ->execute([$color, $imageId, $productId]);
+        return true;
     }
 
     public static function nextImageSort(int $productId): int
