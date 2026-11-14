@@ -61,7 +61,7 @@ $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $her
         </span>
       </a>
       <a class="collection-tile reveal" href="<?= !empty($storeEmpty) ? Helpers::e(Helpers::whatsappLink('Olá! Gostaria de conhecer a Vestidos.')) : '/categoria/vestidos' ?>"<?= !empty($storeEmpty) ? ' target="_blank" rel="noopener"' : '' ?>>
-        <img src="/uploads/moda/colecao/mariah-01.jpg" alt="" loading="lazy" width="800" height="1000">
+        <img src="/uploads/moda/colecao/mariah-04.jpg" alt="" loading="lazy" width="800" height="1000">
         <span class="collection-tile__body">
           <small>Silhueta</small>
           <strong>Vestidos</strong>
@@ -69,7 +69,7 @@ $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $her
         </span>
       </a>
       <a class="collection-tile reveal" href="<?= !empty($storeEmpty) ? Helpers::e(Helpers::whatsappLink('Olá! Gostaria de conhecer a Novidades.')) : '/categoria/novidades' ?>"<?= !empty($storeEmpty) ? ' target="_blank" rel="noopener"' : '' ?>>
-        <img src="/uploads/moda/colecao/mariah-03.jpg" alt="" loading="lazy" width="800" height="1000">
+        <img src="/uploads/moda/colecao/mariah-06.jpg" alt="" loading="lazy" width="800" height="1000">
         <span class="collection-tile__body">
           <small>Recém-chegados</small>
           <strong>Novidades</strong>
