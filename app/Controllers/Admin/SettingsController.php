@@ -118,14 +118,26 @@ class SettingsController extends Controller
     public function uploadHero(): void
     {
         $this->verifyCsrf();
-        if (empty($_FILES['hero_file']['name']) || ($_FILES['hero_file']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
-            $this->flash('error', 'Selecione uma imagem JPG, PNG ou WebP.');
+        $err = $_FILES['hero_file']['error'] ?? UPLOAD_ERR_NO_FILE;
+        if (empty($_FILES['hero_file']['name']) || $err !== UPLOAD_ERR_OK) {
+            $msg = in_array($err, [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true)
+                ? 'A foto e muito grande para o servidor. Diminua a imagem (ate uns 5 MB) e tente de novo.'
+                : 'Selecione uma imagem JPG, PNG ou WebP.';
+            $this->flash('error', $msg);
             $this->redirect('/admin/configuracoes');
         }
 
-        $ext = strtolower(pathinfo((string) $_FILES['hero_file']['name'], PATHINFO_EXTENSION));
-        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) {
-            $this->flash('error', 'Formato não suportado. Use JPG, PNG ou WebP.');
+        $tmp = $_FILES['hero_file']['tmp_name'];
+        $info = @getimagesize($tmp);
+        $type = $info[2] ?? 0;
+        $src = match ($type) {
+            IMAGETYPE_JPEG => @imagecreatefromjpeg($tmp),
+            IMAGETYPE_PNG => @imagecreatefrompng($tmp),
+            IMAGETYPE_WEBP => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($tmp) : false,
+            default => false,
+        };
+        if (!$src) {
+            $this->flash('error', 'Nao consegui ler essa imagem. Use JPG, PNG ou WebP.');
             $this->redirect('/admin/configuracoes');
         }
 
@@ -134,32 +146,37 @@ class SettingsController extends Controller
             mkdir($dir, 0755, true);
         }
 
-        $base = 'hero-atelier';
-        $filename = $ext === 'jpeg' ? $base . '.jpg' : $base . '.' . ($ext === 'jpg' ? 'jpg' : $ext);
-        $dest = $dir . $filename;
-        if (!move_uploaded_file($_FILES['hero_file']['tmp_name'], $dest)) {
-            $this->flash('error', 'Não foi possível salvar a imagem.');
+        // Nome novo a cada envio: evita o navegador/servidor mostrarem a capa antiga em cache.
+        $base = 'hero-' . date('YmdHis');
+        $sw = imagesx($src);
+        $sh = imagesy($src);
+        $tw = min(2560, $sw);
+        $th = (int) round($sh * ($tw / max(1, $sw)));
+        $out = imagecreatetruecolor($tw, $th);
+        imagecopyresampled($out, $src, 0, 0, 0, 0, $tw, $th, $sw, $sh);
+        imagedestroy($src);
+
+        $ok = imagejpeg($out, $dir . $base . '.jpg', 90);
+        if (function_exists('imagewebp')) {
+            @imagewebp($out, $dir . $base . '.webp', 86);
+        }
+        imagedestroy($out);
+
+        if (!$ok) {
+            $this->flash('error', 'Nao foi possivel salvar a imagem.');
             $this->redirect('/admin/configuracoes');
         }
 
-        if ($ext === 'png' || $ext === 'webp') {
-            $jpgPath = $dir . $base . '.jpg';
-            $this->convertHeroToJpeg($dest, $jpgPath, $ext);
-            if (is_file($jpgPath)) {
-                $filename = $base . '.jpg';
-                if ($dest !== $jpgPath && is_file($dest)) {
-                    @unlink($dest);
-                }
-            }
+        $old = Helpers::setting('hero_image');
+        Helpers::saveSetting('hero_image', '/uploads/moda/' . $base . '.jpg');
+
+        // Apaga capas antigas enviadas pelo painel (nunca a original do tema).
+        if (is_string($old) && preg_match('#^/uploads/moda/hero-\d{14}\.jpg$#', $old)) {
+            @unlink($dir . basename($old));
+            @unlink($dir . basename($old, '.jpg') . '.webp');
         }
 
-        $publicPath = '/uploads/moda/' . $filename;
-        Helpers::saveSetting('hero_image', $publicPath);
-
-        require_once dirname(__DIR__, 3) . '/database/build_hero_assets.php';
-        mariah_rebuild_hero_assets(dirname(__DIR__, 3));
-
-        $this->flash('success', 'Banner da home atualizado.');
+        $this->flash('success', 'Capa do site atualizada.');
         $this->redirect('/admin/configuracoes');
     }
 

@@ -7,7 +7,8 @@
   <a href="/admin/produtos"><strong>Produtos</strong>Cadastrar e editar vestidos</a>
   <a href="/admin/pedidos"><strong>Pedidos</strong>Status e atendimento</a>
   <a href="/admin/estoque"><strong>Estoque</strong>Tamanhos e cores</a>
-  <a href="/admin/configuracoes"><strong>Configurações</strong>Banner, contatos e loja</a>
+  <a href="/admin/configuracoes#capa"><strong>Trocar capa do site</strong>Foto e texto do banner da home</a>
+  <a href="/admin/configuracoes"><strong>Configurações</strong>Contatos e loja</a>
 </div>
 
 <div class="stat-grid">

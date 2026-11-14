@@ -7,7 +7,7 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
 
 <div class="admin-settings-grid">
   <div class="admin-card">
-    <h3>Banner da home</h3>
+    <h3 id="capa">Capa do site (banner da home)</h3>
     <p class="muted" style="margin-top:0">Título, texto e foto principal do site.</p>
     <form method="post" action="/admin/configuracoes" class="form-grid">
       <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
@@ -29,12 +29,12 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
     <form method="post" action="/admin/configuracoes/hero" enctype="multipart/form-data" class="form-grid" style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--line)">
       <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
       <div class="form-group">
-        <label for="settings-hero-file">Enviar nova foto do banner</label>
+        <label for="settings-hero-file">Trocar a foto da capa</label>
         <input class="form-control" id="settings-hero-file" type="file" name="hero_file" accept="image/jpeg,image/png,image/webp" required>
-        <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">Recomendado: horizontal 16:9, boa resolução.</p>
+        <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">Escolha a foto no computador ou celular. Melhor foto horizontal (paisagem), boa resolução. A capa muda na hora.</p>
       </div>
       <div class="admin-hero-preview" style="background-image:url('<?= Helpers::e($heroUrl) ?>')"></div>
-      <button class="btn btn-outline" type="submit">Atualizar foto do banner</button>
+      <button class="btn btn-outline" type="submit">Trocar capa agora</button>
     </form>
   </div>
 
