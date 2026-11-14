@@ -19,22 +19,32 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
         <label for="settings-hero-subtitle">Subtítulo do banner</label>
         <textarea class="form-control" id="settings-hero-subtitle" name="hero_subtitle" rows="3"><?= Helpers::e($settings['hero_subtitle'] ?? '') ?></textarea>
       </div>
-      <div class="form-group">
-        <label for="settings-hero-image">URL da imagem (opcional se enviar arquivo abaixo)</label>
-        <input class="form-control" id="settings-hero-image" name="hero_image" value="<?= Helpers::e($settings['hero_image'] ?? '') ?>">
-      </div>
       <button class="btn" type="submit">Salvar banner</button>
     </form>
 
-    <form method="post" action="/admin/configuracoes/hero" enctype="multipart/form-data" class="form-grid" style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--line)">
+    <form id="hero-upload-form" method="post" action="/admin/configuracoes/hero" enctype="multipart/form-data" class="form-grid" style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid var(--line)">
       <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
       <div class="form-group">
         <label for="settings-hero-file">Trocar a foto da capa</label>
         <input class="form-control" id="settings-hero-file" type="file" name="hero_file" accept="image/jpeg,image/png,image/webp" required>
-        <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">Escolha a foto no computador ou celular. Melhor foto horizontal (paisagem), boa resolução. A capa muda na hora.</p>
+        <p class="muted" style="font-size:.82rem;margin:.35rem 0 0">Escolha a foto no computador ou celular. Melhor foto horizontal (paisagem), boa resolução. Ao escolher a foto, ela é enviada automaticamente e a capa muda na hora.</p>
       </div>
       <div class="admin-hero-preview" style="background-image:url('<?= Helpers::e($heroUrl) ?>')"></div>
-      <button class="btn btn-outline" type="submit">Trocar capa agora</button>
+      <button class="btn btn-outline" type="submit" id="hero-upload-btn">Trocar capa agora</button>
+      <script>
+      (function () {
+        var f = document.getElementById('settings-hero-file');
+        var form = document.getElementById('hero-upload-form');
+        var btn = document.getElementById('hero-upload-btn');
+        var prev = form.querySelector('.admin-hero-preview');
+        f.addEventListener('change', function () {
+          if (!f.files || !f.files[0]) return;
+          prev.style.backgroundImage = 'url(' + URL.createObjectURL(f.files[0]) + ')';
+          btn.disabled = true; btn.textContent = 'Enviando a foto...';
+          form.submit();
+        });
+      })();
+      </script>
     </form>
   </div>
 
