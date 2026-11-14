@@ -1636,11 +1636,3 @@ main { display: block; }
 .filters input:not([type="checkbox"]), .filters select { min-height: 44px; font-size: 1rem; }
 .filters input[type="checkbox"] { width: 22px; height: 22px; }
 .hero-kicker { color: rgba(255, 255, 255, 0.92); font-size: .78rem; text-shadow: 0 2px 12px rgba(0, 0, 0, .55); }
-
-/* Uma única coleção na home: card centralizado */
-.collections-grid:has(> .collection-tile:only-child) {
-  grid-auto-columns: min(100%, 420px);
-  grid-template-columns: minmax(0, 420px);
-  justify-content: center;
-  overflow: visible;
-}
