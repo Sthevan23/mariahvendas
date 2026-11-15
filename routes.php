@@ -89,6 +89,7 @@ $router->get('/admin/clientes', [AdminCustomerController::class, 'index'], $admi
 $router->get('/admin/configuracoes', [SettingsController::class, 'index'], $admin);
 $router->post('/admin/configuracoes', [SettingsController::class, 'save'], $admin);
 $router->post('/admin/configuracoes/hero', [SettingsController::class, 'uploadHero'], $admin);
+$router->post('/admin/configuracoes/galeria', [SettingsController::class, 'saveGallery'], $admin);
 $router->post('/admin/configuracoes/colecoes', [SettingsController::class, 'saveCollections'], $admin);
 $router->post('/admin/configuracoes/categoria', [SettingsController::class, 'saveCategory'], $admin);
 $router->post('/admin/configuracoes/cupom', [SettingsController::class, 'saveCoupon'], $admin);

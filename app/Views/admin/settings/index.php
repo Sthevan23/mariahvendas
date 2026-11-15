@@ -90,6 +90,40 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
     </form>
   </div>
 
+  <div class="admin-card" id="galeria">
+    <h3>Galeria de fotos da home</h3>
+    <p class="muted" style="margin-top:0">Fotos que aparecem na home, abaixo do bloco do Instagram. Sem nenhuma foto, a seção some da home.</p>
+    <?php $gallery = array_values(array_filter(json_decode((string) ($settings['instagram_feed'] ?? '[]'), true) ?: [], 'is_string')); ?>
+    <?php if (!$gallery): ?><p class="muted"><strong>Nenhuma foto na galeria.</strong></p><?php endif; ?>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.7rem;margin-bottom:1rem">
+      <?php foreach ($gallery as $g): ?>
+        <form method="post" action="/admin/configuracoes/galeria" style="margin:0" onsubmit="return confirm('Excluir esta foto da home?');">
+          <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
+          <input type="hidden" name="action" value="remove">
+          <input type="hidden" name="path" value="<?= Helpers::e($g) ?>">
+          <div style="aspect-ratio:3/4;border-radius:8px;background:#eee url('<?= Helpers::e($g) ?>') center top/cover"></div>
+          <button class="btn" style="width:100%;margin-top:.3rem;padding:.3rem;font-size:.8rem;background:#b3261e;border-color:#b3261e;color:#fff" type="submit">Excluir</button>
+        </form>
+      <?php endforeach; ?>
+    </div>
+    <?php if ($gallery): ?>
+    <form method="post" action="/admin/configuracoes/galeria" style="margin:0 0 1rem" onsubmit="return confirm('Excluir TODAS as fotos da galeria da home?');">
+      <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
+      <input type="hidden" name="action" value="clear">
+      <button class="btn btn-outline" type="submit">Excluir todas as fotos</button>
+    </form>
+    <?php endif; ?>
+    <form method="post" action="/admin/configuracoes/galeria" enctype="multipart/form-data" class="form-grid" style="border-top:1px solid var(--line);padding-top:1rem">
+      <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
+      <input type="hidden" name="action" value="add">
+      <div class="form-group">
+        <label>Adicionar fotos (pode escolher várias)</label>
+        <input class="form-control" type="file" name="gallery_files[]" accept="image/jpeg,image/png,image/webp" multiple required>
+      </div>
+      <button class="btn" type="submit">Adicionar à galeria</button>
+    </form>
+  </div>
+
   <div class="admin-card">
     <h3>Dados da loja</h3>
     <form method="post" action="/admin/configuracoes" class="form-grid">

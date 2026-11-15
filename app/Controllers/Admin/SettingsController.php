@@ -264,6 +264,88 @@ class SettingsController extends Controller
         $this->redirect('/admin/configuracoes#colecoes');
     }
 
+    /** Galeria de fotos da home (seção Instagram): excluir uma, excluir todas ou adicionar. */
+    public function saveGallery(): void
+    {
+        $this->verifyCsrf('/admin/configuracoes#galeria');
+        $feed = json_decode((string) Helpers::setting('instagram_feed', '[]'), true) ?: [];
+        $feed = array_values(array_filter($feed, 'is_string'));
+        $dir = dirname(__DIR__, 3) . '/public/uploads/moda/galeria/';
+        $drop = function (string $path) use ($dir): void {
+            // So apaga arquivo enviado pelo painel; as fotos antigas do tema ficam no disco.
+            if (preg_match('#^/uploads/moda/galeria/[A-Za-z0-9._-]+$#', $path)) {
+                @unlink($dir . basename($path));
+            }
+        };
+        $action = (string) $this->input('action');
+        $msg = 'Galeria atualizada.';
+
+        if ($action === 'remove') {
+            $path = (string) $this->input('path');
+            $feed = array_values(array_filter($feed, function ($p) use ($path, $drop) {
+                if ($p === $path) {
+                    $drop($p);
+                    return false;
+                }
+                return true;
+            }));
+            $msg = 'Foto excluída da home.';
+        } elseif ($action === 'clear') {
+            foreach ($feed as $p) {
+                $drop($p);
+            }
+            $feed = [];
+            $msg = 'Todas as fotos foram excluídas. A seção saiu da home.';
+        } elseif ($action === 'add') {
+            if (!is_dir($dir)) {
+                mkdir($dir, 0755, true);
+            }
+            $files = $_FILES['gallery_files'] ?? null;
+            $added = 0;
+            $bad = 0;
+            if ($files && is_array($files['name'])) {
+                foreach ($files['name'] as $i => $name) {
+                    if (($files['error'][$i] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+                        continue;
+                    }
+                    $tmp = $files['tmp_name'][$i] ?? '';
+                    $info = $files['error'][$i] === UPLOAD_ERR_OK ? @getimagesize($tmp) : false;
+                    $src = match ($info[2] ?? 0) {
+                        IMAGETYPE_JPEG => @imagecreatefromjpeg($tmp),
+                        IMAGETYPE_PNG => @imagecreatefrompng($tmp),
+                        IMAGETYPE_WEBP => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($tmp) : false,
+                        default => false,
+                    };
+                    if (!$src) {
+                        $bad++;
+                        continue;
+                    }
+                    $sw = imagesx($src);
+                    $sh = imagesy($src);
+                    $tw = min(1000, $sw);
+                    $th = (int) round($sh * ($tw / max(1, $sw)));
+                    $out = imagecreatetruecolor($tw, $th);
+                    imagecopyresampled($out, $src, 0, 0, 0, 0, $tw, $th, $sw, $sh);
+                    imagedestroy($src);
+                    $file = 'g-' . date('YmdHis') . '-' . $i . '.jpg';
+                    if (imagejpeg($out, $dir . $file, 86)) {
+                        $feed[] = '/uploads/moda/galeria/' . $file;
+                        $added++;
+                    }
+                    imagedestroy($out);
+                }
+            }
+            $msg = $added ? "$added foto(s) adicionada(s)." : 'Nenhuma foto foi adicionada.';
+            if ($bad) {
+                $msg .= " $bad arquivo(s) não puderam ser lidos (use JPG, PNG ou WebP de até uns 5 MB).";
+            }
+        }
+
+        Helpers::saveSetting('instagram_feed', json_encode($feed, JSON_UNESCAPED_SLASHES));
+        $this->flash('success', $msg);
+        $this->redirect('/admin/configuracoes#galeria');
+    }
+
     private function convertHeroToJpeg(string $source, string $jpgPath, string $ext): void
     {
         if ($ext === 'webp' && function_exists('imagecreatefromwebp')) {
