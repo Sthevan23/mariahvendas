@@ -66,6 +66,7 @@ $router->get('/admin/produtos/novo', [AdminProductController::class, 'create'], 
 $router->post('/admin/produtos', [AdminProductController::class, 'store'], $admin);
 $router->get('/admin/produtos/{id}/editar', [AdminProductController::class, 'edit'], $admin);
 $router->post('/admin/produtos/{id}', [AdminProductController::class, 'update'], $admin);
+$router->post('/admin/produtos/{id}/alternar', [AdminProductController::class, 'toggle'], $admin);
 $router->post('/admin/produtos/{id}/excluir', [AdminProductController::class, 'destroy'], $admin);
 $router->post('/admin/produtos/{id}/imagens/{imageId}/excluir', [AdminProductController::class, 'deleteImage'], $admin);
 $router->post('/admin/produtos/{id}/imagens/{imageId}/cor', [AdminProductController::class, 'imageColor'], $admin);

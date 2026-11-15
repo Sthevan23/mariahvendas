@@ -12,10 +12,31 @@ class ProductController extends Controller
 {
     public function index(): void
     {
-        $products = Product::query(['search' => $this->input('q')]);
+        $all = Product::query(['search' => $this->input('q')]);
+        foreach ($all as &$p) {
+            $p['stock_total'] = Product::stockTotal((int) $p['id']);
+            $p['has_photo'] = !empty($p['image']) || !empty(Product::images((int) $p['id'], true));
+            $p['live'] = (int) $p['is_active'] === 1 && $p['has_photo'];
+        }
+        unset($p);
+        $counts = [
+            'todos' => count($all),
+            'site' => count(array_filter($all, fn($p) => $p['live'])),
+            'removidos' => count(array_filter($all, fn($p) => !(int) $p['is_active'])),
+            'esgotados' => count(array_filter($all, fn($p) => (int) $p['stock_total'] <= 0)),
+        ];
+        $status = (string) $this->input('status', 'todos');
+        $products = match ($status) {
+            'site' => array_values(array_filter($all, fn($p) => $p['live'])),
+            'removidos' => array_values(array_filter($all, fn($p) => !(int) $p['is_active'])),
+            'esgotados' => array_values(array_filter($all, fn($p) => (int) $p['stock_total'] <= 0)),
+            default => $all,
+        };
         $this->render('admin/products/index', [
             'title' => 'Produtos',
             'products' => $products,
+            'counts' => $counts,
+            'status' => $status,
         ], 'layouts/admin');
     }
 
@@ -79,10 +100,28 @@ class ProductController extends Controller
 
     public function destroy(string $id): void
     {
-        $this->verifyCsrf();
-        Product::delete((int) $id);
-        $this->flash('success', 'Produto excluído.');
+        $this->verifyCsrf('/admin/produtos');
+        $pid = (int) $id;
+        $images = Product::images($pid);
+        Product::delete($pid);
+        foreach ($images as $img) {
+            if (!empty($img['path'])) {
+                $this->removeUploadedFile((string) $img['path']);
+            }
+        }
+        $this->flash('success', 'Vestido excluído para sempre.');
         $this->redirect('/admin/produtos');
+    }
+
+    /** Tira o vestido do site (ou volta) sem apagar nada. */
+    public function toggle(string $id): void
+    {
+        $this->verifyCsrf('/admin/produtos');
+        $stmt = \App\Core\Database::connection()->prepare('UPDATE products SET is_active = 1 - is_active WHERE id = ?');
+        $stmt->execute([(int) $id]);
+        $p = Product::find((int) $id);
+        $this->flash('success', $p && (int) $p['is_active'] ? 'Vestido voltou para o site.' : 'Vestido removido do site (continua guardado aqui no painel).');
+        $this->redirect($_SERVER['HTTP_REFERER'] ?? '/admin/produtos');
     }
 
     private function productPayload(): array
