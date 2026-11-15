@@ -180,6 +180,90 @@ class SettingsController extends Controller
         $this->redirect('/admin/configuracoes');
     }
 
+    /** Cards da seção "Coleções" da home (texto, foto e link editáveis no painel). */
+    public static function collectionTiles(): array
+    {
+        $defaults = [
+            1 => ['small' => 'Festa & formatura', 'title' => 'Coleção Festa', 'image' => '/uploads/moda/colecao/mariah-02.jpg', 'link' => '/categoria/colecao-atelier'],
+            2 => ['small' => 'Silhueta', 'title' => 'Vestidos', 'image' => '/uploads/moda/colecao/mariah-04.jpg', 'link' => '/categoria/vestidos'],
+            3 => ['small' => 'Recém-chegados', 'title' => 'Novidades', 'image' => '/uploads/moda/colecao/mariah-06.jpg', 'link' => '/categoria/novidades'],
+        ];
+        $tiles = [];
+        foreach ($defaults as $n => $d) {
+            $row = [];
+            foreach ($d as $k => $v) {
+                $val = Helpers::setting("col{$n}_{$k}");
+                $row[$k] = is_string($val) && trim($val) !== '' ? $val : $v;
+            }
+            $row['n'] = $n;
+            $row['hidden'] = Helpers::setting("col{$n}_hidden") === '1';
+            if (!$row['hidden']) {
+                $tiles[] = $row;
+            }
+        }
+        return $tiles;
+    }
+
+    public function saveCollections(): void
+    {
+        $this->verifyCsrf('/admin/configuracoes#colecoes');
+        $dir = dirname(__DIR__, 3) . '/public/uploads/moda/colecao/';
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+        $problems = [];
+        for ($n = 1; $n <= 3; $n++) {
+            Helpers::saveSetting("col{$n}_title", trim((string) $this->input("col{$n}_title")));
+            Helpers::saveSetting("col{$n}_small", trim((string) $this->input("col{$n}_small")));
+            $link = trim((string) $this->input("col{$n}_link"));
+            if ($link !== '' && !preg_match('#^(/|https?://)#', $link)) {
+                $link = '/' . $link;
+            }
+            Helpers::saveSetting("col{$n}_link", $link);
+            Helpers::saveSetting("col{$n}_hidden", $this->input("col{$n}_hidden") ? '1' : '0');
+
+            $f = $_FILES["col{$n}_file"] ?? null;
+            if (!$f || ($f['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
+                continue;
+            }
+            if ($f['error'] !== UPLOAD_ERR_OK) {
+                $problems[] = "foto do card $n grande demais";
+                continue;
+            }
+            $info = @getimagesize($f['tmp_name']);
+            $src = match ($info[2] ?? 0) {
+                IMAGETYPE_JPEG => @imagecreatefromjpeg($f['tmp_name']),
+                IMAGETYPE_PNG => @imagecreatefrompng($f['tmp_name']),
+                IMAGETYPE_WEBP => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($f['tmp_name']) : false,
+                default => false,
+            };
+            if (!$src) {
+                $problems[] = "foto do card $n em formato invalido";
+                continue;
+            }
+            $sw = imagesx($src);
+            $sh = imagesy($src);
+            $tw = min(1200, $sw);
+            $th = (int) round($sh * ($tw / max(1, $sw)));
+            $out = imagecreatetruecolor($tw, $th);
+            imagecopyresampled($out, $src, 0, 0, 0, 0, $tw, $th, $sw, $sh);
+            imagedestroy($src);
+            $name = "col{$n}-" . date('YmdHis') . '.jpg';
+            if (imagejpeg($out, $dir . $name, 88)) {
+                $old = Helpers::setting("col{$n}_image");
+                Helpers::saveSetting("col{$n}_image", '/uploads/moda/colecao/' . $name);
+                if (is_string($old) && preg_match('#^/uploads/moda/colecao/col\d-\d{14}\.jpg$#', $old)) {
+                    @unlink($dir . basename($old));
+                }
+            }
+            imagedestroy($out);
+        }
+        $this->flash($problems ? 'error' : 'success', $problems
+            ? 'Salvei os textos, mas: ' . implode('; ', $problems) . '. Use fotos de ate uns 5 MB.'
+            : 'Coleções da home atualizadas.');
+        $this->redirect('/admin/configuracoes#colecoes');
+    }
+
     private function convertHeroToJpeg(string $source, string $jpgPath, string $ext): void
     {
         if ($ext === 'webp' && function_exists('imagecreatefromwebp')) {

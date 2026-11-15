@@ -1532,7 +1532,7 @@ main { display: block; }
   .collection-tile:hover img { transform: scale(1.06); }
   .collection-tile:hover em { transform: translateX(6px); }
 }
-@media (min-width: 768px) {
+@media (min-width: 600px) {
   .collections-grid {
     grid-auto-flow: row;
     grid-auto-columns: auto;
@@ -1636,3 +1636,13 @@ main { display: block; }
 .filters input:not([type="checkbox"]), .filters select { min-height: 44px; font-size: 1rem; }
 .filters input[type="checkbox"] { width: 22px; height: 22px; }
 .hero-kicker { color: rgba(255, 255, 255, 0.92); font-size: .78rem; text-shadow: 0 2px 12px rgba(0, 0, 0, .55); }
+
+/* Coleções: celular em carrossel; tablet/PC em 3 colunas; 1 ou 2 cards ficam centralizados */
+.collections-grid { grid-auto-columns: 74%; }
+@media (min-width: 600px) {
+  .collections-grid { justify-content: center; }
+  .collection-tile strong { font-size: clamp(1.5rem, 3.2vw, 2.4rem); }
+  .collection-tile__body { padding: 1.1rem 1rem; }
+  .collections-grid:has(> .collection-tile:nth-child(2):last-child) { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 760px; margin-inline: auto; }
+  .collections-grid:has(> .collection-tile:only-child) { grid-template-columns: minmax(0, 420px); }
+}

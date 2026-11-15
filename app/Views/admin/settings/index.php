@@ -48,6 +48,48 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
     </form>
   </div>
 
+  <div class="admin-card" id="colecoes">
+    <h3>Coleções da home (3 cards com foto)</h3>
+    <p class="muted" style="margin-top:0">Troque o título, o texto pequeno, a foto e o link de cada card. Para esconder um card, marque "Esconder".</p>
+    <form method="post" action="/admin/configuracoes/colecoes" enctype="multipart/form-data" class="form-grid">
+      <input type="hidden" name="_csrf" value="<?= Helpers::e($_SESSION['_csrf'] ?? '') ?>">
+      <?php foreach ([1, 2, 3] as $n):
+        $d = \App\Controllers\Admin\SettingsController::collectionTiles();
+        $all = [];
+        foreach ([1, 2, 3] as $i) { $all[$i] = null; }
+        foreach ($d as $t) { $all[$t['n']] = $t; }
+        $t = $all[$n];
+        $isHidden = $t === null;
+        if ($isHidden) {
+            $t = ['small' => Helpers::setting("col{$n}_small", ''), 'title' => Helpers::setting("col{$n}_title", ''), 'image' => Helpers::setting("col{$n}_image", ''), 'link' => Helpers::setting("col{$n}_link", '')];
+        }
+      ?>
+      <fieldset style="border:1px solid var(--line);border-radius:10px;padding:.9rem;margin:0">
+        <legend style="padding:0 .4rem;font-weight:600">Card <?= $n ?></legend>
+        <div class="admin-hero-preview" style="background-image:url('<?= Helpers::e((string) $t['image']) ?>');height:140px;background-position:center top"></div>
+        <div class="form-group">
+          <label>Trocar foto</label>
+          <input class="form-control" type="file" name="col<?= $n ?>_file" accept="image/jpeg,image/png,image/webp">
+        </div>
+        <div class="form-group">
+          <label>Título</label>
+          <input class="form-control" name="col<?= $n ?>_title" value="<?= Helpers::e((string) $t['title']) ?>">
+        </div>
+        <div class="form-group">
+          <label>Texto pequeno (acima do título)</label>
+          <input class="form-control" name="col<?= $n ?>_small" value="<?= Helpers::e((string) $t['small']) ?>">
+        </div>
+        <div class="form-group">
+          <label>Link ao clicar (ex.: /categoria/vestidos ou /catalogo)</label>
+          <input class="form-control" name="col<?= $n ?>_link" value="<?= Helpers::e((string) $t['link']) ?>">
+        </div>
+        <label style="display:flex;gap:.5rem;align-items:center"><input type="checkbox" name="col<?= $n ?>_hidden" value="1" <?= $isHidden ? 'checked' : '' ?>> Esconder este card</label>
+      </fieldset>
+      <?php endforeach; ?>
+      <button class="btn" type="submit">Salvar coleções</button>
+    </form>
+  </div>
+
   <div class="admin-card">
     <h3>Dados da loja</h3>
     <form method="post" action="/admin/configuracoes" class="form-grid">

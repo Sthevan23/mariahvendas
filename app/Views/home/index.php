@@ -10,6 +10,7 @@ $instagramUrl = $instagramUser !== '' ? 'https://instagram.com/' . rawurlencode(
 $editorialImage = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/colecao/mariah-01.jpg';
 $heroSrc = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/hero-atelier.jpg';
 $heroWebp = preg_match('/\.jpe?g$/i', $heroSrc) ? preg_replace('/\.jpe?g$/i', '.webp', $heroSrc) : '';
+$collectionTiles = \App\Controllers\Admin\SettingsController::collectionTiles();
 $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $heroWebp);
 ?>
 <section class="hero">
@@ -52,30 +53,16 @@ $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $her
       </div>
     </div>
     <div class="collections-grid">
-      <a class="collection-tile reveal" href="<?= !empty($storeEmpty) ? Helpers::e(Helpers::whatsappLink('Olá! Gostaria de conhecer a Coleção Festa.')) : '/categoria/colecao-atelier' ?>"<?= !empty($storeEmpty) ? ' target="_blank" rel="noopener"' : '' ?>>
-        <img src="/uploads/moda/colecao/mariah-02.jpg" alt="" loading="lazy" width="800" height="1000">
+      <?php foreach ($collectionTiles as $t): ?>
+      <a class="collection-tile reveal" href="<?= !empty($storeEmpty) ? Helpers::e(Helpers::whatsappLink('Olá! Gostaria de conhecer a ' . $t['title'] . '.')) : Helpers::e($t['link']) ?>"<?= !empty($storeEmpty) ? ' target="_blank" rel="noopener"' : '' ?>>
+        <img src="<?= Helpers::e($t['image']) ?>" alt="<?= Helpers::e($t['title']) ?>" loading="lazy" width="800" height="1000">
         <span class="collection-tile__body">
-          <small>Festa &amp; formatura</small>
-          <strong>Coleção Festa</strong>
+          <small><?= Helpers::e($t['small']) ?></small>
+          <strong><?= Helpers::e($t['title']) ?></strong>
           <em><?= !empty($storeEmpty) ? 'Em breve · WhatsApp' : 'Ver peças' ?></em>
         </span>
       </a>
-      <a class="collection-tile reveal" href="<?= !empty($storeEmpty) ? Helpers::e(Helpers::whatsappLink('Olá! Gostaria de conhecer a Vestidos.')) : '/categoria/vestidos' ?>"<?= !empty($storeEmpty) ? ' target="_blank" rel="noopener"' : '' ?>>
-        <img src="/uploads/moda/colecao/mariah-04.jpg" alt="" loading="lazy" width="800" height="1000">
-        <span class="collection-tile__body">
-          <small>Silhueta</small>
-          <strong>Vestidos</strong>
-          <em><?= !empty($storeEmpty) ? 'Em breve · WhatsApp' : 'Ver peças' ?></em>
-        </span>
-      </a>
-      <a class="collection-tile reveal" href="<?= !empty($storeEmpty) ? Helpers::e(Helpers::whatsappLink('Olá! Gostaria de conhecer a Novidades.')) : '/categoria/novidades' ?>"<?= !empty($storeEmpty) ? ' target="_blank" rel="noopener"' : '' ?>>
-        <img src="/uploads/moda/colecao/mariah-06.jpg" alt="" loading="lazy" width="800" height="1000">
-        <span class="collection-tile__body">
-          <small>Recém-chegados</small>
-          <strong>Novidades</strong>
-          <em><?= !empty($storeEmpty) ? 'Em breve · WhatsApp' : 'Ver peças' ?></em>
-        </span>
-      </a>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
