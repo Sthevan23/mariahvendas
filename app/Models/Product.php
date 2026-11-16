@@ -138,9 +138,13 @@ class Product
             }
         }
         if (!empty($filters['search'])) {
-            $sql .= ' AND (p.name LIKE ? OR p.description LIKE ?)';
+            // Busca por nome, descrição, cor, tamanho ou código do vestido.
+            $sql .= ' AND (p.name LIKE ? OR p.description LIKE ? OR EXISTS (SELECT 1 FROM product_variants sv WHERE sv.product_id = p.id AND (sv.color LIKE ? OR sv.sku LIKE ? OR sv.size = ?)))';
             $params[] = '%' . $filters['search'] . '%';
             $params[] = '%' . $filters['search'] . '%';
+            $params[] = '%' . $filters['search'] . '%';
+            $params[] = '%' . $filters['search'] . '%';
+            $params[] = $filters['search'];
         }
         if (!empty($filters['featured'])) {
             $sql .= ' AND p.is_featured = 1';
@@ -218,9 +222,13 @@ class Product
             }
         }
         if (!empty($filters['search'])) {
-            $sql .= ' AND (p.name LIKE ? OR p.description LIKE ?)';
+            // Busca por nome, descrição, cor, tamanho ou código do vestido.
+            $sql .= ' AND (p.name LIKE ? OR p.description LIKE ? OR EXISTS (SELECT 1 FROM product_variants sv WHERE sv.product_id = p.id AND (sv.color LIKE ? OR sv.sku LIKE ? OR sv.size = ?)))';
             $params[] = '%' . $filters['search'] . '%';
             $params[] = '%' . $filters['search'] . '%';
+            $params[] = '%' . $filters['search'] . '%';
+            $params[] = '%' . $filters['search'] . '%';
+            $params[] = $filters['search'];
         }
         if (!empty($filters['is_new'])) {
             $sql .= ' AND p.is_new = 1';
@@ -330,6 +338,30 @@ class Product
             ];
         }
         return array_values($out);
+    }
+
+    /** Cores disponíveis (com estoque) para as bolinhas da busca: [['color'=>..,'hex'=>..], ...]. */
+    public static function availableColors(): array
+    {
+        $rows = Database::connection()->query(
+            "SELECT v.color, MIN(v.color_hex) AS color_hex FROM product_variants v
+             JOIN products p ON p.id = v.product_id
+             WHERE p.is_active = 1 AND v.stock > 0 AND v.color NOT IN ('', '0')
+               AND EXISTS (SELECT 1 FROM product_images pi WHERE pi.product_id = p.id)
+             GROUP BY v.color ORDER BY v.color"
+        )->fetchAll();
+        $seen = [];
+        $out = [];
+        foreach ($rows as $r) {
+            $name = self::normalizeColor($r['color']);
+            $key = mb_strtolower($name);
+            if (isset($seen[$key])) {
+                continue;
+            }
+            $seen[$key] = true;
+            $out[] = ['color' => $name, 'hex' => Helpers::swatchHex($name, $r['color_hex'])];
+        }
+        return $out;
     }
 
     public static function create(array $data): int

@@ -59,7 +59,7 @@ $ogPageUrl = Helpers::absoluteUrl(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/assets/css/app.css?v=26">
+  <link rel="stylesheet" href="/assets/css/app.css?v=27">
   <script type="application/ld+json">
   <?= json_encode([
       '@context' => 'https://schema.org',
@@ -131,6 +131,14 @@ $accountHref = \App\Core\Auth::check() ? '/conta' : '/login';
       <input type="search" name="q" placeholder="Buscar vestidos..." aria-label="Buscar">
       <button class="btn" type="submit">Buscar</button>
     </form>
+    <?php $searchColors = \App\Models\Product::availableColors(); if ($searchColors): ?>
+    <div class="search-colors">
+      <span>Ou escolha uma cor:</span>
+      <?php foreach ($searchColors as $sc): ?>
+        <a class="search-color" href="/catalogo?cor=<?= urlencode($sc['color']) ?>&amp;disponivel=1" title="<?= Helpers::e($sc['color']) ?>" aria-label="Vestidos na cor <?= Helpers::e($sc['color']) ?>" style="background:<?= Helpers::e($sc['hex']) ?>"></a>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
   </div>
 </header>
 
