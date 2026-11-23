@@ -33,6 +33,7 @@ class PageController extends Controller
             'title' => 'Privacidade',
             'heading' => 'Política de privacidade',
             'body' => Helpers::setting('privacy_policy'),
+            'extra' => "Medimos visitas, tempo de navegação e cliques de forma anônima e identificamos a cidade aproximada, sem guardar o IP.",
         ]);
     }
 
