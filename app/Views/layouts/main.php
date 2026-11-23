@@ -232,5 +232,9 @@ $accountHref = \App\Core\Auth::check() ? '/conta' : '/login';
 </a>
 
 <script src="/assets/js/app.js?v=11" defer></script>
+<?php if (\App\Services\Analytics::pvId() > 0): ?>
+<script>window.MV_PV=<?= \App\Services\Analytics::pvId() ?>;</script>
+<script src="/assets/js/track.js?v=1" defer></script>
+<?php endif; ?>
 </body>
 </html>

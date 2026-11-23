@@ -50,6 +50,7 @@ $router->post('/logout', [AuthController::class, 'logout']);
 $router->get('/conta', [AuthController::class, 'account']);
 $router->get('/conta/pedido/{number}', [AuthController::class, 'order']);
 
+$router->post('/a/ping', [\App\Controllers\TrackController::class, 'ping']);
 $router->post('/newsletter', [PageController::class, 'newsletter']);
 $router->get('/privacidade', [PageController::class, 'privacy']);
 $router->get('/trocas', [PageController::class, 'exchange']);
