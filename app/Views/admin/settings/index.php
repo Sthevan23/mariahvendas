@@ -138,6 +138,7 @@ $heroUrl = $settings['hero_image'] ?? '/uploads/moda/hero-atelier.jpg';
         'phone' => 'Telefone',
         'address' => 'Endereço',
         'og_image' => 'Imagem compartilhamento (URL)',
+        'google_site_verification' => 'Código do Google Search Console (opcional)',
         'delivery_info' => 'Info de entrega',
         'exchange_policy' => 'Política de troca',
         'privacy_policy' => 'Privacidade',

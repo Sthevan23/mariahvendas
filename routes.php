@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\Admin\AnalyticsController;
 use App\Controllers\Admin\AuthController as AdminAuthController;
 use App\Controllers\Admin\CustomerController as AdminCustomerController;
 use App\Controllers\Admin\DashboardController;
@@ -61,6 +62,7 @@ $router->post('/admin/logout', [AdminAuthController::class, 'logout']);
 
 $admin = [AdminAuth::class];
 $router->get('/admin', [DashboardController::class, 'index'], $admin);
+$router->get('/admin/visitas', [AnalyticsController::class, 'index'], $admin);
 $router->get('/admin/produtos', [AdminProductController::class, 'index'], $admin);
 $router->get('/admin/produtos/novo', [AdminProductController::class, 'create'], $admin);
 $router->post('/admin/produtos', [AdminProductController::class, 'store'], $admin);

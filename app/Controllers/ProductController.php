@@ -78,6 +78,12 @@ class ProductController extends Controller
 
         $this->render('product/show', [
             'title' => $product['name'],
+            'seo_title' => $product['name'] . ' — vestido de festa | ' . Helpers::setting('store_name', 'Ateliê Mariah') . ', Divinópolis-MG',
+            'crumbs' => array_values(array_filter([
+                ['Início', '/'],
+                !empty($product['category_slug']) ? [$product['category_name'], '/categoria/' . $product['category_slug']] : null,
+                [$product['name'], '/produto/' . $product['slug']],
+            ])),
             'meta_description' => mb_substr(trim($product['name'] . ' — ' . strip_tags((string) $product['description'])), 0, 160),
             'og_type' => 'product',
             'jsonld' => $this->productJsonLd($product, $images, $variants),

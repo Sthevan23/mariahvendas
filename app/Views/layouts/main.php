@@ -24,7 +24,8 @@ if (!empty($seo_title)) {
 $ogTitle = (string) ($og_title ?? $documentTitle);
 $ogType = (string) ($og_type ?? 'website');
 $currentPathForSeo = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-$noindex = !empty($noindex) || (bool) preg_match('#^/(carrinho|checkout|conta|login|cadastro|favoritos|admin|pedido)(/|$)#', $currentPathForSeo);
+$noindex = !empty($noindex) || (bool) preg_match('#^/(carrinho|checkout|conta|login|cadastro|favoritos|admin|pedido|busca)(/|$)#', $currentPathForSeo);
+$gsc = trim((string) Helpers::setting('google_site_verification', ''));
 $ogDescription = (string) ($meta_description ?? $tagline);
 $ogImagePath = (string) ($og_image ?? Helpers::setting('og_image', '/assets/brand/og-share.jpg'));
 $ogImageUrl = Helpers::absoluteUrl($ogImagePath);
@@ -38,7 +39,12 @@ $ogPageUrl = Helpers::absoluteUrl(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_
   <title><?= Helpers::e($documentTitle) ?></title>
   <meta name="description" content="<?= Helpers::e($ogDescription) ?>">
   <link rel="canonical" href="<?= Helpers::e($ogPageUrl) ?>">
-  <?php if ($noindex): ?><meta name="robots" content="noindex, follow"><?php endif; ?>
+  <?php if ($noindex): ?><meta name="robots" content="noindex, follow"><?php else: ?><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><?php endif; ?>
+  <?php if ($gsc !== ''): ?><meta name="google-site-verification" content="<?= Helpers::e($gsc) ?>"><?php endif; ?>
+  <meta name="theme-color" content="#1a1412">
+  <meta name="geo.region" content="BR-MG">
+  <meta name="geo.placename" content="Divinópolis">
+  <meta name="format-detection" content="telephone=no">
   <meta property="og:type" content="<?= Helpers::e($ogType) ?>">
   <meta property="og:locale" content="pt_BR">
   <meta property="og:site_name" content="<?= Helpers::e($store) ?>">
@@ -74,6 +80,25 @@ $ogPageUrl = Helpers::absoluteUrl(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_
       'sameAs' => $instagramHandle !== '' ? [$instagramUrl] : [],
   ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
   </script>
+  <script type="application/ld+json">
+  <?= json_encode([
+      '@context' => 'https://schema.org',
+      '@type' => 'WebSite',
+      'name' => $store,
+      'url' => Helpers::appUrl(),
+      'inLanguage' => 'pt-BR',
+      'potentialAction' => ['@type' => 'SearchAction', 'target' => Helpers::appUrl() . '/busca?q={search_term_string}', 'query-input' => 'required name=search_term_string'],
+  ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
+  </script>
+  <?php if (!empty($crumbs)): ?>
+  <script type="application/ld+json">
+  <?= json_encode([
+      '@context' => 'https://schema.org',
+      '@type' => 'BreadcrumbList',
+      'itemListElement' => array_map(fn($c, $i) => ['@type' => 'ListItem', 'position' => $i + 1, 'name' => $c[0], 'item' => Helpers::absoluteUrl($c[1])], $crumbs, array_keys($crumbs)),
+  ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
+  </script>
+  <?php endif; ?>
   <?php if (!empty($jsonld)): ?>
   <script type="application/ld+json">
   <?= json_encode($jsonld, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>

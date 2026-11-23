@@ -89,6 +89,9 @@ class CatalogController extends Controller
 
         $this->render('catalog/index', [
             'title' => $title,
+            'noindex' => !empty($filters['search']) || !empty($_GET['cor']) || !empty($_GET['tamanho']) || !empty($_GET['disponivel']) || !empty($_GET['ordem']) || !empty($_GET['page']),
+            'crumbs' => [['Início', '/'], [$title, $_SERVER['REQUEST_URI'] ? (parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/catalogo') : '/catalogo']],
+            'seo_title' => $title . ' | Vestidos de festa em Divinópolis-MG — Ateliê Mariah',
             'meta_description' => 'Veja os vestidos de festa do Ateliê Mariah: modelos para formatura, debutante, madrinha e eventos, em vários tamanhos e cores. Entrega em Divinópolis-MG.',
             'products' => $products,
             'categories' => Category::allActive(),

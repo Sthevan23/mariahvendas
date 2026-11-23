@@ -44,6 +44,7 @@ $nav = static function (string $prefix) use ($path): string {
 
     <p class="admin-nav-label">Visão geral</p>
     <a href="/admin" class="<?= $path === '/admin' ? 'active' : '' ?>">Dashboard</a>
+    <a href="/admin/visitas" class="<?= $nav('/admin/visitas') ?>">Visitas do site</a>
 
     <p class="admin-nav-label">Loja</p>
     <a href="/admin/produtos" class="<?= $nav('/admin/produtos') ?>">Produtos</a>

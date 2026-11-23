@@ -4,6 +4,7 @@
 </div>
 
 <div class="admin-quick">
+  <a href="/admin/visitas"><strong>Visitas do site</strong>Quantas pessoas entraram</a>
   <a href="/admin/produtos"><strong>Produtos</strong>Cadastrar e editar vestidos</a>
   <a href="/admin/pedidos"><strong>Pedidos</strong>Status e atendimento</a>
   <a href="/admin/estoque"><strong>Estoque</strong>Tamanhos e cores</a>
