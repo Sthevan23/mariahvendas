@@ -120,6 +120,15 @@ class Analytics
             'visitors_total' => (int) $one('SELECT COUNT(DISTINCT visitor) FROM page_views'),
             'first_day' => $one('SELECT MIN(day) FROM page_views'),
         ];
+        $prevFrom = date('Y-m-d', strtotime('-' . (2 * $days - 1) . ' days'));
+        $out['prev_visitors'] = (int) $one('SELECT COUNT(DISTINCT visitor) FROM page_views WHERE day >= ? AND day < ?', [$prevFrom, $from]);
+        $out['prev_views'] = (int) $one('SELECT COUNT(*) FROM page_views WHERE day >= ? AND day < ?', [$prevFrom, $from]);
+        $out['online'] = (int) $one('SELECT COUNT(DISTINCT visitor) FROM page_views WHERE created_at >= ?', [date('Y-m-d H:i:s', time() - 300)]);
+        $hours = array_fill(0, 24, 0);
+        foreach ($q('SELECT HOUR(created_at) h, COUNT(DISTINCT visitor) v FROM page_views WHERE day >= ? GROUP BY h', [$from]) as $r) {
+            $hours[(int) $r['h']] = (int) $r['v'];
+        }
+        $out['hours'] = $hours;
         $out['returning'] = (int) $one('SELECT COUNT(*) FROM (SELECT visitor FROM page_views WHERE day >= ? GROUP BY visitor HAVING COUNT(DISTINCT day) > 1) t', [$from]);
 
         $byDay = [];
