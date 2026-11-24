@@ -8,8 +8,8 @@ $instagramHandle = Helpers::setting('instagram', '@atelie_mariahaltacostura_');
 $instagramUser = ltrim((string) $instagramHandle, '@');
 $instagramUrl = $instagramUser !== '' ? 'https://instagram.com/' . rawurlencode($instagramUser) : '#';
 $editorialImage = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/colecao/mariah-01.jpg';
-// Capa enviada pelo painel; se nao houver (ou o arquivo sumiu), usa o vestido vermelho.
-$heroDefault = '/uploads/moda/colecao/mariah-03.jpg';
+// Capa enviada pelo painel; se nao houver (ou o arquivo sumiu), usa o vestido vermelho (vestido-vermelho.jpg).
+$heroDefault = '/uploads/moda/vestido-vermelho.jpg';
 $heroSrc = is_string($heroImage) && $heroImage !== '' && $heroImage !== '/uploads/moda/hero-atelier.jpg'
     ? Helpers::imageOrDefault($heroImage, $heroDefault) : $heroDefault;
 $heroIsDefault = $heroSrc === $heroDefault;
@@ -30,7 +30,7 @@ $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $her
         width="2560"
         height="1440"
         alt=""
-        <?= $heroIsDefault ? 'style="object-position:center 12%"' : '' ?>
+        <?= $heroIsDefault ? 'style="object-position:center 4%"' : '' ?>
         fetchpriority="high"
         decoding="async">
     </picture>

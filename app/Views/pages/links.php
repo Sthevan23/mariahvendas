@@ -35,8 +35,8 @@ $logo = '/assets/brand/logo-header.png';
 <style>
 :root{--bg:#f5f0ea;--surface:#fffcf9;--ink:#14110f;--muted:#4a433c;--gold:#b8956b;--eyebrow:#7d5a3c}
 *{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center;padding:2.5rem 1rem 3rem}
-.wrap{width:100%;max-width:440px;text-align:center}
+body{margin:0;min-height:100vh;background:linear-gradient(rgba(20,17,15,.35),rgba(20,17,15,.55)),url(/uploads/moda/vestido-vermelho.jpg) center top/cover fixed,#2a2420;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;display:flex;justify-content:center;padding:2.5rem 1rem 3rem}
+.wrap{width:100%;max-width:440px;text-align:center;background:rgba(255,252,249,.9);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-radius:22px;padding:1.8rem 1.2rem 1.4rem;align-self:flex-start;box-shadow:0 12px 40px rgba(0,0,0,.35)}
 .avatar{width:104px;height:104px;border-radius:50%;object-fit:cover;border:3px solid var(--gold);background:#ebe3d9}
 h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:1.7rem;margin:1rem 0 .25rem}
 .tag{margin:0 0 1.8rem;color:var(--eyebrow);font-size:.95rem}
