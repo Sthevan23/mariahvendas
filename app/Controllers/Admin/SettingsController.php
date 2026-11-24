@@ -31,7 +31,7 @@ class SettingsController extends Controller
         $this->verifyCsrf();
         $keys = [
             'store_name', 'tagline', 'whatsapp', 'instagram', 'email', 'phone', 'address',
-            'hero_title', 'hero_subtitle', 'hero_image', 'og_image', 'google_site_verification',
+            'hero_title', 'hero_subtitle', 'hero_image', 'og_image', 'google_site_verification', 'pinterest_verification',
             'exchange_policy', 'privacy_policy', 'delivery_info',
         ];
         foreach ($keys as $key) {

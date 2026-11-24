@@ -86,6 +86,12 @@ class ProductController extends Controller
             ])),
             'meta_description' => mb_substr(trim($product['name'] . ' — ' . strip_tags((string) $product['description'])), 0, 160),
             'og_type' => 'product',
+            'extra_meta' => [
+                'product:price:amount' => number_format((float) $product['price'], 2, '.', ''),
+                'product:price:currency' => 'BRL',
+                'og:availability' => $defaultVariant && (int) ($defaultVariant['stock'] ?? 0) > 0 ? 'instock' : 'out of stock',
+                'product:brand' => Helpers::setting('store_name', 'Ateliê Mariah'),
+            ],
             'jsonld' => $this->productJsonLd($product, $images, $variants),
             'product' => $product,
             'images' => $images,

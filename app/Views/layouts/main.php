@@ -26,6 +26,7 @@ $ogType = (string) ($og_type ?? 'website');
 $currentPathForSeo = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $noindex = !empty($noindex) || (bool) preg_match('#^/(carrinho|checkout|conta|login|cadastro|favoritos|admin|pedido|busca)(/|$)#', $currentPathForSeo);
 $gsc = trim((string) Helpers::setting('google_site_verification', ''));
+$pin = trim((string) Helpers::setting('pinterest_verification', ''));
 $ogDescription = (string) ($meta_description ?? $tagline);
 $ogImagePath = (string) ($og_image ?? Helpers::setting('og_image', '/assets/brand/og-share.jpg'));
 $ogImageUrl = Helpers::absoluteUrl($ogImagePath);
@@ -41,6 +42,8 @@ $ogPageUrl = Helpers::absoluteUrl(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_
   <link rel="canonical" href="<?= Helpers::e($ogPageUrl) ?>">
   <?php if ($noindex): ?><meta name="robots" content="noindex, follow"><?php else: ?><meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"><?php endif; ?>
   <?php if ($gsc !== ''): ?><meta name="google-site-verification" content="<?= Helpers::e($gsc) ?>"><?php endif; ?>
+  <?php if ($pin !== ''): ?><meta name="p:domain_verify" content="<?= Helpers::e($pin) ?>"><?php endif; ?>
+  <?php foreach (($extra_meta ?? []) as $mk => $mv): ?><meta property="<?= Helpers::e($mk) ?>" content="<?= Helpers::e((string) $mv) ?>"><?php endforeach; ?>
   <meta name="theme-color" content="#1a1412">
   <meta name="geo.region" content="BR-MG">
   <meta name="geo.placename" content="Divinópolis">
