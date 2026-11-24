@@ -8,9 +8,11 @@ $instagramHandle = Helpers::setting('instagram', '@atelie_mariahaltacostura_');
 $instagramUser = ltrim((string) $instagramHandle, '@');
 $instagramUrl = $instagramUser !== '' ? 'https://instagram.com/' . rawurlencode($instagramUser) : '#';
 $editorialImage = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/colecao/mariah-01.jpg';
-// Sem foto de capa enviada pelo painel (ou arquivo sumiu): fundo escuro liso, nunca a foto padrão do tema.
+// Capa enviada pelo painel; se nao houver (ou o arquivo sumiu), usa o vestido vermelho.
+$heroDefault = '/uploads/moda/colecao/mariah-03.jpg';
 $heroSrc = is_string($heroImage) && $heroImage !== '' && $heroImage !== '/uploads/moda/hero-atelier.jpg'
-    ? Helpers::imageOrDefault($heroImage, '') : '';
+    ? Helpers::imageOrDefault($heroImage, $heroDefault) : $heroDefault;
+$heroIsDefault = $heroSrc === $heroDefault;
 $heroWebp = $heroSrc !== '' && preg_match('/\.jpe?g$/i', $heroSrc) ? preg_replace('/\.jpe?g$/i', '.webp', $heroSrc) : '';
 $collectionTiles = \App\Controllers\Admin\SettingsController::collectionTiles();
 $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $heroWebp);
@@ -28,6 +30,7 @@ $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $her
         width="2560"
         height="1440"
         alt=""
+        <?= $heroIsDefault ? 'style="object-position:center 12%"' : '' ?>
         fetchpriority="high"
         decoding="async">
     </picture>
