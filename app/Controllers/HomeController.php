@@ -35,6 +35,8 @@ class HomeController extends Controller
         $pdo = Database::connection();
         $reviews = $pdo->query('SELECT * FROM reviews WHERE is_approved = 1 ORDER BY created_at DESC LIMIT 3')->fetchAll();
         $feed = json_decode((string) Helpers::setting('instagram_feed', '[]'), true) ?: [];
+        // Esconde fotos da galeria que sumiram do disco (nada de quadrado em branco).
+        $feed = array_values(array_filter($feed, static fn($p) => is_string($p) && (!str_starts_with($p, '/uploads/') || is_file(dirname(__DIR__, 2) . '/public' . $p))));
 
         $this->render('home/index', [
             'title' => Helpers::setting('store_name', 'Ateliê Mariah'),

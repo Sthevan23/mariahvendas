@@ -8,7 +8,7 @@ $instagramHandle = Helpers::setting('instagram', '@atelie_mariahaltacostura_');
 $instagramUser = ltrim((string) $instagramHandle, '@');
 $instagramUrl = $instagramUser !== '' ? 'https://instagram.com/' . rawurlencode($instagramUser) : '#';
 $editorialImage = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/colecao/mariah-01.jpg';
-$heroSrc = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/hero-atelier.jpg';
+$heroSrc = is_string($heroImage) && $heroImage !== '' ? Helpers::imageOrDefault($heroImage, '/uploads/moda/hero-atelier.jpg') : '/uploads/moda/hero-atelier.jpg';
 $heroWebp = preg_match('/\.jpe?g$/i', $heroSrc) ? preg_replace('/\.jpe?g$/i', '.webp', $heroSrc) : '';
 $collectionTiles = \App\Controllers\Admin\SettingsController::collectionTiles();
 $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $heroWebp);

@@ -51,7 +51,7 @@ class MediaStore
     }
 
     /** @return array{ok:bool,path?:string,error?:string} */
-    public static function saveUpload(array $file): array
+    public static function saveUpload(array $file, int $maxSide = self::MAX_SIDE): array
     {
         $code = (int) ($file['error'] ?? UPLOAD_ERR_NO_FILE);
         if ($code !== UPLOAD_ERR_OK) {
@@ -76,7 +76,7 @@ class MediaStore
             return ['ok' => false, 'error' => 'formato inválido (use JPG, PNG, WebP ou GIF)'];
         }
 
-        $blob = self::optimize($tmp, $mime);
+        $blob = self::optimize($tmp, $mime, $maxSide);
         if ($blob === null) {
             $blob = file_get_contents($tmp);
             $outMime = $mime;
@@ -100,13 +100,13 @@ class MediaStore
     }
 
     /** Reduz fotos grandes de celular (lado maior 1600px). Devolve [binário, mime] ou null. */
-    private static function optimize(string $tmp, string $mime): ?array
+    private static function optimize(string $tmp, string $mime, int $maxSide = self::MAX_SIDE): ?array
     {
         if (!function_exists('imagecreatefromstring') || $mime === 'image/gif') {
             return null;
         }
         $info = @getimagesize($tmp);
-        if (!$info || max($info[0], $info[1]) <= self::MAX_SIDE) {
+        if (!$info || max($info[0], $info[1]) <= $maxSide) {
             return null;
         }
         $src = @imagecreatefromstring((string) file_get_contents($tmp));
@@ -125,7 +125,7 @@ class MediaStore
         }
         $w = imagesx($src);
         $h = imagesy($src);
-        $scale = self::MAX_SIDE / max($w, $h);
+        $scale = $maxSide / max($w, $h);
         $dst = imagecreatetruecolor((int) round($w * $scale), (int) round($h * $scale));
         if ($mime === 'image/png' || $mime === 'image/webp') {
             imagealphablending($dst, false);

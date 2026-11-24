@@ -5,6 +5,7 @@ namespace App\Controllers\Admin;
 use App\Core\Controller;
 use App\Core\Database;
 use App\Core\Helpers;
+use App\Services\MediaStore;
 
 class SettingsController extends Controller
 {
@@ -127,54 +128,12 @@ class SettingsController extends Controller
             $this->redirect('/admin/configuracoes');
         }
 
-        $tmp = $_FILES['hero_file']['tmp_name'];
-        $info = @getimagesize($tmp);
-        $type = $info[2] ?? 0;
-        $src = match ($type) {
-            IMAGETYPE_JPEG => @imagecreatefromjpeg($tmp),
-            IMAGETYPE_PNG => @imagecreatefrompng($tmp),
-            IMAGETYPE_WEBP => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($tmp) : false,
-            default => false,
-        };
-        if (!$src) {
-            $this->flash('error', 'Nao consegui ler essa imagem. Use JPG, PNG ou WebP.');
+        $res = MediaStore::saveUpload($_FILES['hero_file'], 2400);
+        if (!$res['ok']) {
+            $this->flash('error', 'Nao foi possivel salvar a capa: ' . ($res['error'] ?? 'erro'));
             $this->redirect('/admin/configuracoes');
         }
-
-        $dir = dirname(__DIR__, 3) . '/public/uploads/moda/';
-        if (!is_dir($dir)) {
-            mkdir($dir, 0755, true);
-        }
-
-        // Nome novo a cada envio: evita o navegador/servidor mostrarem a capa antiga em cache.
-        $base = 'hero-' . date('YmdHis');
-        $sw = imagesx($src);
-        $sh = imagesy($src);
-        $tw = min(2560, $sw);
-        $th = (int) round($sh * ($tw / max(1, $sw)));
-        $out = imagecreatetruecolor($tw, $th);
-        imagecopyresampled($out, $src, 0, 0, 0, 0, $tw, $th, $sw, $sh);
-        imagedestroy($src);
-
-        $ok = imagejpeg($out, $dir . $base . '.jpg', 90);
-        if (function_exists('imagewebp')) {
-            @imagewebp($out, $dir . $base . '.webp', 86);
-        }
-        imagedestroy($out);
-
-        if (!$ok) {
-            $this->flash('error', 'Nao foi possivel salvar a imagem.');
-            $this->redirect('/admin/configuracoes');
-        }
-
-        $old = Helpers::setting('hero_image');
-        Helpers::saveSetting('hero_image', '/uploads/moda/' . $base . '.jpg');
-
-        // Apaga capas antigas enviadas pelo painel (nunca a original do tema).
-        if (is_string($old) && preg_match('#^/uploads/moda/hero-\d{14}\.jpg$#', $old)) {
-            @unlink($dir . basename($old));
-            @unlink($dir . basename($old, '.jpg') . '.webp');
-        }
+        Helpers::saveSetting('hero_image', $res['path']);
 
         $this->flash('success', 'Capa do site atualizada.');
         $this->redirect('/admin/configuracoes');
@@ -194,6 +153,9 @@ class SettingsController extends Controller
             foreach ($d as $k => $v) {
                 $val = Helpers::setting("col{$n}_{$k}");
                 $row[$k] = is_string($val) && trim($val) !== '' ? $val : $v;
+                if ($k === 'image') {
+                    $row[$k] = Helpers::imageOrDefault($row[$k], $v);
+                }
             }
             $row['n'] = $n;
             $row['hidden'] = Helpers::setting("col{$n}_hidden") === '1';
@@ -230,33 +192,12 @@ class SettingsController extends Controller
                 $problems[] = "foto do card $n grande demais";
                 continue;
             }
-            $info = @getimagesize($f['tmp_name']);
-            $src = match ($info[2] ?? 0) {
-                IMAGETYPE_JPEG => @imagecreatefromjpeg($f['tmp_name']),
-                IMAGETYPE_PNG => @imagecreatefrompng($f['tmp_name']),
-                IMAGETYPE_WEBP => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($f['tmp_name']) : false,
-                default => false,
-            };
-            if (!$src) {
-                $problems[] = "foto do card $n em formato invalido";
+            $res = MediaStore::saveUpload($f, 1400);
+            if (!$res['ok']) {
+                $problems[] = "foto do card $n: " . ($res['error'] ?? 'erro');
                 continue;
             }
-            $sw = imagesx($src);
-            $sh = imagesy($src);
-            $tw = min(1200, $sw);
-            $th = (int) round($sh * ($tw / max(1, $sw)));
-            $out = imagecreatetruecolor($tw, $th);
-            imagecopyresampled($out, $src, 0, 0, 0, 0, $tw, $th, $sw, $sh);
-            imagedestroy($src);
-            $name = "col{$n}-" . date('YmdHis') . '.jpg';
-            if (imagejpeg($out, $dir . $name, 88)) {
-                $old = Helpers::setting("col{$n}_image");
-                Helpers::saveSetting("col{$n}_image", '/uploads/moda/colecao/' . $name);
-                if (is_string($old) && preg_match('#^/uploads/moda/colecao/col\d-\d{14}\.jpg$#', $old)) {
-                    @unlink($dir . basename($old));
-                }
-            }
-            imagedestroy($out);
+            Helpers::saveSetting("col{$n}_image", $res['path']);
         }
         $this->flash($problems ? 'error' : 'success', $problems
             ? 'Salvei os textos, mas: ' . implode('; ', $problems) . '. Use fotos de ate uns 5 MB.'
@@ -308,31 +249,20 @@ class SettingsController extends Controller
                     if (($files['error'][$i] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
                         continue;
                     }
-                    $tmp = $files['tmp_name'][$i] ?? '';
-                    $info = $files['error'][$i] === UPLOAD_ERR_OK ? @getimagesize($tmp) : false;
-                    $src = match ($info[2] ?? 0) {
-                        IMAGETYPE_JPEG => @imagecreatefromjpeg($tmp),
-                        IMAGETYPE_PNG => @imagecreatefrompng($tmp),
-                        IMAGETYPE_WEBP => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($tmp) : false,
-                        default => false,
-                    };
-                    if (!$src) {
+                    $one = [
+                        'name' => $name,
+                        'type' => $files['type'][$i] ?? '',
+                        'tmp_name' => $files['tmp_name'][$i] ?? '',
+                        'error' => $files['error'][$i],
+                        'size' => $files['size'][$i] ?? 0,
+                    ];
+                    $res = MediaStore::saveUpload($one, 1200);
+                    if (!$res['ok']) {
                         $bad++;
                         continue;
                     }
-                    $sw = imagesx($src);
-                    $sh = imagesy($src);
-                    $tw = min(1000, $sw);
-                    $th = (int) round($sh * ($tw / max(1, $sw)));
-                    $out = imagecreatetruecolor($tw, $th);
-                    imagecopyresampled($out, $src, 0, 0, 0, 0, $tw, $th, $sw, $sh);
-                    imagedestroy($src);
-                    $file = 'g-' . date('YmdHis') . '-' . $i . '.jpg';
-                    if (imagejpeg($out, $dir . $file, 86)) {
-                        $feed[] = '/uploads/moda/galeria/' . $file;
-                        $added++;
-                    }
-                    imagedestroy($out);
+                    $feed[] = $res['path'];
+                    $added++;
                 }
             }
             $msg = $added ? "$added foto(s) adicionada(s)." : 'Nenhuma foto foi adicionada.';

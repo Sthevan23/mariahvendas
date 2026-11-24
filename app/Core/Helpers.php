@@ -186,4 +186,13 @@ class Helpers
         }
         return self::appUrl() . '/' . ltrim($path, '/');
     }
+
+    /** Foto enviada que sumiu do disco (ex.: após redeploy) cai na foto padrão em vez de ficar em branco. */
+    public static function imageOrDefault(string $path, string $default): string
+    {
+        if (str_starts_with($path, '/uploads/') && !is_file(dirname(__DIR__, 2) . '/public' . $path)) {
+            return $default;
+        }
+        return $path;
+    }
 }
