@@ -18,7 +18,7 @@ if ($ig !== '') {
 }
 $links[] = ['t' => 'Trocas e entregas', 's' => 'Como funciona', 'u' => '/trocas'];
 
-$logo = Helpers::imageOrDefault((string) Helpers::setting('hero_image', ''), '/uploads/moda/hero-atelier.jpg');
+$logo = '/assets/brand/logo-header.png';
 ?><!doctype html>
 <html lang="pt-BR">
 <head>

@@ -8,13 +8,16 @@ $instagramHandle = Helpers::setting('instagram', '@atelie_mariahaltacostura_');
 $instagramUser = ltrim((string) $instagramHandle, '@');
 $instagramUrl = $instagramUser !== '' ? 'https://instagram.com/' . rawurlencode($instagramUser) : '#';
 $editorialImage = is_string($heroImage) && $heroImage !== '' ? $heroImage : '/uploads/moda/colecao/mariah-01.jpg';
-$heroSrc = is_string($heroImage) && $heroImage !== '' ? Helpers::imageOrDefault($heroImage, '/uploads/moda/hero-atelier.jpg') : '/uploads/moda/hero-atelier.jpg';
-$heroWebp = preg_match('/\.jpe?g$/i', $heroSrc) ? preg_replace('/\.jpe?g$/i', '.webp', $heroSrc) : '';
+// Sem foto de capa enviada pelo painel (ou arquivo sumiu): fundo escuro liso, nunca a foto padrão do tema.
+$heroSrc = is_string($heroImage) && $heroImage !== '' && $heroImage !== '/uploads/moda/hero-atelier.jpg'
+    ? Helpers::imageOrDefault($heroImage, '') : '';
+$heroWebp = $heroSrc !== '' && preg_match('/\.jpe?g$/i', $heroSrc) ? preg_replace('/\.jpe?g$/i', '.webp', $heroSrc) : '';
 $collectionTiles = \App\Controllers\Admin\SettingsController::collectionTiles();
 $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $heroWebp);
 ?>
 <section class="hero">
   <div class="hero-media">
+    <?php if ($heroSrc !== ''): ?>
     <picture>
       <?php if ($heroWebpOk): ?>
       <source srcset="<?= Helpers::e($heroWebp) ?>" type="image/webp">
@@ -28,6 +31,7 @@ $heroWebpOk = $heroWebp !== '' && is_file(dirname(__DIR__, 3) . '/public' . $her
         fetchpriority="high"
         decoding="async">
     </picture>
+    <?php endif; ?>
   </div>
   <div class="hero-grain" aria-hidden="true"></div>
   <div class="hero-glow" aria-hidden="true"></div>
