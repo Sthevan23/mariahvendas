@@ -37,6 +37,12 @@ class PageController extends Controller
         ]);
     }
 
+    /** Página de links para a bio do Instagram/Pinterest (sem o layout da loja). */
+    public function links(): void
+    {
+        $this->render('pages/links', [], null);
+    }
+
     public function exchange(): void
     {
         $this->render('pages/policy', [
@@ -70,7 +76,7 @@ class PageController extends Controller
 
         echo '<?xml version="1.0" encoding="UTF-8"?>';
         echo '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">';
-        foreach (['/' => '1.0', '/catalogo' => '0.9', '/trocas' => '0.3', '/privacidade' => '0.2'] as $path => $prio) {
+        foreach (['/' => '1.0', '/catalogo' => '0.9', '/links' => '0.4', '/trocas' => '0.3', '/privacidade' => '0.2'] as $path => $prio) {
             echo '<url><loc>' . htmlspecialchars($base . $path) . '</loc><changefreq>weekly</changefreq><priority>' . $prio . '</priority></url>';
         }
         foreach ($cats as $c) {

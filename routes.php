@@ -54,6 +54,7 @@ $router->post('/a/ping', [\App\Controllers\TrackController::class, 'ping']);
 $router->post('/newsletter', [PageController::class, 'newsletter']);
 $router->get('/privacidade', [PageController::class, 'privacy']);
 $router->get('/trocas', [PageController::class, 'exchange']);
+$router->get('/links', [PageController::class, 'links']);
 $router->get('/robots.txt', [PageController::class, 'robots']);
 $router->get('/sitemap.xml', [PageController::class, 'sitemap']);
 
