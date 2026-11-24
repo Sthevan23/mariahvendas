@@ -23,6 +23,10 @@ class Router
 
     public function dispatch(string $method, string $uri): void
     {
+        // Robôs (Pinterest, WhatsApp, Google) checam o link com HEAD: responde como GET (o servidor descarta o corpo).
+        if (strtoupper($method) === 'HEAD') {
+            $method = 'GET';
+        }
         $path = parse_url($uri, PHP_URL_PATH) ?: '/';
         $path = rtrim($path, '/') ?: '/';
 
